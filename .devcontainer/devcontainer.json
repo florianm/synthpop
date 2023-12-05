@@ -6,7 +6,7 @@
             "version": "prerelease"
         },
         "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
-            "packages": "libudunits2-dev,libxtst6,libxt6,libmagick++-dev,texlive-latex-extra"
+            "packages": "libudunits2-dev,libxtst6,libxt6,libmagick++-dev,texlive-latex-extra,texlive-fonts-recommended"
         },
         "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
             "packages": "github::rstudio/renv,covr,tidyverse,here,httpgd,knitr,lattice,party,plyr,proto,polspline,randomForest,ranger,rmarkdown,roxygen2,testthat,classInt,usethis,mipfp,rmutil,broman"

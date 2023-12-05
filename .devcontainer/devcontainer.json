@@ -14,10 +14,17 @@
     },
     "customizations": {
         "vscode": {
-            "extensions": ["mechatroner.rainbow-csv"]
+            "extensions": [
+                "mechatroner.rainbow-csv",
+                "REditorSupport.r",
+                "RDebugger.r-debugger"
+            ]
         },
         "codespaces": {
-            "openFiles": ["DESCRIPTION", "NEWS.md"]
+            "openFiles": [
+                "DESCRIPTION",
+                "NEWS.md"
+            ]
         }
     }
 }

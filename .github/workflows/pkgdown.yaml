@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, master]
   pull_request:
-    branches: [main, master,31-pkgdown]
+    branches: [main, master]
   release:
     types: [published]
   workflow_dispatch:
@@ -42,6 +42,15 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
+
+      # DEBUG: CMD check
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+  
+      - uses: r-lib/actions/check-r-package@v2
+      # END DEBUG
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

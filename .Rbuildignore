@@ -1,2 +1,9 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.devcontainer
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^NAMESPACE\.old$
+^README\.Rmd$

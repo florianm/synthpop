@@ -108,4 +108,3 @@ importFrom("utils", "head", "read.csv", "read.table", "tail", "combn",
            "write.csv", "write.table")
 importFrom("stringr", "str_pad", "str_detect", "str_extract_all", "str_subset")
 importFrom("rmutil", "rlaplace")
-

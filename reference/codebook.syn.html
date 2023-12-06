@@ -53,41 +53,27 @@
     <dl><dt>data</dt>
 <dd><p>a data frame with a data set to be synthesised.</p></dd>
 
-  <dt>maxlevs</dt>
-<dd><p>the number of factor levels above which separate tables with 
-    all labels are returned as part of <code>labs</code> component.</p></dd>
+
+<dt>maxlevs</dt>
+<dd><p>the number of factor levels above which separate tables with
+all labels are returned as part of <code>labs</code> component.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A list with two components.</p>
-<p></p>
-<p><code>tab</code> - a data frame with the following information about each variable:</p>
-<dl><dt>name</dt>
-<dd><p>variable name</p></dd>
-
-  <dt>class</dt>
-<dd><p>class of variable</p></dd>
-
-  <dt>nmiss</dt>
-<dd><p>number of missing values (<code>NA</code>)</p></dd>
-
-  <dt>perctmiss</dt>
-<dd><p>percentage of missing values</p></dd>
-
-  <dt>ndistinct</dt>
-<dd><p>number of distinct values (excluding missing values)</p></dd>
-
-  <dt>details</dt>
-<dd><p>range for numeric variables, maximum length for character 
-    variables, labels for factors with &lt;= maxlevs levels</p></dd>
-
-
- </dl><p><code>labs</code> - a list of extra tables with labels for each factor with number 
-   of levels greater than <code>maxlevs</code>.</p>
-    </div>
+<p>a list with two components:</p><ul><li><p><strong>tab</strong>: a data frame with the following information about each variable:</p><ul><li><p><strong>name</strong>: variable name</p></li>
+<li><p><strong>class</strong>: class of variable</p></li>
+<li><p><strong>nmiss</strong>: number of missing values (<code>NA</code>)</p></li>
+<li><p><strong>perctmiss</strong>: percentage of missing values</p></li>
+<li><p><strong>ndistinct</strong>: number of distinct values (excluding missing values)</p></li>
+<li><p><strong>details</strong>: range for numeric variables, maximum length for character
+variables, labels for factors with &lt;= maxlevs levels</p></li>
+</ul></li>
+<li><p><strong>labs</strong>: a list of extra tables with labels for each factor with a
+number of levels greater than <code>maxlevs</code>.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

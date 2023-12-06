@@ -50,7 +50,6 @@ Imports:
     survival,
     utils
 Suggests:
-    )
     roxygen2 (>= 7.2.3),
     covr (>= 3.6.1),
     here (>= 1.0.1),

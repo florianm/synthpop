@@ -221,7 +221,7 @@ they and their corresponding frequency tables are stored as a list.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Selected utility measures:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        pMSE   S_pMSE df</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ls 0.000125 1.426982  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ls 0.000137 1.568348  7</span>
 <span class="r-in"><span><span class="fu"><a href="compare.html">compare</a></span><span class="op">(</span><span class="va">s1</span>, <span class="va">ods</span>, vars <span class="op">=</span> <span class="st">"income"</span>, stat <span class="op">=</span> <span class="st">"counts"</span>,</span></span>
 <span class="r-in"><span>        table <span class="op">=</span> <span class="cn">TRUE</span>, breaks <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -230,13 +230,13 @@ they and their corresponding frequency tables are stored as a list.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $income</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              0 2000 4000 6000 8000 10000 12000 14000 miss.-8 miss.NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observed  2978  605   92   23    9     3     0     4     603     683</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> synthetic 3062  570   86   20    8     3     0     5     599     647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> synthetic 2949  566  100   29   10     0     0     5     624     717</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="compare.synds-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Selected utility measures:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           pMSE   S_pMSE df</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> income 5.2e-05 0.697582  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         pMSE   S_pMSE df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> income 6e-05 0.800676  6</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">### synthetic data provided as 'data.frame'</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="compare.html">compare</a></span><span class="op">(</span><span class="va">s1</span><span class="op">$</span><span class="va">syn</span>, <span class="va">ods</span>, vars <span class="op">=</span> <span class="st">"ls"</span><span class="op">)</span></span></span>
@@ -247,7 +247,7 @@ they and their corresponding frequency tables are stored as a list.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Selected utility measures:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        pMSE   S_pMSE df</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ls 0.000125 1.426982  7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ls 0.000137 1.568348  7</span>
 <span class="r-in"><span><span class="fu"><a href="compare.html">compare</a></span><span class="op">(</span><span class="va">s1</span><span class="op">$</span><span class="va">syn</span>, <span class="va">ods</span>, vars <span class="op">=</span> <span class="st">"income"</span>, cont.na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>income <span class="op">=</span> <span class="op">-</span><span class="fl">8</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>        stat <span class="op">=</span> <span class="st">"counts"</span>, table <span class="op">=</span> <span class="cn">TRUE</span>, breaks <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -256,13 +256,13 @@ they and their corresponding frequency tables are stored as a list.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $income</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              0 2000 4000 6000 8000 10000 12000 14000 miss.-8 miss.NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observed  2978  605   92   23    9     3     0     4     603     683</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> synthetic 3062  570   86   20    8     3     0     5     599     647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> synthetic 2949  566  100   29   10     0     0     5     624     717</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="compare.synds-4.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Selected utility measures:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           pMSE   S_pMSE df</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> income 5.2e-05 0.697582  6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         pMSE   S_pMSE df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> income 6e-05 0.800676  6</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -13,16 +13,16 @@ syn.sample(y, xp, smoothing = "", cont.na = NA, proper = FALSE, ...)
   \item{smoothing}{smoothing method for numeric variable. See documentation
    for \code{\link{syn.smooth}}.}
   \item{cont.na}{a vector of codes for missing values for continuous
-     variables that should be excluded from smoothing.}  
-  \item{proper}{if \code{proper = TRUE} values are sampled from  
-    a bootstrapped sample of the original data.}  
+     variables that should be excluded from smoothing.}
+  \item{proper}{if \code{proper = TRUE} values are sampled from
+    a bootstrapped sample of the original data.}
   \item{\dots}{additional parameters passed to \code{sample}.}
 }
 \details{
- A simple random sample with replacement is taken from the 
- observed values in \code{y} and used as synthetic values. 
- A Guassian kernel smoothing can be applied to continuous variables 
- by setting smoothing parameter to \code{"density"}. It is recommended 
+ A simple random sample with replacement is taken from the
+ observed values in \code{y} and used as synthetic values.
+ A Guassian kernel smoothing can be applied to continuous variables
+ by setting smoothing parameter to \code{"density"}. It is recommended
  as a tool to decrease the disclosure risk.
 }
 \value{

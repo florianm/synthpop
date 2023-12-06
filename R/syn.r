@@ -6,13 +6,13 @@
 
 syn <- function(data, method = "cart",
                 visit.sequence = (1:ncol(data)),
-                predictor.matrix = NULL,  
-                m = 1, k = nrow(data), proper = FALSE, 
+                predictor.matrix = NULL,
+                m = 1, k = nrow(data), proper = FALSE,
                 minnumlevels = 1, maxfaclevels = 60,
-                rules = NULL, rvalues = NULL,                                  
+                rules = NULL, rvalues = NULL,
                 cont.na = NULL, semicont = NULL,
                 smoothing = NULL, event = NULL, denom = NULL,
-                drop.not.used = FALSE, drop.pred.only = FALSE,                                            
+                drop.not.used = FALSE, drop.pred.only = FALSE,
                 default.method = c("normrank", "logreg", "polyreg", "polr"),
                 numtocat = NULL, catgroups = rep(5, length(numtocat)),
                 models = FALSE,
@@ -27,21 +27,21 @@ syn <- function(data, method = "cart",
 #----------------------------------------------------------------------
 obs.vars <- names(data)
 
-#if (k == 0) m <- 0 
+# if (k == 0) m <- 0
 
 # set default method for everything to cart and to blank (which will get defaults) if method is "parametric"
 # if (all(method == "")) method = "cart"  # change to "ctree"?
 # else if (length(method)==1 && method=="parametric") method=rep("",dim(data)[2])
 
-if (!is.null(attr(data,"filetype")) && attr(data,"filetype") == "sav") {
-  var.lab <- attr(data,"variable.labels")
-  val.lab <- attr(data,"label.table")
+if (!is.null(attr(data, "filetype")) && attr(data, "filetype") == "sav") {
+  var.lab <- attr(data, "variable.labels")
+  val.lab <- attr(data, "label.table")
 } else {
   var.lab <- val.lab <- NULL
 }
 
 # check problematic characters in varaiable names
-has_space  <- grepl(" ", obs.vars) + 
+has_space <- grepl(" ", obs.vars) +
               sapply(data, function(x) {res <- any(is.na(x))}) +
               sapply(data, is.numeric)
 if (any(has_space == 3)) stop(paste("Your data have numeric variable(s) with missing values with names that include spaces:\n  ",
@@ -49,297 +49,297 @@ if (any(has_space == 3)) stop(paste("Your data have numeric variable(s) with mis
                               "\nThese should be renamed for synthpop to work correctly."), call. = FALSE)
 
 bad_char <- "[^\\w_.]"
-has_bad_char  <- str_detect(obs.vars, bad_char)
+has_bad_char <- str_detect(obs.vars, bad_char)
 if (any(has_bad_char)) cat("WARNING: Some variable names include special characters",
-                           unlist(str_extract_all(obs.vars, bad_char)),"\n  ",
+                           unlist(str_extract_all(obs.vars, bad_char)), "\n  ",
                            paste0(str_subset(obs.vars, bad_char), collapse = ", "),
                            "\nYou must rename them for synthpop to work correctly.")
 
-# if visit sequence includes variable names change them into column indecies 
+# if visit sequence includes variable names change them into column indecies
 if (is.character(visit.sequence)) {
   nametoind <- match(visit.sequence, colnames(data))
-    if (any(is.na(nametoind))) stop("Unrecognized variable(s) in visit.sequence: ", 
+    if (any(is.na(nametoind))) stop("Unrecognized variable(s) in visit.sequence: ",
       paste(visit.sequence[is.na(nametoind)], collapse = ", "), call. = FALSE)
     else visit.sequence <- nametoind
-} else if (!all(visit.sequence %in% 1:length(data))) stop("Column indices in visit.sequence must be between 1 and ", 
-                                                          length(data), sep = "", call. = FALSE)  
+} else if (!all(visit.sequence %in% 1:length(data))) stop("Column indices in visit.sequence must be between 1 and ",
+                                                          length(data), sep = "", call. = FALSE)
 
 # expand user's smoothing method (single string) to all numeric variables
 if (length(smoothing) == 1 & is.character(smoothing)) {
   numeric.vars <- which(sapply(data, is.numeric))
-  smoothing <- as.list(rep(smoothing,length(numeric.vars)))
+  smoothing <- as.list(rep(smoothing, length(numeric.vars)))
   names(smoothing) <- names(numeric.vars)
 }
 
-size.warn <- 100 + 10*length(visit.sequence)
-if (dim(data)[1] <  size.warn & print.flag == TRUE) {
-  cat("CAUTION: Your data set has fewer observations (",  dim(data)[1], 
-      ") than we advise.\nWe suggest that there should be at least ", 
+size.warn <- 100 + 10 * length(visit.sequence)
+if (dim(data)[1] < size.warn & print.flag == TRUE) {
+  cat("CAUTION: Your data set has fewer observations (", dim(data)[1],
+      ") than we advise.\nWe suggest that there should be at least ",
       size.warn, " observations\n(100 + 10 * no. of variables used in modelling the data).\n",
       "Please check your synthetic data carefully with functions\ncompare(), utility.tab(), and utility.gen().\n\n", sep = "")
   }
 
-##-----------------------code for numtocat------------------------------------------
+## -----------------------code for numtocat------------------------------------------
 if (!is.null(numtocat)) {
-  
-  # if numtocat is numeric change to column names and check names if not
+
+# if numtocat is numeric change to column names and check names if not
   if (is.numeric(numtocat)) {
-    if (!all(numtocat %in% 1:length(data))) stop("Column indices in visit.sequence must be between 1 and ", 
-      length(data), sep = "", call. = FALSE)  
+    if (!all(numtocat %in% 1:length(data))) stop("Column indices in visit.sequence must be between 1 and ",
+      length(data), sep = "", call. = FALSE)
     numtocat <- names(data)[numtocat]
   } else if (!all(numtocat %in% names(data))) stop("numtocat variable(s): ",
-      paste(numtocat[!numtocat %in% names(data)], collapse = ", ")," are not in data.", sep = "", call. = FALSE)
- 
- # check if numtocat in visit sequence and remove from numtocat if not
+      paste(numtocat[!numtocat %in% names(data)], collapse = ", "), " are not in data.", sep = "", call. = FALSE)
+
+# check if numtocat in visit sequence and remove from numtocat if not
  if (!all(numtocat %in% names(data)[visit.sequence])) {
    cat("\nVariable(s) in numtocat (", paste(numtocat[!numtocat %in% names(data)[visit.sequence]], collapse = ", "),
-     ") not in visit.sequence and have been removed from numtocat.\n" , sep = "")
+     ") not in visit.sequence and have been removed from numtocat.\n", sep = "")
    if (length(catgroups) > 1) catgroups <- catgroups[numtocat %in% names(data)[visit.sequence]]
    numtocat <- numtocat[numtocat %in% names(data)[visit.sequence]]
    if (length(numtocat) == 0) stop("\nAll variables in numtocat removed, perhaps try without this parameter.\n", call. = FALSE)
  }
- 
- # get cont.na for numtocat vars
+
+# get cont.na for numtocat vars
  cna <- cont.na
  if (!any(names(cna) %in% numtocat)) cna <- NULL
  if (!is.null(cna) & any(names(cna) %in% numtocat)) {
-   cna <- cna[names(cna) %in%  numtocat]
+   cna <- cna[names(cna) %in% numtocat]
    if (length(cna) == 0) cna <- NULL
  }
 
- # make numtocat object incorporating some checks
- numtocat.obj <- numtocat.syn(data, numtocat = numtocat, cont.na = cna, 
+# make numtocat object incorporating some checks
+ numtocat.obj <- numtocat.syn(data, numtocat = numtocat, cont.na = cna,
                               catgroups = catgroups, print.flag = FALSE)
- 
- # adjust visit.sequence
+
+# adjust visit.sequence
  visit.sequence <- c(visit.sequence, length(data) + 1:length(numtocat))
-  
- # replace data with categorised with orig vars at end
+
+# replace data with categorised with orig vars at end
  data <- cbind(numtocat.obj$data, numtocat.obj$orig)
- 
+
  if (length(method) == 1) {
-   if (method == "parametric") stop("'parametric' not available, when numtocat is used, methods must be specified in detail.\n", call. = FALSE )
+   if (method == "parametric") stop("'parametric' not available, when numtocat is used, methods must be specified in detail.\n", call. = FALSE)
    else method <- rep(method, length(data) - length(numtocat))
  }
-  
- # assign method for final columns as nested and give changed parameters correct names
+
+# assign method for final columns as nested and give changed parameters correct names
  method <- c(method, paste("nested", numtocat, sep = "."))
- # checks on methods for numtocat variables
- if (any(method[numtocat.obj$ind] %in% 
+# checks on methods for numtocat variables
+ if (any(method[numtocat.obj$ind] %in%
      c("norm", "normrank", "lognorm", "sqrtnorm", "cubertnorm"))) {
-   nummth <- method[numtocat.obj$ind] %in% 
+   nummth <- method[numtocat.obj$ind] %in%
      c("norm", "normrank", "lognorm", "sqrtnorm", "cubertnorm")
    stop("Method(s) (", paste(method[numtocat.obj$ind][nummth], collapse = ", "),
-        ") assigned to variable(s) in numcat (", 
+        ") assigned to variable(s) in numcat (",
         paste(numtocat[nummth], collapse = ", "),
         ")\nunsuitable for categorical data.", sep = "", call. = FALSE)
- }  
+ }
 
- # modify visit sequence and predictor matrix to synthesis numtocat 
- # original variables after the others
- # and adjust other parameters to match if not null
+# modify visit sequence and predictor matrix to synthesis numtocat
+# original variables after the others
+# and adjust other parameters to match if not null
  if (!is.null(predictor.matrix)) {
    predictor.matrix <- cbind(predictor.matrix, matrix(0, dim(data)[2], length(numtocat)))
    predictor.matrix <- rbind(predictor.matrix, matrix(0, length(numtocat), dim(data)[2] + length(numtocat)))
-   for (i in 1:length(numtocat)) { 
+   for (i in 1:length(numtocat)) {
      predictor.matrix[dim(data)[2] + i, numtocat.obj$ind[i]] <- 1
    }
  }
 
- # move these parameters to numeric versions
- newnames <- function(x) { 
-   # mini function to change names of lists
+# move these parameters to numeric versions
+ newnames <- function(x) {
+# mini function to change names of lists
    xn <- names(x)
    ind <- match(numtocat, xn)
    ind <- ind[!is.na(ind)]
    names(x)[ind] <- paste("orig", names(x)[ind], sep = ".")
    return(x)
  }
- if (!is.null(rules))     rules     <- newnames(rules)
- if (!is.null(rvalues))   rvalues   <- newnames(rvalues)
- if (!is.null(cont.na))   cont.na   <- newnames(cont.na)
- if (!is.null(smoothing)) smoothing <- newnames(smoothing) 
+ if (!is.null(rules)) rules <- newnames(rules)
+ if (!is.null(rvalues)) rvalues <- newnames(rvalues)
+ if (!is.null(cont.na)) cont.na <- newnames(cont.na)
+ if (!is.null(smoothing)) smoothing <- newnames(smoothing)
 
  if (print.flag == TRUE) cat(
 "**************************************************************
- The numeric variable(s): ", 
- paste(names(data)[numtocat.obj$ind], collapse = ", "), 
+ The numeric variable(s): ",
+ paste(names(data)[numtocat.obj$ind], collapse = ", "),
 "\n will been synthesised as grouped variables and their numeric
  values generated from boostrap samples within categories.
-**************************************************************\n", sep = "") 
+**************************************************************\n", sep = "")
 }
-##-----------------end of--code for numtocat----------------------------
+## -----------------end of--code for numtocat----------------------------
 
 
-##-----------------------check.visit.sequence.syn-----------------------
+## -----------------------check.visit.sequence.syn-----------------------
 
-check.visit.sequence.syn <- function(setup){
+check.visit.sequence.syn <- function(setup) {
 
- vis      <- setup$visit.sequence
- nvar     <- setup$nvar
+ vis <- setup$visit.sequence
+ nvar <- setup$nvar
  varnames <- setup$varnames
- method   <- setup$method
+ method <- setup$method
 
- # visit.sequence can include column indices only
- # not all columns have to be given - variables
- # not in the visit sequence won't be synthesised
- 
- # stop if variable in visit.sequence more than once
+# visit.sequence can include column indices only
+# not all columns have to be given - variables
+# not in the visit sequence won't be synthesised
+
+# stop if variable in visit.sequence more than once
  if (any(duplicated(vis))) stop("Visit sequence includes repeated variable names/numbers.\n", call. = FALSE)
 
- # remove any visitSequnce members outside 1:nvar
+# remove any visitSequnce members outside 1:nvar
  if (any(!(vis %in% 1:nvar))) {
-   cat("Element(s): {",paste(vis[!(vis %in% 1:nvar)],
-       collapse = ", "),"} of the 'visit.sequence' removed as not valid. No such column.\n\n", sep = "")
+   cat("Element(s): {", paste(vis[!(vis %in% 1:nvar)],
+       collapse = ", "), "} of the 'visit.sequence' removed as not valid. No such column.\n\n", sep = "")
    vis <- as.numeric(vis[vis %in% 1:nvar])
  }
 
- # remove event indicator(s) from visit.sequence, if present
- event.in.vis <- !is.na(match(vis,event))
+# remove event indicator(s) from visit.sequence, if present
+ event.in.vis <- !is.na(match(vis, event))
  if (!is.null(event) & any(event.in.vis) && method[which(event == vis[event.in.vis])] == "survctree") {
    cat("Variable(s) {", paste0(names(data)[vis][event.in.vis], collapse = ", "),
-       "} with method(s) {",paste0(method[vis[event.in.vis]], collapse = ", "),
+       "} with method(s) {", paste0(method[vis[event.in.vis]], collapse = ", "),
        "} removed from 'visit.sequence'\nbecause used as event indicator(s).\nAny event indicators will be synthesised along with the corresponding survival time(s). \n\n",
        sep = "")
    vis <- vis[!event.in.vis]
    if (length(vis) < 2) stop("Visit sequence now of length ",
-       length(vis),". No synthesis done.", call. = FALSE)
- } 
-                                                            #GRdenom new code
- #!BN adjusted to allow visit sequence with selected vars only 
- #! have to add a condition when denominator is not in visit seq at all;
- #! sampler has to be changed still
- #!---                                                                   
- #  check that denominator comes before the count for a binomial with denom
- #if (any(denom>0)) {
- #   denom.in.vis<-(1:nvar)[denom>0]
- #       for (j in denom.in.vis){
- #          posj<-(1:length(vis))[match(j,vis)]
- #          kj <-denom[j]
- #          posk<-(1:length(vis))[match(kj,vis)]
- #      if (posj<=posk) 
- #         stop("\n Denominator ",varnames[j]," for ",varnames[kj]," must be synthesisied before it\n")
- #   }
- #
- # }                                                               
- 
- # check that denominator comes before the count for a binomial with denom 
- for (j in which(denom[vis] > 0)) { 
-   denom.pos <- match(denom[vis][j],vis)
-   if (j < denom.pos) stop("Denominator ",varnames[denom[vis][j]]," for ",
-                           varnames[vis[j]]," must be synthesisied before it\n",
+       length(vis), ". No synthesis done.", call. = FALSE)
+ }
+# GRdenom new code
+# !BN adjusted to allow visit sequence with selected vars only
+# ! have to add a condition when denominator is not in visit seq at all;
+# ! sampler has to be changed still
+# !---
+#  check that denominator comes before the count for a binomial with denom
+# if (any(denom>0)) {
+#   denom.in.vis<-(1:nvar)[denom>0]
+#       for (j in denom.in.vis){
+#          posj<-(1:length(vis))[match(j,vis)]
+#          kj <-denom[j]
+#          posk<-(1:length(vis))[match(kj,vis)]
+#      if (posj<=posk)
+#         stop("\n Denominator ",varnames[j]," for ",varnames[kj]," must be synthesisied before it\n")
+#   }
+#
+# }
+
+# check that denominator comes before the count for a binomial with denom
+ for (j in which(denom[vis] > 0)) {
+   denom.pos <- match(denom[vis][j], vis)
+   if (j < denom.pos) stop("Denominator ", varnames[denom[vis][j]], " for ",
+                           varnames[vis[j]], " must be synthesisied before it\n",
                            call. = FALSE)
  }
- #!---
-                                                                        
- # stop if visit.sequence is empty
+# !---
+
+# stop if visit.sequence is empty
  if (length(vis) == 0) stop(paste("Seems no variables being synthesised.\nCheck parameter 'visit.sequence'."), call. = FALSE)
 
- # All variables used in passive synthesis have to be synthesised BEFORE
- # the variables they apply to
- for (j in which(is.passive(method[vis]))) {  #  
-   var.present <- match(all.vars(as.formula(method[vis][j])),varnames) 
-   var.in.vis  <- match(var.present,vis)
+# All variables used in passive synthesis have to be synthesised BEFORE
+# the variables they apply to
+ for (j in which(is.passive(method[vis]))) { #
+   var.present <- match(all.vars(as.formula(method[vis][j])), varnames)
+   var.in.vis <- match(var.present, vis)
    if (j < max(var.in.vis) | any(is.na(var.in.vis))) stop("Variable(s) used in passive synthesis for ",
-     varnames[vis][j]," has/have to be synthesised BEFORE the variables they apply to.", call. = FALSE)
+     varnames[vis][j], " has/have to be synthesised BEFORE the variables they apply to.", call. = FALSE)
  }
 
  setup$visit.sequence <- vis
  return(setup)
 }
-##-----------------end of--check.visit.sequence.syn---------------------
+## -----------------end of--check.visit.sequence.syn---------------------
 
 
-##-----------------------check.predictor.matrix.syn---------------------
+## -----------------------check.predictor.matrix.syn---------------------
 
-check.predictor.matrix.syn <- function(setup){
- ## checks the predictor.matrix
- ## makes consistency edits of the predictor.matrix
+check.predictor.matrix.syn <- function(setup) {
+## checks the predictor.matrix
+## makes consistency edits of the predictor.matrix
 
- pred     <- setup$predictor.matrix
- nvar     <- setup$nvar
+ pred <- setup$predictor.matrix
+ nvar <- setup$nvar
  varnames <- setup$varnames
- vis      <- setup$visit.sequence
- method   <- setup$method
- denom    <- setup$denom                     #GRdenom new
-    
- # set up default predictor matrix (if not provided by a user)
- # to lower diagonal in order of visitSequnce but with
- # elements for variables not to be synthesised set to 0
- 
- pred.dt           <- matrix(0, nvar, nvar)
+ vis <- setup$visit.sequence
+ method <- setup$method
+ denom <- setup$denom # GRdenom new
+
+# set up default predictor matrix (if not provided by a user)
+# to lower diagonal in order of visitSequnce but with
+# elements for variables not to be synthesised set to 0
+
+ pred.dt <- matrix(0, nvar, nvar)
  pred.dt[vis, vis] <- outer(1:length(vis), 1:length(vis), ">")
  if (is.null(pred)) pred <- pred.dt
 
- # basic corrections for a default matrix or the one provided by a user
- dimnames(pred)   <- list(varnames, varnames)
- diag(pred)       <- 0
+# basic corrections for a default matrix or the one provided by a user
+ dimnames(pred) <- list(varnames, varnames)
+ diag(pred) <- 0
 
- # select from visit.sequence variables that are synthesised
- # (=method different than "")
+# select from visit.sequence variables that are synthesised
+# (=method different than "")
  vis.syn <- vis
  if (!all(method == "") & length(method) > 1) vis.syn <- intersect(vis, which(method != ""))
- # removing predictors for variables with "" method
+# removing predictors for variables with "" method
  if (length(vis.syn) < length(vis)) {
-   vis.blank        <- setdiff(vis,vis.syn)
-   pred[vis.blank,] <- 0
+   vis.blank <- setdiff(vis, vis.syn)
+   pred[vis.blank, ] <- 0
  }
- # removing predictors for variables not in visit.sequence
- pred[setdiff(1:nvar, vis),] <- 0
- 
- # removing predictors for variables with "sample" method
- for (j in which(method == "sample")) pred[j,] <- 0
- 
- # removing survival time from predictors
- for (j in which(method == "survctree")) pred[,j] <- 0
+# removing predictors for variables not in visit.sequence
+ pred[setdiff(1:nvar, vis), ] <- 0
 
- # removing event indicator from predictors
- for (j in which(method == "survctree" & event > 0)) pred[,event[j]] <- 0
-                                                                     #GRdenom new lines
- #  remove denom from prediction of its numerator
+# removing predictors for variables with "sample" method
+ for (j in which(method == "sample")) pred[j, ] <- 0
+
+# removing survival time from predictors
+ for (j in which(method == "survctree")) pred[, j] <- 0
+
+# removing event indicator from predictors
+ for (j in which(method == "survctree" & event > 0)) pred[, event[j]] <- 0
+# GRdenom new lines
+#  remove denom from prediction of its numerator
     for  (j in which(method == "logreg")) {
       if (denom[j] > 0) pred[j, denom[j]] <- 0
     }
-                                                                    # to here
- # checking consistency between visit.sequence and predictor matrix
- # provided by a user: dropping from predictors variables that are
- # not already synthesised
- preddel <- which((pred[, vis.syn, drop = FALSE] == 1 & 
+# to here
+# checking consistency between visit.sequence and predictor matrix
+# provided by a user: dropping from predictors variables that are
+# not already synthesised
+ preddel <- which((pred[, vis.syn, drop = FALSE] == 1 &
                    pred.dt[, vis.syn, drop = FALSE] == 0), arr.ind = TRUE)
  if (length(vis) > 1) {
- 	 pred[,vis.syn] <- ifelse((pred[,vis.syn] == 1 & pred.dt[, vis.syn] == 0),
+         pred[, vis.syn] <- ifelse((pred[, vis.syn] == 1 & pred.dt[, vis.syn] == 0),
                              0, pred[, vis.syn])
- 	 if (nrow(preddel) > 0) cat(paste("Not synthesised predictor ",
+         if (nrow(preddel) > 0) cat(paste("Not synthesised predictor ",
                          varnames[vis.syn][preddel[, 2]],
                          " removed from predictor.matrix for variable ",
                          varnames[preddel[, 1]], ".\n", sep = ""))
  }
  setup$predictor.matrix <- pred
- setup$visit.sequence   <- vis
+ setup$visit.sequence <- vis
  return(setup)
 }
-##-----------------end of--check.predictor.matrix.syn-------------------
+## -----------------end of--check.predictor.matrix.syn-------------------
 
 
-##-----------------------check.method.syn------------------------------
+## -----------------------check.method.syn------------------------------
 
 check.method.syn <- function(setup, data, proper) {
- ## check method, set defaults if appropriate
+## check method, set defaults if appropriate
 
- method         <- setup$method
+ method <- setup$method
  default.method <- setup$default.method
- vis            <- setup$visit.sequence
- nvar           <- setup$nvar
- varnames	      <- setup$varnames
- pred		        <- setup$predictor.matrix
- event          <- setup$event
- denom          <- setup$denom                    
+ vis <- setup$visit.sequence
+ nvar <- setup$nvar
+ varnames <- setup$varnames
+ pred <- setup$predictor.matrix
+ event <- setup$event
+ denom <- setup$denom
 
- # check that all ipf and allcat are at start of visit sequence   
+# check that all ipf and allcat are at start of visit sequence
  mcatall <- (method %in% "catall")[vis]
- mipf    <- (method %in% "ipf")[vis]
+ mipf <- (method %in% "ipf")[vis]
  if (any(mipf) & any(mcatall)) stop("Methods 'ipf' and 'catall' cannot both be used.\nIf you want all margins fitted for a set of variables,\nthen you could use 'ipf' and specify othmargins appropriately.\n", call. = FALSE)
- 
+
  if (any(mcatall)) {
    if (any(mcatall != mcatall[order(!mcatall)])) stop("All variables with method 'catall' must be together at start of visit sequence.\n", call. = FALSE)
    if (sum(mcatall) == 1) {
@@ -354,41 +354,41 @@ check.method.syn <- function(setup, data, proper) {
      cat("First method changed to 'sample' from 'ipf' as set for a single variable only.\n", call. = FALSE)
    }
  }
- 
- # change method for constant variables but leave passive variables untouched
- # factors and character variables with missing data won't count,
- # as NA is made into an additional level
+
+# change method for constant variables but leave passive variables untouched
+# factors and character variables with missing data won't count,
+# as NA is made into an additional level
  for (j in 1:nvar) {
    if (!is.passive(method[j]) & method[j] != "ipf" & method[j] != "catall") {
-     if (is.numeric(data[,j])) {
-       v <- var(data[,j], na.rm = TRUE)
+     if (is.numeric(data[, j])) {
+       v <- var(data[, j], na.rm = TRUE)
        if (!is.na(v)) constant <- (v < 1000 * .Machine$double.eps) else
        constant <- is.na(v) | v < 1000 * .Machine$double.eps
      } else {
-       constant <- all(duplicated(data[,j])[-1L])
+       constant <- all(duplicated(data[, j])[-1L])
      }
 
      if (constant) {
        if (any(vis == j)) {
-	       method[j] <- "constant" 
-         if (print.flag == T) cat('Variable ', varnames[j], 
+               method[j] <- "constant"
+         if (print.flag == T) cat('Variable ', varnames[j],
            ' has only one value so its method has been changed to "constant".\n', sep = "")
-	       pred[j, ] <- 0
+               pred[j, ] <- 0
        }
-       if (any(pred[, j] != 0)) { 
-         if (print.flag == T) cat("Variable ", varnames[j], 
+       if (any(pred[, j] != 0)) {
+         if (print.flag == T) cat("Variable ", varnames[j],
            " removed as predictor because only one value.\n", sep = "")
          pred[, j] <- 0
        }
      }
    }
- } 
+ }
 
- # check that passive relationship holds in original data
- #---
+# check that passive relationship holds in original data
+#---
  passive.idx <- grep("~", method)
  for (i in passive.idx) {
-   data.val <- data[,i]
+   data.val <- data[, i]
    passive.val <- syn.passive(data, method[i])$res[[1]]
 
    if (is.factor(data.val)) {
@@ -398,16 +398,16 @@ check.method.syn <- function(setup, data, proper) {
                                                         sep = "", call. = FALSE)
    }
 
-   NAderived <- sum( is.na(passive.val) & !is.na(data.val))
-   NAorig    <- sum(!is.na(passive.val) &  is.na(data.val))
-   nonmiss   <- sum(abs(as.numeric(passive.val)[!is.na(data.val) & !is.na(passive.val)] -
-                        as.numeric(data.val)[!is.na(data.val) & !is.na(passive.val)]) > 1e-8 )
+   NAderived <- sum(is.na(passive.val) & !is.na(data.val))
+   NAorig <- sum(!is.na(passive.val) & is.na(data.val))
+   nonmiss <- sum(abs(as.numeric(passive.val)[!is.na(data.val) & !is.na(passive.val)] -
+                        as.numeric(data.val)[!is.na(data.val) & !is.na(passive.val)]) > 1e-8)
 
    if (sum(NAderived + NAorig + nonmiss) > 0) {
-     cat("\nVariable(s) ", varnames[i]," with passive synthesis: relationship does not hold in data.\n", sep = "")
-     if (NAderived > 0) cat("Total of ", NAderived," case(s) where value in data but some predictors missing.\n", sep = "")
-     if (NAorig > 0) cat("Total of ", NAorig," case(s) where no predictors missing but no value in data.\n", sep = "")
-     if (nonmiss > 0) cat("Total of ", nonmiss," case(s) where predictors do not give value present in data.\n", sep = "")
+     cat("\nVariable(s) ", varnames[i], " with passive synthesis: relationship does not hold in data.\n", sep = "")
+     if (NAderived > 0) cat("Total of ", NAderived, " case(s) where value in data but some predictors missing.\n", sep = "")
+     if (NAorig > 0) cat("Total of ", NAorig, " case(s) where no predictors missing but no value in data.\n", sep = "")
+     if (nonmiss > 0) cat("Total of ", nonmiss, " case(s) where predictors do not give value present in data.\n", sep = "")
     cat("You might want to recompute the variable(s) in the original data.\n")
    }
 
@@ -415,200 +415,200 @@ check.method.syn <- function(setup, data, proper) {
                                                         " with passive synthesis has missing values\nso it will not be used to predict other variables.\n", sep = "")
  }
 
- 
- # # check that passive variables obey rule in original data  ##GR0621
- # #---
- # passive.idx <- grep("~", method)
- # for (i in passive.idx) {
- #   test <- syn.passive(data, method[i])$res
- #   NAderived <- sum(is.na(test[[1]]) & !is.na(data[,i]))
- #   NAorig <-  sum(!is.na(test[[1]]) & is.na(data[,i]))
- #   nonmiss <- sum(abs(as.numeric(test[[1]])[!is.na(data[,i]) & !is.na(test)] - as.numeric(data[,i])[!is.na(data[,i]) & !is.na(test)]) > 1e-8 )
- #   
- #   if (sum(NAderived + NAorig + nonmiss) >0) {
- #     cat("\n\nVariable(s) ", varnames[i]," with passive synthesis: relationship does not hold in data\n" )
- #     if (NAderived >0 ) cat("Total of ", NAderived," cases where value in data but some predictors missing\n")
- #     if (NAorig >0 ) cat("Total of ", NAorig," cases no predictors missing but no value in  data \n")
- #     if (nonmiss >0 ) cat("Total of ", nonmiss," cases where predictors do not give value in data\n")
- #     stop("You must recompute the variables in the original data in order for the synthesis to run.", call. = FALSE)
- #   }
- #   if (is.factor(data[,i])) {
- #     resor <- data[,i]
- #     resor <- addNA(resor, ifany = TRUE)
- #     levels(resor)[is.na(levels(resor))] <- "NAtemp" 
- #     if (  !all(levels(resor) == levels(test[[1]]))) stop("Levels of passively created factor ", varnames[i]," differ from original\n", call. = FALSE)
- #   }
- #   if (is.numeric(data[,i]) & any(is.na(data[,i]))) cat("\n\nVariable ",varnames[i], " with passive synthesis has missing values\n so it will not be used to predict later variables.")
- # }
- 
- 
- 
- 
- # check nested variables
- #---
+
+# # check that passive variables obey rule in original data  ##GR0621
+# #---
+# passive.idx <- grep("~", method)
+# for (i in passive.idx) {
+#   test <- syn.passive(data, method[i])$res
+#   NAderived <- sum(is.na(test[[1]]) & !is.na(data[,i]))
+#   NAorig <-  sum(!is.na(test[[1]]) & is.na(data[,i]))
+#   nonmiss <- sum(abs(as.numeric(test[[1]])[!is.na(data[,i]) & !is.na(test)] - as.numeric(data[,i])[!is.na(data[,i]) & !is.na(test)]) > 1e-8 )
+#
+#   if (sum(NAderived + NAorig + nonmiss) >0) {
+#     cat("\n\nVariable(s) ", varnames[i]," with passive synthesis: relationship does not hold in data\n" )
+#     if (NAderived >0 ) cat("Total of ", NAderived," cases where value in data but some predictors missing\n")
+#     if (NAorig >0 ) cat("Total of ", NAorig," cases no predictors missing but no value in  data \n")
+#     if (nonmiss >0 ) cat("Total of ", nonmiss," cases where predictors do not give value in data\n")
+#     stop("You must recompute the variables in the original data in order for the synthesis to run.", call. = FALSE)
+#   }
+#   if (is.factor(data[,i])) {
+#     resor <- data[,i]
+#     resor <- addNA(resor, ifany = TRUE)
+#     levels(resor)[is.na(levels(resor))] <- "NAtemp"
+#     if (  !all(levels(resor) == levels(test[[1]]))) stop("Levels of passively created factor ", varnames[i]," differ from original\n", call. = FALSE)
+#   }
+#   if (is.numeric(data[,i]) & any(is.na(data[,i]))) cat("\n\nVariable ",varnames[i], " with passive synthesis has missing values\n so it will not be used to predict later variables.")
+# }
+
+
+
+
+# check nested variables
+#---
  nestmth.idx <- grep("nested", method)
  gr.vars <- vector("character", length(method))
  gr.vars[nestmth.idx] <- substring(method[nestmth.idx], 8)
 
- if (length(nestmth.idx) > 0) { 
+ if (length(nestmth.idx) > 0) {
    for (i in nestmth.idx) {
-     # check if provided grouped var exists
-     if (gr.vars[i] == "") stop("No variable name provided for 'nested' method for ", 
-       varnames[i] ,".\nSet method as 'nested.varname' instead of 'nested'.\n", call. = FALSE)
-     if (!(gr.vars[i] %in% varnames)) stop("Unrecognized variable ", gr.vars[i], 
-       " provided for 'nested' method for ", varnames[i] ,"\n", call. = FALSE)
-     if (gr.vars[i] == varnames[i]) stop("Variable ", varnames[i], 
-       " can not be predicted by itself.\n", call. = FALSE) 
-       
-     # check if var nested in gr.var
-     #? tabvars   <- table(data[,i], data[,gr.vars[i]]) 
-     tabvars <- table(data[,i], data[,gr.vars[i]], useNA = "ifany") 
+# check if provided grouped var exists
+     if (gr.vars[i] == "") stop("No variable name provided for 'nested' method for ",
+       varnames[i], ".\nSet method as 'nested.varname' instead of 'nested'.\n", call. = FALSE)
+     if (!(gr.vars[i] %in% varnames)) stop("Unrecognized variable ", gr.vars[i],
+       " provided for 'nested' method for ", varnames[i], "\n", call. = FALSE)
+     if (gr.vars[i] == varnames[i]) stop("Variable ", varnames[i],
+       " can not be predicted by itself.\n", call. = FALSE)
+
+# check if var nested in gr.var
+# ? tabvars   <- table(data[,i], data[,gr.vars[i]])
+     tabvars <- table(data[, i], data[, gr.vars[i]], useNA = "ifany")
      tabvars01 <- ifelse(tabvars > 0, 1, 0)
      ymulti <- rowSums(tabvars01) > 1
-     if ("NAtemp" %in% names(ymulti)) ymulti["NAtemp"] <- FALSE  
-     ymulti[names(ymulti) %in% cont.na[[i]]] <- FALSE  # missing values and cont.na are excluded 
-     if (any(ymulti)) cat("\nNOTE: Variable ", varnames[i], 
-       " is not nested within its predictor ", gr.vars[i], ".\nCheck values of ", 
-       varnames[i], ": ", paste0(rownames(tabvars01)[ymulti], collapse = ", "), 
+     if ("NAtemp" %in% names(ymulti)) ymulti["NAtemp"] <- FALSE
+     ymulti[names(ymulti) %in% cont.na[[i]]] <- FALSE # missing values and cont.na are excluded
+     if (any(ymulti)) cat("\nNOTE: Variable ", varnames[i],
+       " is not nested within its predictor ", gr.vars[i], ".\nCheck values of ",
+       varnames[i], ": ", paste0(rownames(tabvars01)[ymulti], collapse = ", "),
        "\n\n", sep = "")
-   
-   # adjust predictor matrix
-   pred[i, -match(gr.vars[i], varnames)] <- 0  # remove all predictors except the group var
-   pred[-match(varnames[i], gr.vars), i] <- 0  # exclude detailed var from predictors except when used for nested method
+
+# adjust predictor matrix
+   pred[i, -match(gr.vars[i], varnames)] <- 0 # remove all predictors except the group var
+   pred[-match(varnames[i], gr.vars), i] <- 0 # exclude detailed var from predictors except when used for nested method
    }
    if (m > 0) method[nestmth.idx] <- "nested"
  }
- #---
+#---
 
- # check if var has predictors
- if (sum(pred) > 0) has.pred <- apply(pred != 0, 1, any)   # GR condition added
- else has.pred <- rep(0, nvar) 
- 
+# check if var has predictors
+ if (sum(pred) > 0) has.pred <- apply(pred != 0, 1, any) # GR condition added
+ else has.pred <- rep(0, nvar)
+
  if (any(method == "parametric")) {
-   # set method for first in visit.sequence to "sample"
-   # change to default methods for variables with predictors
-   
+# set method for first in visit.sequence to "sample"
+# change to default methods for variables with predictors
+
    if (length(vis) > 1) {
-	   for (j in vis[-1]) {
-	     if (has.pred[j]) {
-	       y <- data[,j]
-	       if (is.numeric(y))        method[j] <- default.method[1]
-	       else if (nlevels(y) == 2) method[j] <- default.method[2]
-	       else if (is.ordered(y) & nlevels(y) > 2) method[j] <- default.method[4]
-	       else if (nlevels(y) > 2)  method[j] <- default.method[3]
-	       else if (is.logical(y))   method[j] <- default.method[2]
-	       else if (nlevels(y) != 1) stop("Variable ",j," ",varnames[j],
-		     " type not numeric or factor.", call. = FALSE) # to prevent a constant values failing
-	     } else if (method[j] != "constant") method[j] <- "sample" 
-	   }
-	 }
+           for (j in vis[-1]) {
+             if (has.pred[j]) {
+               y <- data[, j]
+               if (is.numeric(y)) method[j] <- default.method[1]
+               else if (nlevels(y) == 2) method[j] <- default.method[2]
+               else if (is.ordered(y) & nlevels(y) > 2) method[j] <- default.method[4]
+               else if (nlevels(y) > 2) method[j] <- default.method[3]
+               else if (is.logical(y)) method[j] <- default.method[2]
+               else if (nlevels(y) != 1) stop("Variable ", j, " ", varnames[j],
+                     " type not numeric or factor.", call. = FALSE) # to prevent a constant values failing
+             } else if (method[j] != "constant") method[j] <- "sample"
+           }
+         }
  }
-  
- # check whether the elementary synthesising methods are available
- # on the search path
- active    <- !is.passive(method) & !(method == "") & !(method == "constant") 
+
+# check whether the elementary synthesising methods are available
+# on the search path
+ active <- !is.passive(method) & !(method == "") & !(method == "constant")
  if (sum(active) > 0) {
-   # fullNames <- paste("syn", method[active], sep=".") #!GR-29/8/16
-   fullNames <- method[active]                                #!GR-29/8/16
-   if (m == 0) fullNames[grep("nested",fullNames)] <- "nested"  #!GR-29/8/16
-   fullNames <- paste("syn", fullNames, sep = ".")               #!GR-29/8/16
-   notFound  <- !(fullNames %in% c('syn.bag', 'syn.cart', 'syn.cartbboot', 'syn.collinear', 
-      'syn.ctree', 'syn.cubertnorm', 'syn.lognorm', 'syn.logreg', 'syn.nested', 'syn.norm', 
-      'syn.normrank', 'syn.pmm', 'syn.polr', 'syn.polyreg', 'syn.ranknorm', 'syn.rf', 
-      'syn.sample', 'syn.satcat', 'syn.smooth', 'syn.sqrtnorm', 'syn.survctree') | 
-      sapply(fullNames, exists, mode = "function", inherit = TRUE)) 
+# fullNames <- paste("syn", method[active], sep=".") #!GR-29/8/16
+   fullNames <- method[active] # !GR-29/8/16
+   if (m == 0) fullNames[grep("nested", fullNames)] <- "nested" # !GR-29/8/16
+   fullNames <- paste("syn", fullNames, sep = ".") # !GR-29/8/16
+   notFound <- !(fullNames %in% c('syn.bag', 'syn.cart', 'syn.cartbboot', 'syn.collinear',
+      'syn.ctree', 'syn.cubertnorm', 'syn.lognorm', 'syn.logreg', 'syn.nested', 'syn.norm',
+      'syn.normrank', 'syn.pmm', 'syn.polr', 'syn.polyreg', 'syn.ranknorm', 'syn.rf',
+      'syn.sample', 'syn.satcat', 'syn.smooth', 'syn.sqrtnorm', 'syn.survctree') |
+      sapply(fullNames, exists, mode = "function", inherit = TRUE))
    if (any(notFound)) stop(paste("The following functions were not found:",
                            paste(unique(fullNames[notFound]), collapse = ", ")), call. = FALSE)
  }
 
- # type checks on built-in  methods 
+# type checks on built-in  methods
 
  for (j in vis) {
- 	 y     <- data[,j]
+         y <- data[, j]
    vname <- colnames(data)[j]
-   mj    <- method[j]
-   mlist <- list(m1 = c("logreg","polyreg","polr","ipf","catall"), #GRBN
-                 m2 = c("norm","normrank","survctree"),
-                 m3 = c("norm","normrank","survctree","logreg"))
-   # In case of type mismatch stop execution
+   mj <- method[j]
+   mlist <- list(m1 = c("logreg", "polyreg", "polr", "ipf", "catall"), # GRBN
+                 m2 = c("norm", "normrank", "survctree"),
+                 m3 = c("norm", "normrank", "survctree", "logreg"))
+# In case of type mismatch stop execution
 
 #                                                       #GRdenom lines changed
 # check for logistic with denominator
-# 
+#
    if (denom[j] > 0) {
      if (!(mj %in% c("logreg"))) {
        method[j] <- "logreg"
-       cat("Variable ", vname," has denominator (", colnames(data[denom[j]]), 
+       cat("Variable ", vname, " has denominator (", colnames(data[denom[j]]),
        ") and method ", mj, " has been changed to logreg\n", sep = "")
      }
-   #if (!(mj %in% c("logreg"))) stop("Variable ", vname," has denominator (",
-   #  colnames(data[denom[j]]), ") and method should be set to logreg and not ",mj,"\n", 
-   #  call. = FALSE)
+# if (!(mj %in% c("logreg"))) stop("Variable ", vname," has denominator (",
+#  colnames(data[denom[j]]), ") and method should be set to logreg and not ",mj,"\n",
+#  call. = FALSE)
 #
 #  check all integers
 
-  if (!((is.integer(y) | all((y - round(y)) == 0, na.rm = TRUE)) &  #!!!!!! address missing data issue
-     (is.integer(data[denom[j]]) | all((data[denom[j]] - round(data[denom[j]]) == 0), na.rm = TRUE)))) #!!!!!! address missing data issue   
-     stop("Variable ", vname," and denominator ", colnames(data[denom[j]]),
+  if (!((is.integer(y) | all((y - round(y)) == 0, na.rm = TRUE)) & # !!!!!! address missing data issue
+     (is.integer(data[denom[j]]) | all((data[denom[j]] - round(data[denom[j]]) == 0), na.rm = TRUE)))) # !!!!!! address missing data issue
+     stop("Variable ", vname, " and denominator ", colnames(data[denom[j]]),
      " must be integers\n", call. = FALSE)
-   if (any((data[denom[j]] - y) < 0, na.rm = TRUE)) stop("Variable ", vname,    #!!!!!! address missing data issue
+   if (any((data[denom[j]] - y) < 0, na.rm = TRUE)) stop("Variable ", vname, # !!!!!! address missing data issue
      " must be less than or equal denominator ",
-     colnames(data[denom[j]]),"\n", call. = FALSE)
+     colnames(data[denom[j]]), "\n", call. = FALSE)
    } else {
-     if (is.numeric(y) & (mj %in% mlist$m1) & !(j %in% numtocat)) {                                             #!GRipf    numtocat added
+     if (is.numeric(y) & (mj %in% mlist$m1) & !(j %in% numtocat)) { # !GRipf    numtocat added
        stop('Type mismatch for variable ', vname,
-            '.\nSynthesis method "', mj, 
+            '.\nSynthesis method "', mj,
             '" is for categorical data unless grouped with numtocat.',
             sep = "", call. = FALSE)
      } else if (is.factor(y) & nlevels(y) == 2 & (mj %in% mlist$m2)) {
        stop('Type mismatch for variable ', vname,
-       	    '.\nSyhthesis method "', mj, '" is not for factors.',
+            '.\nSyhthesis method "', mj, '" is not for factors.',
             sep = "", call. = FALSE)
      } else if (is.factor(y) & nlevels(y) > 2 & (mj %in% mlist$m3)) {
        stop('Type mismatch for variable ', vname,
-    	      '.\nSyhthesis method "', mj,
+              '.\nSyhthesis method "', mj,
             '" is not for factors with three or more levels.',
             sep = "", call. = FALSE)
-     }                                               
+     }
    }
  }
 
- # check method for variables without predictors
- # set to "sample" if method is not valid
- 
- # check if var has predictors (re-compute it)
- if (sum(pred) > 0) has.pred <- apply(pred != 0, 1, any)  #  GR condition added
- else has.pred <- rep(0, sqrt(length(pred)))            # this needed in case pred now has dimension 1
+# check method for variables without predictors
+# set to "sample" if method is not valid
+
+# check if var has predictors (re-compute it)
+ if (sum(pred) > 0) has.pred <- apply(pred != 0, 1, any) #  GR condition added
+ else has.pred <- rep(0, sqrt(length(pred))) # this needed in case pred now has dimension 1
 
  for (j in vis) {
    if (!has.pred[j] & substr(method[j], 1, 6) != "nested" & is.na(any(match(method[j],
-      c("", "constant", "sample", "sample.proper", "catall", "ipf"))))) 
+      c("", "constant", "sample", "sample.proper", "catall", "ipf")))))
    {
      if (print.flag == TRUE) cat('\nMethod "', method[j],
      '" is not valid for a variable without predictors (',
-     names(data)[j],')\nMethod has been changed to "sample"\n\n', sep = "")
+     names(data)[j], ')\nMethod has been changed to "sample"\n\n', sep = "")
      method[j] <- "sample"
    }
  }
 
- # check survival method and events are consistent
- error.message <- "Invalid event value, must be logical, factor (2-level), or numeric (1/0)." 
+# check survival method and events are consistent
+ error.message <- "Invalid event value, must be logical, factor (2-level), or numeric (1/0)."
  if (any(method == "survctree")) {
-   for (j in vis) {   # checks for survival variables
+   for (j in vis) { # checks for survival variables
      vname <- colnames(data)[j]
      if (method[j] == "survctree") {
-   	   if (!is.numeric(data[,j])) stop("Variable ", vname,
+           if (!is.numeric(data[, j])) stop("Variable ", vname,
          " should be a numeric survival time.", call. = FALSE)
-    	 if (any(!is.na(data[,j]) & data[,j] < 0)) stop("Variable ", vname,          
+         if (any(!is.na(data[, j]) & data[, j] < 0)) stop("Variable ", vname,
          " should be a non-negative survival time.", call. = FALSE)
 
        if (is.na((match(event[j], 1:nvar)))) {
          cat("Variable ", vname, " is a survival time. Corresponding event not in data, assuming no censoring.\n\n", sep = "")
          event[j] <- -1 # used to indicate no censoring
        } else {
-    	   if (any(is.na(data[, event[j]]))) stop("Missing values in event indicator '", colnames(data)[event[j]], 
-    	       "' for survival time '", vname, "'. No data synthesised.", call. = FALSE)
-         
+           if (any(is.na(data[, event[j]]))) stop("Missing values in event indicator '", colnames(data)[event[j]],
+               "' for survival time '", vname, "'. No data synthesised.", call. = FALSE)
+
          if (is.character(data[, event[j]])) {
            stop(error.message, call. = FALSE)
          } else if (is.logical(data[, event[j]])) {
@@ -620,24 +620,24 @@ check.method.syn <- function(setup, data, proper) {
          } else {
            tabEI <- table(data[, event[j]])
          }
-         
+
          if (length(tabEI) != 2) {
            if (length(tabEI) == 1 & all(tabEI == 1)) cat("Variable ", vname,
              " is a survival time with all cases having events.\n", sep = "")
            else if (length(tabEI) == 1 & all(tabEI == 0)) stop("Variable ",
-             vname," is a survival time with no cases having events.\n",
+             vname, " is a survival time with no cases having events.\n",
              "Estimation not possible.", sep = "", call. = FALSE)
            else stop(error.message, call. = FALSE)
          }
-         if (!all(as.character(names(tabEI)) == c("0","1"))) {
+         if (!all(as.character(names(tabEI)) == c("0", "1"))) {
            stop(error.message, call. = FALSE)
          }
        }
      } else {
-       # checks for non-survival variables with events
+# checks for non-survival variables with events
        if (event[j] != 0) {
          cat("Variable ", vname, " has event set to ", colnames(data)[event[j]],
- 	           ' although method is "', method[j], '". Event indicator reset to none.\n', sep = "")
+                   ' although method is "', method[j], '". Event indicator reset to none.\n', sep = "")
          event[j] <- 0
        }
      }
@@ -647,14 +647,14 @@ check.method.syn <- function(setup, data, proper) {
    event <- rep(0, nvar)
  }
 
- ## change names for proper imputations and check
- #for(j in unique(vis)){
- #  if(proper==T & method[j]!="") method[j] <- paste(method[j],
- #                                                   ".proper",sep="")
- #}
+## change names for proper imputations and check
+# for(j in unique(vis)){
+#  if(proper==T & method[j]!="") method[j] <- paste(method[j],
+#                                                   ".proper",sep="")
+# }
 
- # check collinearity of variables
- if (sum(pred > 0)  & m > 0) {                                     
+# check collinearity of variables
+ if (sum(pred > 0) & m > 0) {
    inpred <- apply(pred != 0, 1, any) | apply(pred != 0, 2, any)
    if (any(inpred)) {
      collout <- collinear.out(data[, inpred, drop = FALSE])
@@ -663,87 +663,87 @@ check.method.syn <- function(setup, data, proper) {
          if (print.flag) cat("Variables ", paste(collout[[i]], collapse = ", "),
                              " are collinear.", sep = "")
          vars <- match(collout[[i]], varnames[vis])
-			   vfirst <- collout[[i]][vars == min(vars)]
-			   nfirst <- match(vfirst,varnames)
-         nall   <- match(collout[[i]],varnames)
+                           vfirst <- collout[[i]][vars == min(vars)]
+                           nfirst <- match(vfirst, varnames)
+         nall <- match(collout[[i]], varnames)
          if (print.flag) cat(" Variables later in 'visit.sequence'\nare derived from ",
                              vfirst, ".\n\n", sep = "")
          for (ii in nall) {
            if (ii != nfirst) {
              method[ii] <- "collinear"
-             pred[ii,]  <- 0
-             pred[,ii]  <- 0
+             pred[ii, ] <- 0
+             pred[, ii] <- 0
              pred[ii, nfirst] <- 1
            }
-			   }
+                           }
        }
-     }                 
-   } 
- } 
+     }
+   }
+ }
 
- setup$event            <- event
- setup$method           <- method
+ setup$event <- event
+ setup$method <- method
  setup$predictor.matrix <- pred
- setup$visit.sequence   <- vis
- setup$denom            <- denom                  
- 
+ setup$visit.sequence <- vis
+ setup$denom <- denom
+
  return(setup)
 }
-##--------------------end-of--check.method.syn-------------------------
- 
+## --------------------end-of--check.method.syn-------------------------
 
-##------------------check.rules.syn------------------------------------
+
+## ------------------check.rules.syn------------------------------------
 
 check.rules.syn <- function(setup, data) {
 
- rules      <- setup$rules
- rvalues    <- setup$rvalues
- pred       <- setup$predictor.matrix
- nvar       <- setup$nvar                                                               
- varnames   <- setup$varnames
- method     <- setup$method
- vis        <- setup$visit.sequence
-#browser()  
- # Check the syntax
- #------------------
- # check the length of the rules and corresponding values
- if (any(sapply(rules,length) != sapply(rvalues,length)))
+ rules <- setup$rules
+ rvalues <- setup$rvalues
+ pred <- setup$predictor.matrix
+ nvar <- setup$nvar
+ varnames <- setup$varnames
+ method <- setup$method
+ vis <- setup$visit.sequence
+# browser()
+# Check the syntax
+#------------------
+# check the length of the rules and corresponding values
+ if (any(sapply(rules, length) != sapply(rvalues, length)))
    stop("The number of data rules for each variable should equal the number of corresponding values.\n  Check variable(s): ",
-     paste(varnames[sapply(rules,length) != sapply(rvalues,length)], collapse = ", "), ".", call. = FALSE)
+     paste(varnames[sapply(rules, length) != sapply(rvalues, length)], collapse = ", "), ".", call. = FALSE)
 
- # special characters 
- char.allowed <- c("","|","||","&","&&","==",">=","<=","<",">",
-   "!=","==-",">=-","<=-","<-",">-","!=-","=='",".",")","(",";","-",
-   "'","\"","\"(",")\"","'(",")'") #### . ( and ) added
- char.present <- paste(gsub("\\w"," ",unlist(rules)),collapse = " ") # remove word characters and concatenate
- char.present <- strsplit(char.present,"[[:space:]]+")[[1]]    # split into seperate characters
- char.wrong   <- !(char.present %in% char.allowed)             # identify unxepected characters
- #if (any(char.wrong)) stop("Unexpected character(s) in rules: ",paste(char.present[char.wrong],collapse=" "),".")
+# special characters
+ char.allowed <- c("", "|", "||", "&", "&&", "==", ">=", "<=", "<", ">",
+   "!=", "==-", ">=-", "<=-", "<-", ">-", "!=-", "=='", ".", ")", "(", ";", "-",
+   "'", "\"", "\"(", ")\"", "'(", ")'") #### . ( and ) added
+ char.present <- paste(gsub("\\w", " ", unlist(rules)), collapse = " ") # remove word characters and concatenate
+ char.present <- strsplit(char.present, "[[:space:]]+")[[1]] # split into seperate characters
+ char.wrong <- !(char.present %in% char.allowed) # identify unxepected characters
+# if (any(char.wrong)) stop("Unexpected character(s) in rules: ",paste(char.present[char.wrong],collapse=" "),".")
 
- # variables names (=a string before a special character) must be in varnames 
- rule.sep <- lapply(sapply(rules, strsplit, "[|&]"), unlist)       # split into seperate conditions
+# variables names (=a string before a special character) must be in varnames
+ rule.sep <- lapply(sapply(rules, strsplit, "[|&]"), unlist) # split into seperate conditions
  get.vars <- lapply(rule.sep, function(x) gsub("[<>=!].*", "", x)) # remove everything after a special character
- #get.vars <- lapply(get.vars,function(x) gsub(" ","",x))          # remove spaces
- get.vars <- lapply(get.vars, trimws)                              # Remove leading and trailing spaces
- get.vars <- lapply(get.vars, function(x) gsub("[\\(\\)]", "", x)) # remove brackets  
- get.vars <- lapply(get.vars, function(x) gsub("is.na", "", x))    # remove function name
- get.vars <- lapply(get.vars, function(x) gsub("`", "", x))        # remove `
- get.vars <- lapply(get.vars, function(x) x[x != ""])              # remove empty strings  ?? why this
- 
+# get.vars <- lapply(get.vars,function(x) gsub(" ","",x))          # remove spaces
+ get.vars <- lapply(get.vars, trimws) # Remove leading and trailing spaces
+ get.vars <- lapply(get.vars, function(x) gsub("[\\(\\)]", "", x)) # remove brackets
+ get.vars <- lapply(get.vars, function(x) gsub("is.na", "", x)) # remove function name
+ get.vars <- lapply(get.vars, function(x) gsub("`", "", x)) # remove `
+ get.vars <- lapply(get.vars, function(x) x[x != ""]) # remove empty strings  ?? why this
+
  vars.in.rules <- unique(unlist(get.vars))
- vars.wrong <- !(vars.in.rules %in% varnames)                   # identify unxepected variables
+ vars.wrong <- !(vars.in.rules %in% varnames) # identify unxepected variables
 
  if (any(vars.wrong)) stop("Unexpected variable(s) in rules: ",
    paste(vars.in.rules[vars.wrong], collapse = ", "), ".", call. = FALSE)
- 
- # remove rules with warning for ipf and catall
+
+# remove rules with warning for ipf and catall
  vars.with.rules <- varnames[rules != ""]
- if (any(method[varnames %in% vars.with.rules] %in% c("catall","ipf"))){
+ if (any(method[varnames %in% vars.with.rules] %in% c("catall", "ipf"))) {
    cat("\nRules cannot be used for variables synthesised by ipf or catall")
    cat("\nbut values can be restricted by defining structural zero cells\nwith ipf.structzero or catall.structzero parameter.\n")
-   rules[method %in% c("catall","ipf")] <-  rvalues[method %in% c("catall","ipf")] <- ""
+   rules[method %in% c("catall", "ipf")] <- rvalues[method %in% c("catall", "ipf")] <- ""
    cat("\nRules defined for variable(s) ",
-       paste0(varnames[method %in% c("catall","ipf") & varnames %in% vars.with.rules], collapse = ", "),
+       paste0(varnames[method %in% c("catall", "ipf") & varnames %in% vars.with.rules], collapse = ", "),
        " have been deleted.\n\n", sep = "")
    setup$rules <- rules
    setup$rvalues <- rvalues
@@ -751,32 +751,32 @@ check.rules.syn <- function(setup, data) {
      return(setup)
    }
  }
- 
+
  if (any(char.wrong)) {
-   cat("One of rules may not be correct. If this is the case compare your rules and Error below.\nOtherwise rules have been applied.\n") 
+   cat("One of rules may not be correct. If this is the case compare your rules and Error below.\nOtherwise rules have been applied.\n")
    rs <- unlist(rules); names(rs) <- varnames
    rs <- cbind(rs[rs != ""]); colnames(rs) <- ""
    cat("\nYour rules are:")
    print(rs); cat("\n")
  }
 
- # Check that missingness in the data obeys the rules in rules
+# Check that missingness in the data obeys the rules in rules
  nonmissing <- vector("list", nvar)
- isfactor   <- sapply(data, is.factor)
+ isfactor <- sapply(data, is.factor)
  yes.rules <- sapply(rules, function(x) any(x != ""))
  lth.rules <- sapply(rules, length)
  for (i in 1:nvar) {
    if (yes.rules[i]) {
      for (r in 1:lth.rules[i]) {
        if (is.na(rvalues[[i]][r]) & !isfactor[i]) {
-         nonmissing[[i]][r] <- with(data,sum(!is.na(data[eval(parse(text = rules[[i]][r])), i])))
-       } else if (is.na(rvalues[[i]][r]) & isfactor[i]) {    # different for factors because <NA> is treated as a level
-         #nonmissing[[i]][r] <- with(data,sum(!is.na(as.character(data[eval(parse(text=rules[[i]][r])),i]))))
-         nonmissing[[i]][r] <- with(data,sum(as.character(data[eval(parse(text = rules[[i]][r])),i]) != "NAtemp" &
-                               as.character(data[eval(parse(text = rules[[i]][r])),i]) != "NAlogical"))       
+         nonmissing[[i]][r] <- with(data, sum(!is.na(data[eval(parse(text = rules[[i]][r])), i])))
+       } else if (is.na(rvalues[[i]][r]) & isfactor[i]) { # different for factors because <NA> is treated as a level
+# nonmissing[[i]][r] <- with(data,sum(!is.na(as.character(data[eval(parse(text=rules[[i]][r])),i]))))
+         nonmissing[[i]][r] <- with(data, sum(as.character(data[eval(parse(text = rules[[i]][r])), i]) != "NAtemp" &
+                               as.character(data[eval(parse(text = rules[[i]][r])), i]) != "NAlogical"))
        } else {
-         nonmissing[[i]][r] <- with(data,sum(data[eval(parse(text = rules[[i]][r])),i] != rvalues[[i]][r] |
-                               is.na(data[eval(parse(text = rules[[i]][r])),i])))
+         nonmissing[[i]][r] <- with(data, sum(data[eval(parse(text = rules[[i]][r])), i] != rvalues[[i]][r] |
+                               is.na(data[eval(parse(text = rules[[i]][r])), i])))
        }
      }
    }
@@ -786,93 +786,93 @@ check.rules.syn <- function(setup, data) {
      paste(varnames[any.nonmissing > 0], collapse = ", "),
      ".\nRules have been applied but make sure they are correct.\n", sep = "")
 
- # Check visit sequence 
- # all variables used in missing data rules have to be synthesised BEFORE 
- # the variables they apply to
- var.position <- lapply(get.vars, function(x) match(unique(x),varnames))
- var.in.vis   <- lapply(var.position, function(x) if (length(x) == 0) {
+# Check visit sequence
+# all variables used in missing data rules have to be synthesised BEFORE
+# the variables they apply to
+ var.position <- lapply(get.vars, function(x) match(unique(x), varnames))
+ var.in.vis <- lapply(var.position, function(x) if (length(x) == 0) {
                                         x <- 0
-                                        } else if (any(is.na(match(x,vis)))) {
+                                        } else if (any(is.na(match(x, vis)))) {
                                         x[!is.na(match(x, vis))] <- match(x, vis)
-                                        x[is.na(match(x, vis))]  <- nvar
+                                        x[is.na(match(x, vis))] <- nvar
                                         } else {
-                                        x <- match(x,vis)})
- max.seq      <- sapply(var.in.vis, max, na.rm = T)
- not.synth    <- match(1:nvar,vis)[!is.na( match(1:nvar,vis))] <= max.seq[!is.na( match(1:nvar,vis))]
- if (any(not.synth,na.rm = TRUE)) stop("Variable(s) used in missing data rules for ",
-       paste(varnames[!is.na( match(1:nvar,vis))][not.synth & !is.na(not.synth)], collapse = " "),
+                                        x <- match(x, vis)})
+ max.seq <- sapply(var.in.vis, max, na.rm = T)
+ not.synth <- match(1:nvar, vis)[!is.na(match(1:nvar, vis))] <= max.seq[!is.na(match(1:nvar, vis))]
+ if (any(not.synth, na.rm = TRUE)) stop("Variable(s) used in missing data rules for ",
+       paste(varnames[!is.na(match(1:nvar, vis))][not.synth & !is.na(not.synth)], collapse = " "),
        " have to be synthesised BEFORE the variables they apply to.", call. = FALSE)
 
- # Check if a variable with missing values predicts other variables only if its
- # missing values are a subset of the missing values of the predicted variables
- # and remove from a prediction matrix if not. 
- # It refers to missing values coded as NA, otherwise variable can be used as 
- # a predictor without restrictions.
-  
- #for (i in 1:nvar){
- #  if (!is.na(rvalues[i])) data[with(data,eval(parse(text=rules[i]))),i] <- NA
- #}
+# Check if a variable with missing values predicts other variables only if its
+# missing values are a subset of the missing values of the predicted variables
+# and remove from a prediction matrix if not.
+# It refers to missing values coded as NA, otherwise variable can be used as
+# a predictor without restrictions.
+
+# for (i in 1:nvar){
+#  if (!is.na(rvalues[i])) data[with(data,eval(parse(text=rules[i]))),i] <- NA
+# }
  patternRules <- matrix(0, nrow = nrow(data), ncol = ncol(data))
  for (i in 1:nvar) {
    if (yes.rules[i]) {
      for (r in 1:lth.rules[i]) {
-       if (is.na(rvalues[[i]][r])) patternRules[with(data,eval(parse(text = rules[[i]][r]))), i] <- 1
+       if (is.na(rvalues[[i]][r])) patternRules[with(data, eval(parse(text = rules[[i]][r]))), i] <- 1
      }
    }
  }
  patternNA <- is.na(data) + 0
  patternNA <- ifelse(patternRules == patternNA, patternNA, 0)
- diffNAij  <- function(i, j, dataNA) sum(dataNA[, i] - dataNA[, j] < 0)
- diffNA    <- Vectorize(diffNAij, vectorize.args = list("i", "j"))
- predNA    <- outer(1:nvar, 1:nvar, diffNA, dataNA = patternNA)
-   
- # predNAwrong <- which ((pred==1 & predNA>0),arr.ind=TRUE)
- # pred        <- ifelse((pred==1 & predNA>0),0,pred)
- # if(nrow(predNAwrong)>0) cat(paste("Missing values of variable ",
- # varnames[predNAwrong[,2]]," are not a subset of missing values of variable ",
- # varnames[predNAwrong[,1]]," and cannot be used as its predictor (removed).\n",sep=""),
- # "\n",sep="")
+ diffNAij <- function(i, j, dataNA) sum(dataNA[, i] - dataNA[, j] < 0)
+ diffNA <- Vectorize(diffNAij, vectorize.args = list("i", "j"))
+ predNA <- outer(1:nvar, 1:nvar, diffNA, dataNA = patternNA)
+
+# predNAwrong <- which ((pred==1 & predNA>0),arr.ind=TRUE)
+# pred        <- ifelse((pred==1 & predNA>0),0,pred)
+# if(nrow(predNAwrong)>0) cat(paste("Missing values of variable ",
+# varnames[predNAwrong[,2]]," are not a subset of missing values of variable ",
+# varnames[predNAwrong[,1]]," and cannot be used as its predictor (removed).\n",sep=""),
+# "\n",sep="")
 
  setup$predictor.matrix <- pred
 
  return(setup)
 }
-##-----------------end of--check.rules.syn----------------------------
+## -----------------end of--check.rules.syn----------------------------
 
 
-##------------------namedlist------------------------------------
-# check args that should be provided as a named list 
-# and create list with elements for each variable 
- namedlist <- function(x, varnames = colnames(data), 
-                       nvars = length(varnames), 
-                       missval = NA, argname, argdescription = "", 
-                       asvector = FALSE){
+## ------------------namedlist------------------------------------
+# check args that should be provided as a named list
+# and create list with elements for each variable
+ namedlist <- function(x, varnames = colnames(data),
+                       nvars = length(varnames),
+                       missval = NA, argname, argdescription = "",
+                       asvector = FALSE) {
    if (is.null(x)) {
      x <- as.list(rep(missval, nvars))
    } else if (!is.list(x) | any(names(x) == "") | is.null(names(x))) {
-     stop("Argument '", argname,"' must be a named list with names of selected ", 
-     argdescription, " variables.", call. = FALSE)  
+     stop("Argument '", argname, "' must be a named list with names of selected ",
+     argdescription, " variables.", call. = FALSE)
    } else {
-     x.missval <- as.list(rep(missval,nvars))
+     x.missval <- as.list(rep(missval, nvars))
      x.ind <- match(names(x), varnames)
-     if (any(is.na(x.ind))) stop("Unrecognized variable names in '", 
-       argname,"': ",paste(names(x)[is.na(x.ind)], collapse = ", "), call. = FALSE)
-     # For 'event' and 'denom' check if denominators' name exist and 
-     # change them to column indecies   
+     if (any(is.na(x.ind))) stop("Unrecognized variable names in '",
+       argname, "': ", paste(names(x)[is.na(x.ind)], collapse = ", "), call. = FALSE)
+# For 'event' and 'denom' check if denominators' name exist and
+# change them to column indecies
      if (argname %in% c("denom", "event") & is.character(argname)) {
-       denom.ind <- lapply(x,match,varnames)
-       if (any(is.na(denom.ind))) stop("Unrecognized variable(s) provided as ", argname, "(s): ", 
-       paste(unlist(x)[is.na(denom.ind)], collapse = ", "), call. = FALSE) 
+       denom.ind <- lapply(x, match, varnames)
+       if (any(is.na(denom.ind))) stop("Unrecognized variable(s) provided as ", argname, "(s): ",
+       paste(unlist(x)[is.na(denom.ind)], collapse = ", "), call. = FALSE)
        x <- denom.ind
      }
      x.missval[x.ind] <- x
-     x <- x.missval 
+     x <- x.missval
    }
    names(x) <- varnames
    if (asvector) x <- unlist(x)
-   return(x)  
+   return(x)
  }
-##-----------------end of--namedlist-----------------------------
+## -----------------end of--namedlist-----------------------------
 
 
 #----------------------- now syn continues here ----------------------
@@ -883,230 +883,230 @@ check.rules.syn <- function(setup, data) {
  nvar <- ncol(data)
  if (!is.na(seed) & seed == "sample") {
    seed <- sample.int(1e9, 1)
-   # cat("No seed has been provided and it has been set to ", seed,".\n\n", sep="")
+# cat("No seed has been provided and it has been set to ", seed,".\n\n", sep="")
  }
  if (!is.na(seed)) set.seed(seed)
 
  if (!(is.matrix(data) | is.data.frame(data)))
     stop("Data should be a matrix or data frame.")
  if (nvar < 2) stop("Data should contain at least two columns.", call. = FALSE)
-                              
- # S U B S A M P L E   S I Z E
+
+# S U B S A M P L E   S I Z E
  if (k != nrow(data) & print.flag == TRUE & m > 0) {
-  # if (k > nrow(data)) {
-  #   cat("Warning: Subpopulation size (k=",k,") cannot be greater than the population size (",
-  #       nrow(data),").\n","Synthetic data sets of same size as data will be produced.\n\n",sep="")
-  #       k <- nrow(data)
-  # } else
+# if (k > nrow(data)) {
+#   cat("Warning: Subpopulation size (k=",k,") cannot be greater than the population size (",
+#       nrow(data),").\n","Synthetic data sets of same size as data will be produced.\n\n",sep="")
+#       k <- nrow(data)
+# } else
    cat("Sample(s) of size ", k, " will be generated from original data of size ",
-         nrow(data),".\n\n", sep = "")
+         nrow(data), ".\n\n", sep = "")
  }
 
- # M E T H O D S
+# M E T H O D S
  method <- gsub(" ", "", method) # remove any spaces in or around method
- # # must be the same length as visit.sequence
- # if (length(method) > 1 & length(method) != length(visit.sequence)) 
- #   stop(paste("The length of method (", length(method),
- #              ") must be the same length as the visit.sequence (",length(visit.sequence),").", sep = ""), 
- #        call. = FALSE) 
- 
- # expand user's syhthesising method (single string) to all variables
+# # must be the same length as visit.sequence
+# if (length(method) > 1 & length(method) != length(visit.sequence))
+#   stop(paste("The length of method (", length(method),
+#              ") must be the same length as the visit.sequence (",length(visit.sequence),").", sep = ""),
+#        call. = FALSE)
+
+# expand user's syhthesising method (single string) to all variables
  if (length(method) == 1) {
    if (is.passive(method)) stop("Cannot have a passive syhthesising method for every column.", call. = FALSE)
    method <- rep(method, nvar)
    if (!(method[1] %in% c("catall", "ipf"))) method[visit.sequence[1]] <- "sample"
-   # set method to "" for vars not in visit.sequence
+# set method to "" for vars not in visit.sequence
    method[setdiff(1:nvar, visit.sequence)] <- ""
  }
- # if user specifies multiple methods, check the length of the argument
- # methods must be given for all columns in the data
+# if user specifies multiple methods, check the length of the argument
+# methods must be given for all columns in the data
  if (length(method) != nvar) stop(paste("The length of method (", length(method),
-    ") does not match the number of columns in the data (", nvar, ").", sep = ""), 
+    ") does not match the number of columns in the data (", nvar, ").", sep = ""),
     call. = FALSE)
 
 
- # P R E D I C T O R   M A T R I X
+# P R E D I C T O R   M A T R I X
  if (!is.null(predictor.matrix)) {
    if (!is.matrix(predictor.matrix)) {
      stop("Argument 'predictor.matrix' is not a matrix.", call. = FALSE)
    } else if (nvar != nrow(predictor.matrix) | nvar != ncol(predictor.matrix))
-     stop(paste("The 'predictor.matrix' has ",nrow(predictor.matrix),
+     stop(paste("The 'predictor.matrix' has ", nrow(predictor.matrix),
           " row(s) and ", ncol(predictor.matrix),
           " column(s). \nBoth should match the number of columns in the data (",
           nvar, ").", sep = ""), call. = FALSE)
  }
 
- data     <- as.data.frame(data)
+ data <- as.data.frame(data)
  varnames <- dimnames(data)[[2]]
- 
- # Named lists: check args and create list with elements for each variables 
- # C O N T I N O U S  V A R S  W I T H  M I S S I N G  D A T A  C O D E S
- # S E M I - C O N T I N O U S  V A R S 
- semicont <- namedlist(semicont, missval = NA, argname = "semicont", 
+
+# Named lists: check args and create list with elements for each variables
+# C O N T I N O U S  V A R S  W I T H  M I S S I N G  D A T A  C O D E S
+# S E M I - C O N T I N O U S  V A R S
+ semicont <- namedlist(semicont, missval = NA, argname = "semicont",
    argdescription = "semi-continuous")
- cont.na  <- namedlist(cont.na, missval = NA, argname = "cont.na", 
+ cont.na <- namedlist(cont.na, missval = NA, argname = "cont.na",
    argdescription = "")
- # combine cont.na and semicont lists  
+# combine cont.na and semicont lists
  cont.na.ini <- cont.na
  cont.na <- mapply(c, cont.na, semicont, SIMPLIFY = FALSE)
  cont.na <- lapply(cont.na, unique)
- # R U L E S  and  R V A L U E S 
- rules   <- namedlist(rules, missval = "", argname = "rules", 
+# R U L E S  and  R V A L U E S
+ rules <- namedlist(rules, missval = "", argname = "rules",
                       argdescription = "")
- rvalues <- namedlist(rvalues, missval = NA, argname = "rvalues", 
+ rvalues <- namedlist(rvalues, missval = NA, argname = "rvalues",
                       argdescription = "")
- # S M O O T H I N G
- smoothing <- namedlist(smoothing, missval = "", argname = "smoothing", 
+# S M O O T H I N G
+ smoothing <- namedlist(smoothing, missval = "", argname = "smoothing",
    argdescription = "", asvector = TRUE)
  if (any(smoothing != "")) {
    varsmoothind <- which(smoothing != "")
-   varnumind    <- which(sapply(data, is.numeric))
+   varnumind <- which(sapply(data, is.numeric))
    smoothnumind <- match(varsmoothind, varnumind)
    if (any(is.na(smoothnumind)) & print.flag == TRUE)
    cat("\nSmoothing can only be applied to numeric variables.\nNo smoothing will be applied to variable(s): ",
-     paste(varnames[varsmoothind[is.na(smoothnumind)]], collapse = ", "), "\n", sep = "")   
-   smoothing[varsmoothind[is.na(smoothnumind)]] <- "" 
+     paste(varnames[varsmoothind[is.na(smoothnumind)]], collapse = ", "), "\n", sep = "")
+   smoothing[varsmoothind[is.na(smoothnumind)]] <- ""
  }
- 
- # D E N O M   
+
+# D E N O M
  denom <- namedlist(denom, missval = 0, argname = "denom", asvector = TRUE)
- # E V E N T
+# E V E N T
  event <- namedlist(event, missval = 0, argname = "event", asvector = TRUE)
- 
- # Perform various validity checks on the specified arguments
+
+# Perform various validity checks on the specified arguments
  setup <- list(visit.sequence = visit.sequence,
                method = method,
                default.method = default.method,
                predictor.matrix = predictor.matrix,
                nvar = nvar,
-               varnames = varnames, 
+               varnames = varnames,
                rules = rules,
                rvalues = rvalues,
-               cont.na = cont.na,                                         
+               cont.na = cont.na,
                event = event,
-               denom = denom)                   #GRdenom new
-              
+               denom = denom) # GRdenom new
+
  setup <- check.visit.sequence.syn(setup)
  setup <- check.predictor.matrix.syn(setup)
 
 
 # C H A N G E  D A T A  T Y P E  &  M O D I F Y  F A C T O R  L E V E L S
 #---
- # apply only if in predictor matrix 
-                                                                               # GR added condition and else
+# apply only if in predictor matrix
+# GR added condition and else
  if (!is.null(setup$predictor.matrix) & sum(setup$predictor.matrix > 0)) {
-   inpred <- apply(setup$predictor.matrix != 0, 1, any)*(!(method %in% c("","sample"))) |                # GR added to allow null methods not affected
-             apply(setup$predictor.matrix != 0, 2, any)  # if anywhere in predictor.matrix
+   inpred <- apply(setup$predictor.matrix != 0, 1, any) * (!(method %in% c("", "sample"))) | # GR added to allow null methods not affected
+             apply(setup$predictor.matrix != 0, 2, any) # if anywhere in predictor.matrix
  } else {
    inpred <- rep(FALSE, sqrt(length(setup$predictor.matrix)))
  }
- notevent <- is.na(match(1:nvar,setup$event))       # if not in event list
+ notevent <- is.na(match(1:nvar, setup$event)) # if not in event list
 
- # Convert any character variables into factors for variables in pred
- ischar    <- sapply(data,is.character)
+# Convert any character variables into factors for variables in pred
+ ischar <- sapply(data, is.character)
  chartofac <- (ischar * inpred) > 0
  if (sum(chartofac) > 0) {
-   cat("\nVariable(s):",paste0(varnames[chartofac], collapse = ", "),
+   cat("\nVariable(s):", paste0(varnames[chartofac], collapse = ", "),
        "have been changed for synthesis from character to factor.\n", sep = " ")
-   for (j in (1:nvar)[chartofac]) data[,j] <- as.factor(data[,j]) 
+   for (j in (1:nvar)[chartofac]) data[, j] <- as.factor(data[, j])
  }
 
- # Changing numeric variables with fewer than 'minnumlevels' into factors
- #  Default for this now set to 1 (only those with a single level are changed)                       
- # this allows correct synthesis of any with only one value as well as missing values
- #  Warning if numeric vars with < 5 levels (20 too many as picks up months)
- #  Also only need to do this if variable in predictionMatrix
- #  and any inappropriate methods are changed to the default for factors
- nlevel      <- sapply(data, function(x) length(table(x)))
- ifnum       <- sapply(data, is.numeric)
- innumtocat  <- rep(FALSE,length(data)) 
- 
+# Changing numeric variables with fewer than 'minnumlevels' into factors
+#  Default for this now set to 1 (only those with a single level are changed)
+# this allows correct synthesis of any with only one value as well as missing values
+#  Warning if numeric vars with < 5 levels (20 too many as picks up months)
+#  Also only need to do this if variable in predictionMatrix
+#  and any inappropriate methods are changed to the default for factors
+ nlevel <- sapply(data, function(x) length(table(x)))
+ ifnum <- sapply(data, is.numeric)
+ innumtocat <- rep(FALSE, length(data))
+
  if (minnumlevels < 5 & any(nlevel > minnumlevels & nlevel <= 5 & ifnum & inpred & notevent)) {
-   cat("Warning: In your synthesis there are numeric variables with 5 or fewer levels: ",                     
+   cat("Warning: In your synthesis there are numeric variables with 5 or fewer levels: ",
        paste0(varnames[nlevel > minnumlevels & nlevel <= 5 & ifnum & inpred & notevent], collapse = ", "), ".",
-       "\nConsider changing them to factors. You can do it using parameter 'minnumlevels'.\n", sep = "")  
+       "\nConsider changing them to factors. You can do it using parameter 'minnumlevels'.\n", sep = "")
  }
 
  vartofactor <- which(nlevel <= minnumlevels & ifnum & inpred & notevent)
- for (j in vartofactor) data[,j] <- as.factor(data[,j])
+ for (j in vartofactor) data[, j] <- as.factor(data[, j])
  if (length(vartofactor) > 0) {
    cat("\nVariable(s): ", paste0(varnames[vartofactor], collapse = ", "),
-       " numeric but with only ", minnumlevels, 
+       " numeric but with only ", minnumlevels,
        " or fewer distinct values turned into factor(s) for synthesis.\n\n", sep = "")
    for (j in vartofactor) {
-     if (setup$method[j] %in% c("norm","norm.proper",
-                                "normrank","normrank.proper")) {
+     if (setup$method[j] %in% c("norm", "norm.proper",
+                                "normrank", "normrank.proper")) {
        if (nlevel[j] == 2) setup$method[j] <- default.method[2]
        else setup$method[j] <- default.method[3]
-  	   cat("Method for ",varnames[j]," changed to ",setup$method[j],"\n\n")
+           cat("Method for ", varnames[j], " changed to ", setup$method[j], "\n\n")
      }
    }
  }
 
- # Modifies a factor by turning NA into an extra level
- isfactor  <- sapply(data,is.factor)
+# Modifies a factor by turning NA into an extra level
+ isfactor <- sapply(data, is.factor)
  for (j in (1:nvar)[isfactor & inpred & notevent]) {
-   data[,j] <- addNA(data[,j], ifany = TRUE)
-   levels(data[,j])[is.na(levels(data[,j]))] <- "NAtemp"          
- } 
-
- islogicalNA <- sapply(data, function(x) (is.logical(x) & any(is.na(x))))   
- for (j in (1:nvar)[islogicalNA & inpred & notevent]) {
-   data[,j] <- addNA(data[,j], ifany = TRUE)
-   levels(data[,j])[is.na(levels(data[,j]))] <- "NAlogical"          
+   data[, j] <- addNA(data[, j], ifany = TRUE)
+   levels(data[, j])[is.na(levels(data[, j]))] <- "NAtemp"
  }
 
- 
+ islogicalNA <- sapply(data, function(x) (is.logical(x) & any(is.na(x))))
+ for (j in (1:nvar)[islogicalNA & inpred & notevent]) {
+   data[, j] <- addNA(data[, j], ifany = TRUE)
+   levels(data[, j])[is.na(levels(data[, j]))] <- "NAlogical"
+ }
+
+
 #---
- setup  <- check.method.syn(setup, data, proper)
+ setup <- check.method.syn(setup, data, proper)
  if (any(rules != "")) setup <- check.rules.syn(setup, data)
 
- method           <- setup$method
+ method <- setup$method
  predictor.matrix <- setup$predictor.matrix
- visit.sequence   <- setup$visit.sequence
- event            <- setup$event
- rules            <- setup$rules
- rvalues          <- setup$rvalues
- cont.na          <- setup$cont.na
- default.method   <- setup$default.method
- denom            <- setup$denom  
- 
- ############################################################
+ visit.sequence <- setup$visit.sequence
+ event <- setup$event
+ rules <- setup$rules
+ rvalues <- setup$rvalues
+ cont.na <- setup$cont.na
+ default.method <- setup$default.method
+ denom <- setup$denom
 
- method[!(1:length(method) %in% visit.sequence)] <- ""  
+############################################################
 
- # Identify any factors with > maxfaclevels levels that are in 'visit.sequence'
- no.fac.levels   <- sapply(data, function(x) length(levels(x)))
+ method[!(1:length(method) %in% visit.sequence)] <- ""
+
+# Identify any factors with > maxfaclevels levels that are in 'visit.sequence'
+ no.fac.levels <- sapply(data, function(x) length(levels(x)))
  too.many.levels <- no.fac.levels > maxfaclevels
  notsampling <- !(grepl("nested", method) | grepl("sample", method) | grepl("satcat", method) | grepl("constant", method))
  if (any(inpred & too.many.levels & notsampling)) {
    stop("We have stopped your synthesis because you have factor(s) with more than\n",
-        maxfaclevels," levels: ", paste0(varnames[inpred & too.many.levels]," (",
-        no.fac.levels[inpred & too.many.levels],"). ", collapse = ", "), 
+        maxfaclevels, " levels: ", paste0(varnames[inpred & too.many.levels], " (",
+        no.fac.levels[inpred & too.many.levels], "). ", collapse = ", "),
         "This may cause computational problems that lead to failures\nand/or long running times. ",
         "You can try continuing by increasing 'maxfaclevels'\nand perhaps by trying one or more of the following:\n",
         " - omitting this variable as a predictor in the 'predictor.matrix' for some\n   or all variables,\n",
         " - leaving it/them until the end of the 'visit.sequence',\n",
         " - combining categories for these variables to make fewer categories,\n",
         " - using or creating a grouping of each variable (as above) and setting the\n",
-        "   method for the variable with many levels to 'nested' within the groups.\n\n", 
+        "   method for the variable with many levels to 'nested' within the groups.\n\n",
         call. = FALSE)
  }
 
- # Not used variables are identified and dropped if drop.not.used==T
- # reclculate inpred & notevent in case they have changed after
- # check.method and check.data
- if (sum(predictor.matrix) > 0) {                            # GR condition added
-   inpred      <- apply(predictor.matrix != 0, 1, any) | apply(predictor.matrix != 0, 2, any) # if anywhere in predictor.matrix
-	 ispredictor <- apply(predictor.matrix != 0, 2, any)    # if used as predictor
+# Not used variables are identified and dropped if drop.not.used==T
+# reclculate inpred & notevent in case they have changed after
+# check.method and check.data
+ if (sum(predictor.matrix) > 0) { # GR condition added
+   inpred <- apply(predictor.matrix != 0, 1, any) | apply(predictor.matrix != 0, 2, any) # if anywhere in predictor.matrix
+         ispredictor <- apply(predictor.matrix != 0, 2, any) # if used as predictor
  }
- else inpred <- ispredictor <- rep(0, sqrt(length(predictor.matrix))) 
+ else inpred <- ispredictor <- rep(0, sqrt(length(predictor.matrix)))
 
- notinvs     <- is.na(match(1:nvar,visit.sequence))  # if not in visit.sequence
- notsynth    <- notinvs | (!notinvs & method == "")  # if not synthesised
- notevent    <- is.na(match(1:nvar,event))           # if not in event list
+ notinvs <- is.na(match(1:nvar, visit.sequence)) # if not in visit.sequence
+ notsynth <- notinvs | (!notinvs & method == "") # if not synthesised
+ notevent <- is.na(match(1:nvar, event)) # if not in event list
 
- # identify columns not used as events or predictors or in visitSequnce
+# identify columns not used as events or predictors or in visitSequnce
  out <- !inpred & notevent & notsynth
 
  if (any(out) & print.flag == TRUE) {
@@ -1119,56 +1119,56 @@ check.rules.syn <- function(setup, data) {
 
 # remove columns not used from data and replace predictor matrix, visit sequence, nvar and others
  if (any(out) & drop.not.used == T) {
-   if (sum(!out) == 0) stop("No variables left to be synthesised", call. = FALSE) ######to stop if all data excluded 
-   newnumbers        <- rep(0,nvar)
-   newnumbers[!out]  <- 1:sum(!out)
-   visit.sequence    <- newnumbers[visit.sequence]
-   visit.sequence    <- visit.sequence[!visit.sequence == 0]
-   predictor.matrix  <- predictor.matrix[!out,!out]
-   
+   if (sum(!out) == 0) stop("No variables left to be synthesised", call. = FALSE) ###### to stop if all data excluded
+   newnumbers <- rep(0, nvar)
+   newnumbers[!out] <- 1:sum(!out)
+   visit.sequence <- newnumbers[visit.sequence]
+   visit.sequence <- visit.sequence[!visit.sequence == 0]
+   predictor.matrix <- predictor.matrix[!out, !out]
+
    event[event != 0] <- newnumbers[event[event != 0]]
-   event             <- event[!out]
+   event <- event[!out]
    denom[denom != 0] <- newnumbers[denom[denom != 0]]
-   denom             <- denom[!out]
-   
-   data              <- data[,!out]
-   nvar              <- sum(!out)
-   method            <- method[!out]
-   varnames          <- varnames[!out]
+   denom <- denom[!out]
 
-   if (nvar == 1) {                             #  GR added  note having to reassign character vector
-   	 cl <- class(data)
-  	 data <- data.frame(data)
-  	 if ( any(cl == "character")) data[,1] <- as.character(data[,1])
-  	 names(data) <- varnames
-   }
-   cont.na          <- cont.na[!out]
-   cont.na.ini      <- cont.na.ini[!out]      #BN13/11  
-   semicont         <- semicont[!out]         #BN13/11  
-   smoothing        <- smoothing[!out]
-   rules            <- rules[!out]
-   rvalues          <- rvalues[!out]
-   var.lab          <- var.lab[!out]
-   val.lab          <- val.lab[!out]
-   
-   # recalculate these
-   if (sum(predictor.matrix > 0)) {                                 # GR condition added
-	   inpred <- apply(predictor.matrix != 0, 1, any) |
-	             apply(predictor.matrix != 0, 2, any)      # if anywhere in predictor.matrix
-	   ispredictor <- apply(predictor.matrix != 0, 2, any) # if used as predictor
-   }
-   else inpred <- ispredictor <- rep(0,sqrt(length(predictor.matrix))) 
+   data <- data[, !out]
+   nvar <- sum(!out)
+   method <- method[!out]
+   varnames <- varnames[!out]
 
-   notinvs  <- is.na(match(1:nvar,visit.sequence)) # if not in visit.sequence
+   if (nvar == 1) { #  GR added  note having to reassign character vector
+         cl <- class(data)
+         data <- data.frame(data)
+         if (any(cl == "character")) data[, 1] <- as.character(data[, 1])
+         names(data) <- varnames
+   }
+   cont.na <- cont.na[!out]
+   cont.na.ini <- cont.na.ini[!out] # BN13/11
+   semicont <- semicont[!out] # BN13/11
+   smoothing <- smoothing[!out]
+   rules <- rules[!out]
+   rvalues <- rvalues[!out]
+   var.lab <- var.lab[!out]
+   val.lab <- val.lab[!out]
+
+# recalculate these
+   if (sum(predictor.matrix > 0)) { # GR condition added
+           inpred <- apply(predictor.matrix != 0, 1, any) |
+                     apply(predictor.matrix != 0, 2, any) # if anywhere in predictor.matrix
+           ispredictor <- apply(predictor.matrix != 0, 2, any) # if used as predictor
+   }
+   else inpred <- ispredictor <- rep(0, sqrt(length(predictor.matrix)))
+
+   notinvs <- is.na(match(1:nvar, visit.sequence)) # if not in visit.sequence
    notsynth <- notinvs | (!notinvs & method == "") # if not synthesised
-   notevent <- is.na(match(1:nvar,event))          # if not in event list
+   notevent <- is.na(match(1:nvar, event)) # if not in event list
  }
 
- # Print out info on variables not synthesised but used in prediction
+# Print out info on variables not synthesised but used in prediction
  pred.not.syn <- (ispredictor & notsynth)
- if (sum(pred.not.syn ) > 0 & drop.pred.only == FALSE) pred.not.syn[pred.not.syn == TRUE] <- FALSE
- 
- if (sum(pred.not.syn ) > 0 & print.flag == TRUE) {
+ if (sum(pred.not.syn) > 0 & drop.pred.only == FALSE) pred.not.syn[pred.not.syn == TRUE] <- FALSE
+
+ if (sum(pred.not.syn) > 0 & print.flag == TRUE) {
    cat("\nVariable(s):", paste0(varnames[ispredictor & notsynth], collapse = ", "),
        "used as predictors but not synthesised.\n", sep = " ")
    if (drop.pred.only == T) {
@@ -1176,90 +1176,90 @@ check.rules.syn <- function(setup, data) {
    } else {
      cat("CAUTION: The synthesised data will contain the variable(s) unchanged.\n")
    }
- } 
+ }
 
- if (sum(predictor.matrix) > 0){
+ if (sum(predictor.matrix) > 0) {
 
-	 pm <- padMis.syn(data, method, predictor.matrix, visit.sequence,
-			   nvar, rules, rvalues, default.method, cont.na, smoothing, event, denom)
+         pm <- padMis.syn(data, method, predictor.matrix, visit.sequence,
+                           nvar, rules, rvalues, default.method, cont.na, smoothing, event, denom)
 
-	 # Pad the Syhthesis model with dummy variables for the factors
-	 # p <- padModel.syn(data, method, predictor.matrix, visit.sequence,
-	 #                   nvar, rules, rvalues)
-	 p  <- padModel.syn(pm$data, pm$method, pm$predictor.matrix, pm$visit.sequence,
-			   pm$nvar, pm$rules, pm$rvalues, pm$factorNA, pm$smoothing, pm$event, pm$denom)
+# Pad the Syhthesis model with dummy variables for the factors
+# p <- padModel.syn(data, method, predictor.matrix, visit.sequence,
+#                   nvar, rules, rvalues)
+         p <- padModel.syn(pm$data, pm$method, pm$predictor.matrix, pm$visit.sequence,
+                           pm$nvar, pm$rules, pm$rvalues, pm$factorNA, pm$smoothing, pm$event, pm$denom)
    if (k != dim(data)[1]) {
-     # create a non-empty data frame in case some variables are kept unsynthesised
-     p$syn <- p$syn[sample(1:nrow(data), k, replace = TRUE),]
+# create a non-empty data frame in case some variables are kept unsynthesised
+     p$syn <- p$syn[sample(1:nrow(data), k, replace = TRUE), ]
      dimnames(p$syn)[[1]] <- 1:k
    }
    if (sum(duplicated(names(p$data))) > 0)
      stop("Column names of padded data should be unique.", call. = FALSE)
- 
-	 p$cont.na <- pm$cont.na  
-	 
+
+         p$cont.na <- pm$cont.na
+
  } else {
- 
-   p <- list(data = data,                        
+
+   p <- list(data = data,
              syn = data,
-             predictor.matrix = predictor.matrix, 
-             method = method, 
-             visit.sequence = visit.sequence, 
+             predictor.matrix = predictor.matrix,
+             method = method,
+             visit.sequence = visit.sequence,
              rules = rules,
              rvalues = rvalues,
-             cont.na = cont.na, 
-             event = event,                
+             cont.na = cont.na,
+             event = event,
              denom = denom,
              categories = NULL,
-             smoothing = smoothing)         
-   
+             smoothing = smoothing)
+
    if (k != dim(data)[1]) {
-     p$syn <- p$syn[sample(1:nrow(data), k, replace = TRUE),]   
+     p$syn <- p$syn[sample(1:nrow(data), k, replace = TRUE), ]
      dimnames(p$syn)[[1]] <- 1:k
    }
  }
 
  if (m > 0) {
 #  syn <- list(m)
-#	 for(i in 1:m){
+# 	 for(i in 1:m){
 #     syn[[i]] <- data
 #     if (k != dim(data)[1]) syn[[i]] <- syn[[i]][sample(1:dim(data)[1], k, replace = TRUE), ]
-#   }    
-   syn <- vector("list",m)                        
-   for (i in 1:m) {                               
-     syn[[i]] <- data[0, ]                         
+#   }
+   syn <- vector("list", m)
+   for (i in 1:m) {
+     syn[[i]] <- data[0, ]
      syn[[i]][1:k, ] <- NA
-     #if (k > 0){                                 #!BN-12/08/2016 - for syn.strata
-     #syn[[i]] <- syn[[i]][1:k,]                 
-     #dimnames(syn[[i]])[[1]] <- 1:k             
-     #}                                           
-   } 
+# if (k > 0){                                 #!BN-12/08/2016 - for syn.strata
+# syn[[i]] <- syn[[i]][1:k,]
+# dimnames(syn[[i]])[[1]] <- 1:k
+# }
+   }
  }
  else syn <- NULL
 
- synall <- sampler.syn(p, data, m, syn, visit.sequence, rules, rvalues, 
+ synall <- sampler.syn(p, data, m, syn, visit.sequence, rules, rvalues,
     event, proper, print.flag, k, pred.not.syn, models, numtocat, ...)
- 
+
  syn <- synall$syn
  fits <- synall$fits
- 
+
  if (m == 1) {
    syn <- syn[[1]]
    fits <- fits[[1]]
- } 
- 
+ }
+
 
 #-----------------------------------------------------------------------
 # restore the original NA's in the data
 # for(j in p$visit.sequence) p$data[(!r[,j]),j] <- NA
- 
- names(method)         <- varnames
+
+ names(method) <- varnames
  names(visit.sequence) <- varnames[visit.sequence]
 
-# Put grouped numeric variables and their synthesising parameters 
+# Put grouped numeric variables and their synthesising parameters
 # back into their correct positions
 #---
- if (!is.null(numtocat)) { 
+ if (!is.null(numtocat)) {
    out <- (length(method) - length(numtocat) + 1:length(numtocat))
    if (m == 1) {
      tocat <- match(numtocat, names(syn))
@@ -1269,82 +1269,82 @@ check.rules.syn <- function(setup, data) {
      for (i in 1:m) {
        tocat <- match(numtocat, names(syn[[1]]))
        syn[[i]][, tocat] <- syn[[i]][, out]
-       syn[[i]] <- syn[[i]][,-out]
+       syn[[i]] <- syn[[i]][, -out]
      }
    }
-   
-   # move their parameters to numeric versions
-   method             <- method[-out]
-   visit.sequence     <- visit.sequence[-out]
-   smoothing[tocat]   <- smoothing[out]
-   smoothing          <- smoothing[-out]
+
+# move their parameters to numeric versions
+   method <- method[-out]
+   visit.sequence <- visit.sequence[-out]
+   smoothing[tocat] <- smoothing[out]
+   smoothing <- smoothing[-out]
    cont.na.ini[tocat] <- cont.na.ini[out]
-   cont.na.ini        <- cont.na.ini[-out]
-   rules[tocat]       <- rules[out]
-   rules              <- rules[-out]
-   rvalues[tocat]     <- rvalues[out]
-   rvalues            <- rvalues[-out]
-   predictor.matrix   <- predictor.matrix[-out,-out]
+   cont.na.ini <- cont.na.ini[-out]
+   rules[tocat] <- rules[out]
+   rules <- rules[-out]
+   rvalues[tocat] <- rvalues[out]
+   rvalues <- rvalues[-out]
+   predictor.matrix <- predictor.matrix[-out, -out]
  }
- 
-# ---------------------------------------------------------------------- 
+
+# ----------------------------------------------------------------------
 # #!GR added 14/01/21
 # put numtofac variables back to numeric and chartofac back to character
 
- if (length(chartofac) > 0 ) {
+ if (length(chartofac) > 0) {
    if (m == 1) {
-    tochange <- (1:length(syn)) [chartofac]
-    for (i in tochange) syn[,i] <- as.character(syn[,i])}
+    tochange <- (1:length(syn))[chartofac]
+    for (i in tochange) syn[, i] <- as.character(syn[, i])}
    else {for (j in 1:m) {
-     tochange <- (1:length(syn[[1]])) [chartofac]
-     for (i in tochange) syn[[j]][,i] <- as.character(syn[[j]][,i])
+     tochange <- (1:length(syn[[1]]))[chartofac]
+     for (i in tochange) syn[[j]][, i] <- as.character(syn[[j]][, i])
    }
   }
  }
- 
+
  if (any(vartofactor)) {
-   if (m == 1)  {
+   if (m == 1) {
      tochange <- (1:length(syn))[vartofactor]
-     for (i in tochange) syn[,i] <- as.numeric(as.character(syn[,i]))
+     for (i in tochange) syn[, i] <- as.numeric(as.character(syn[, i]))
    }
-   else { for(j in 1:m) {
+   else { for (j in 1:m) {
      tochange <- (1:length(syn[[1]]))[vartofactor]
-     for (i in tochange) syn[[j]][,i] <- as.numeric(as.character(syn[[j]][,i]))
+     for (i in tochange) syn[[j]][, i] <- as.numeric(as.character(syn[[j]][, i]))
    }
   }
  }
 
 #---------------------------------------------------------------------
-#Tidy models
+# Tidy models
 
 #---
  if (models) {
-   if (m == 1) { 
-     # drop fits from dummies and nulls
-     fitout <- sapply(fits, function(x) is.null(x) || (is.character(x) && x =="dummy")) | 
+   if (m == 1) {
+# drop fits from dummies and nulls
+     fitout <- sapply(fits, function(x) is.null(x) || (is.character(x) && x == "dummy")) |
                grepl("orig.", names(fits))
      if (any(fitout)) fits <- fits[!fitout]
-     # move the models for non-missing values to original position
-     n.0 <- grepl("\\.0", names(fits))      
+# move the models for non-missing values to original position
+     n.0 <- grepl("\\.0", names(fits))
      if (any(n.0)) {
        fits[gsub("\\.0", "", names(fits[n.0]))] <- fits[n.0]
        fits <- fits[!n.0]
      }
    }
-   if (m > 1) { 
+   if (m > 1) {
      for (j in 1:m) {
-       fitout <- sapply(fits[[j]], function(x) is.null(x) || (is.character(x) && x =="dummy")) |
+       fitout <- sapply(fits[[j]], function(x) is.null(x) || (is.character(x) && x == "dummy")) |
                  grepl("orig.", names(fits))
        if (any(fitout)) fits[[j]] <- fits[[j]][!fitout]
-       n.0 <- grepl("\\.0",names(fits[[j]]))
-       if ( any(n.0)) {
-         fits[[j]][gsub("\\.0","",names(fits[[j]][n.0]))] <- fits[[j]][n.0]
+       n.0 <- grepl("\\.0", names(fits[[j]]))
+       if (any(n.0)) {
+         fits[[j]][gsub("\\.0", "", names(fits[[j]][n.0]))] <- fits[[j]][n.0]
          fits[[j]] <- fits[[j]][!n.0]
        }
      }
    }
  }
- 
+
 # Save, and return, but don't return data
 #---
  syndsobj <- list(call = call,
@@ -1355,15 +1355,15 @@ check.rules.syn <- function(setup, data) {
                   predictor.matrix = predictor.matrix,
                   smoothing = smoothing,
                   event = event,
-                  denom = denom,                  
+                  denom = denom,
 #                 minbucket = minbucket,
                   proper = proper,
                   n = nrow(data),
                   k = k,
                   rules = rules,
                   rvalues = rvalues,
-                  cont.na = cont.na.ini,          
-                  semicont = semicont,            
+                  cont.na = cont.na.ini,
+                  semicont = semicont,
                   drop.not.used = drop.not.used,
                   drop.pred.only = drop.pred.only,
                   models = fits,
@@ -1371,28 +1371,28 @@ check.rules.syn <- function(setup, data) {
                   var.lab = var.lab,
                   val.lab = val.lab,
                   obs.vars = obs.vars,
-                  numtocat = numtocat,                      #!GRipf 2 new parameters
+                  numtocat = numtocat, # !GRipf 2 new parameters
                   catgroups = catgroups)
- # if (diagnostics) syndsobj <- c(syndsobj, list(pad = p))
+# if (diagnostics) syndsobj <- c(syndsobj, list(pad = p))
  class(syndsobj) <- "synds"
  return(syndsobj)
 }
 
 
-###-----collinear.out------------------------------------------------------
+### -----collinear.out------------------------------------------------------
 
 collinear.out <- function(x, threshold = 0.99999) {
-  nvar     <- ncol(x)
-  x        <- data.matrix(x)
+  nvar <- ncol(x)
+  x <- data.matrix(x)
   varnames <- dimnames(x)[[2]]
-  z        <- suppressWarnings(cor(x, use = "pairwise.complete.obs"))
-  z[is.na(z)] <- 0    #GR-09/2016 to handle all NAs
-  hit      <- abs(z) >= threshold
-  mysets   <- !duplicated(hit) & rowSums(hit) > 1
+  z <- suppressWarnings(cor(x, use = "pairwise.complete.obs"))
+  z[is.na(z)] <- 0 # GR-09/2016 to handle all NAs
+  hit <- abs(z) >= threshold
+  mysets <- !duplicated(hit) & rowSums(hit) > 1
   if (sum(mysets) == 0) setlist <- NULL
   else {
-    setlist  <- vector("list",sum(mysets))
-    for (i in 1:sum(mysets)) setlist[[i]] <- colnames(hit)[hit[mysets, , drop = FALSE][i,]]  
-  } 
+    setlist <- vector("list", sum(mysets))
+    for (i in 1:sum(mysets)) setlist[[i]] <- colnames(hit)[hit[mysets, , drop = FALSE][i, ]]
+  }
   return(setlist)
 }

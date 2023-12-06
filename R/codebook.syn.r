@@ -29,7 +29,7 @@ codebook.syn <- function(data, maxlevs = 3) {
   n <- dim(data)[[1]]
   p <- dim(data)[[2]]
 
-  # calculate number and % of missing and non-missing values
+# calculate number and % of missing and non-missing values
   nmiss <- sapply(data, function(x) length(x[is.na(x)]))
   perctmiss <- round(nmiss / n * 100, 2)
   nok <- sapply(data, function(x) length(x[!is.na(x)]))

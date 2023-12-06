@@ -8,3 +8,4 @@
 ^\.github$
 ^NAMESPACE\.old$
 ^README\.Rmd$
+^\.pre-commit-config\.yaml$

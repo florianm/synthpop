@@ -47,16 +47,16 @@
 \item{weight}{Weight of person}
 \item{bmi}{Body mass index}
 }}
-\note{Please note that the original variable names have been changed to make them 
+\note{Please note that the original variable names have been changed to make them
   more self-explanatory. Some variable labels have been adjusted as well.}
 \source{
   Council for Social Monitoring. Social Diagnosis 2000-2011: integrated database.
   \url{http://www.diagnoza.com/index-en.html} [downloaded on 13/12/2013]
 }
 \references{
-  Czapinski J. and Panek T. (Eds.) (2011). Social Diagnosis 2011. Objective and 
-  Subjective Quality of Life in Poland - full report. Contemporary Economics, 
-  Volume 5, Issue 3 (special issue) \url{http://ce.vizja.pl/en/issues/volume/5/issue/3#art254} 
+  Czapinski J. and Panek T. (Eds.) (2011). Social Diagnosis 2011. Objective and
+  Subjective Quality of Life in Poland - full report. Contemporary Economics,
+  Volume 5, Issue 3 (special issue) \url{http://ce.vizja.pl/en/issues/volume/5/issue/3#art254}
 }
 \examples{
   spineplot(englang ~ agegr, data = SD2011, xlab = "Age group", ylab = "Knowledge of English")

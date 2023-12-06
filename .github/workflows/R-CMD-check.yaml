@@ -26,16 +26,19 @@ jobs:
             algorithms
             algorithmicx
             caption
-            collection-fontsrecommended 
+            collection-fontsrecommended
             etoolbox
             fancyvrb
             float
+            mdwtools
             framed
-            hyperref     
+            hyperref
+            natbib
             preprint
-            scheme-basic 
+            scheme-basic
             setspace
             thumbpdf
+            threeparttable
             xcolor
 
       - uses: r-lib/actions/setup-r@v2

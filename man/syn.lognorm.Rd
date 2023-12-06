@@ -2,15 +2,15 @@
 \alias{syn.lognorm}
 \alias{syn.sqrtnorm}
 \alias{syn.cubertnorm}
-\title{Synthesis by linear regression after transformation of 
+\title{Synthesis by linear regression after transformation of
        a dependent variable}
 \description{
   Generates univariate synthetic data using linear regression
-  of an outcome variable transformed by natural logarithm (\code{lognorm}), 
+  of an outcome variable transformed by natural logarithm (\code{lognorm}),
   square root (\code{sqrtnorm}) or cube root (\code{cubertnorm}).
 }
 \usage{
-syn.lognorm(y, x, xp, proper = FALSE, ...) 
+syn.lognorm(y, x, xp, proper = FALSE, ...)
 syn.sqrtnorm(y, x, xp, proper = FALSE, ...)
 syn.cubertnorm(y, x, xp, proper = FALSE, ...)
 }
@@ -18,7 +18,7 @@ syn.cubertnorm(y, x, xp, proper = FALSE, ...)
   \item{y}{an original data vector of length \code{n}.}
   \item{x}{a matrix (\code{n} x \code{p}) of original covariates.}
   \item{xp}{a matrix (\code{k} x \code{p}) of synthesised covariates.}
-  \item{proper}{a logical value specifying whether proper synthesis 
+  \item{proper}{a logical value specifying whether proper synthesis
     should be conducted. See details.}
   \item{\dots}{additional parameters.}
 }
@@ -37,5 +37,3 @@ syn.cubertnorm(y, x, xp, proper = FALSE, ...)
 \seealso{
   \code{\link{syn}}, \code{\link{syn.norm}}, \code{\link{syn.normrank}}}
 \keyword{datagen}
-
-

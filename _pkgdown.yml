@@ -4,7 +4,6 @@ template:
   bootswatch: lux
   bslib:
     pkgdown-nav-height: 100px
-home: 
+home:
   title: synthpop
   description: Generating Synthetic Versions of Sensitive Microdata for Statistical Disclosure Control
-

@@ -9,12 +9,14 @@
             "packages": "libudunits2-dev,libxtst6,libxt6,libmagick++-dev,texlive-latex-extra,texlive-fonts-recommended"
         },
         "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
-            "packages": "github::rstudio/renv,covr,tidyverse,here,httpgd,knitr,lattice,party,plyr,proto,polspline,randomForest,ranger,rmarkdown,roxygen2,testthat,classInt,usethis,mipfp,rmutil,broman"
-        }
+            "packages": "github::rstudio/renv,covr,tidyverse,git2r,here,httpgd,knitr,spelling,lattice,party,plyr,proto,precommit,polspline,randomForest,ranger,rmarkdown,roxygen2,testthat,classInt,usethis,mipfp,rmutil,broman"
+        },
+        "ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
     },
     "mounts": [
         "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=~/.gitconfig,type=bind,consistency=cached"
     ],
+    "onCreateCommand": "pre-commit install && pre-commit run",
     "customizations": {
         "vscode": {
             "extensions": [

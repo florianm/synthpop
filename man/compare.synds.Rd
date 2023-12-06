@@ -9,7 +9,7 @@
 \description{
  Compare synthesised data set with the original (observed) data set
  using percent frequency tables and histograms. When more than one
- synthetic data set has been generated (\code{object$m > 1}), by 
+ synthetic data set has been generated (\code{object$m > 1}), by
  default pooled synthetic data are used for comparison.
 
  This function can be also used with synthetic data NOT created by
@@ -70,14 +70,14 @@
   \item{ncol}{the number of columns for the plotting area.}
   \item{rel.size.x}{a number representing the relative size of x-axis labels.}
   \item{utility.stats}{a single string or a vector of strings that determines
-    which utility measures to print. Must be a selection from:  
-    \code{"VW"}, \code{"FT"},\code{"JSD"}, \code{"SPECKS"}, \code{"WMabsDD"}, 
-    \code{"U"}, \code{"G"}, \code{"pMSE"}, \code{"PO50"}, \code{"MabsDD"}, 
-    \code{"dBhatt"},  \code{"S_VW"}, \code{"S_FT"}, \code{"S_JSD"}, 
-    \code{"S_WMabsDD"}, \code{"S_G"}, \code{"S_pMSE"}, \code{"df"}. 
-    If \code{utility.stats = "all"}, all of these will be printed. For more 
+    which utility measures to print. Must be a selection from:
+    \code{"VW"}, \code{"FT"},\code{"JSD"}, \code{"SPECKS"}, \code{"WMabsDD"},
+    \code{"U"}, \code{"G"}, \code{"pMSE"}, \code{"PO50"}, \code{"MabsDD"},
+    \code{"dBhatt"},  \code{"S_VW"}, \code{"S_FT"}, \code{"S_JSD"},
+    \code{"S_WMabsDD"}, \code{"S_G"}, \code{"S_pMSE"}, \code{"df"}.
+    If \code{utility.stats = "all"}, all of these will be printed. For more
     information see the details section for \code{\link{utility.tab}}.}
-  \item{utility.for.plot}{a single string that determines which utility 
+  \item{utility.for.plot}{a single string that determines which utility
     measure to print in facet labels of the plot. Set to \code{NULL} to
     print variable names only.}
   \item{cols}{bar colors.}

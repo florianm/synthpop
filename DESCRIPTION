@@ -20,7 +20,6 @@ Suggests:
     covr (>= 3.6.1),
     here (>= 1.0.1),
     knitr (>= 1.42),
-    lattice (>= 0.20-45),
     rmarkdown (>= 2.20),
     roxygen2 (>= 7.2.3),
     testthat (>= 3.1.6),

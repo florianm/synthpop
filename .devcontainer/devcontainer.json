@@ -1,6 +1,6 @@
 {
     "name": "R (rocker/r-ver base)",
-    "image": "ghcr.io/rocker-org/devcontainer/r-ver:4.2",
+    "dockerFile": "Dockerfile",
     "features": {
         "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {
             "version": "prerelease"
@@ -12,12 +12,17 @@
             "packages": "github::rstudio/renv,covr,tidyverse,here,httpgd,knitr,lattice,party,plyr,proto,polspline,randomForest,ranger,rmarkdown,roxygen2,testthat,classInt,usethis,mipfp,rmutil,broman"
         }
     },
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=~/.gitconfig,type=bind,consistency=cached"
+    ],
     "customizations": {
         "vscode": {
             "extensions": [
                 "mechatroner.rainbow-csv",
                 "REditorSupport.r",
-                "RDebugger.r-debugger"
+                "RDebugger.r-debugger",
+                "james-yu.latex-workshop",
+                "ms-azuretools.vscode-docker"
             ]
         },
         "codespaces": {

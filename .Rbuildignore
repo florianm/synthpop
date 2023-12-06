@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.devcontainer
+^\.vscode
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$

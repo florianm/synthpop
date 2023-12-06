@@ -154,19 +154,19 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>  sex age edu marital ls smoke</span>
 <span class="r-in"><span><span class="va">f1</span> <span class="op">&lt;-</span> <span class="fu">multinom.synds</span><span class="op">(</span><span class="va">edu</span>  <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">s1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # weights:  16 (9 variable)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 1383.521772 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  10 value 1278.362029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 1258.194794 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> converged</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # weights:  16 (9 variable)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 1386.294361 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  10 value 1267.162653</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 1255.272686 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iter  10 value 1269.591260</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 1255.313689 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> converged</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # weights:  16 (9 variable)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 1384.908067 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iter  10 value 1264.662755</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 1249.584839 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iter  10 value 1263.504947</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 1246.859053 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> converged</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> # weights:  16 (9 variable)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> initial  value 1382.135478 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iter  10 value 1268.021529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> final  value 1256.566717 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> converged</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">f1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fit to synthetic data set with 3 syntheses. Inference to coefficients</span>
@@ -177,24 +177,24 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Combined estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                      xpct(Beta) xpct(se.Beta) xpct(z)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:(Intercept)        4.1772449     0.3789399 11.0235</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:sexFEMALE         -0.4994888     0.2074117 -2.4082</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:age               -0.0610337     0.0063105 -9.6717</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:(Intercept)                 3.8331915     0.3813489 10.0517</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:sexFEMALE                   0.1541170     0.2119401  0.7272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:age                        -0.0628060     0.0063662 -9.8656</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:(Intercept)  3.2116111     0.4028936  7.9714</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:sexFEMALE    0.0391525     0.2300458  0.1702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:age         -0.0587541     0.0068411 -8.5884</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:(Intercept)        4.1643251     0.3842537 10.8374</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:sexFEMALE         -0.6900632     0.2088943 -3.3034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:age               -0.0590617     0.0063573 -9.2903</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:(Intercept)                 3.7800614     0.3829199  9.8717</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:sexFEMALE                   0.0206243     0.2093033  0.0985</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:age                        -0.0584997     0.0063002 -9.2854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:(Intercept)  3.1959553     0.4096214  7.8022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:sexFEMALE   -0.0216014     0.2327392 -0.0928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:age         -0.0584475     0.0069233 -8.4421</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                      Pr(&gt;|xpct(z)|)    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:(Intercept)            &lt; 2.2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:sexFEMALE                0.01603 *  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:sexFEMALE              0.0009552 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> VOCATIONAL/GRAMMAR:age                    &lt; 2.2e-16 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:(Intercept)                     &lt; 2.2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:sexFEMALE                         0.46712    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:sexFEMALE                       0.9215052    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SECONDARY:age                             &lt; 2.2e-16 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:(Intercept)      1.569e-15 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:sexFEMALE          0.86486    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:(Intercept)      6.083e-15 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:sexFEMALE        0.9260514    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> POST-SECONDARY OR HIGHER:age              &lt; 2.2e-16 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
@@ -206,17 +206,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficient estimates for selected synthetic data set(s):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       VOCATIONAL/GRAMMAR:(Intercept) VOCATIONAL/GRAMMAR:sexFEMALE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> syn=1                       4.219323                   -0.3039626</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> syn=2                       3.876739                   -0.3857034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syn=1                       4.074332                   -0.6924520</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syn=2                       4.439624                   -0.9325212</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       VOCATIONAL/GRAMMAR:age SECONDARY:(Intercept) SECONDARY:sexFEMALE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> syn=1            -0.06366196              4.022380           0.1154049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> syn=2            -0.05805117              3.549593           0.4109479</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syn=1            -0.05573427              3.861270          0.02175011</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syn=2            -0.06358012              3.873921         -0.08770341</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       SECONDARY:age POST-SECONDARY OR HIGHER:(Intercept)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> syn=1   -0.06803163                             3.211316</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> syn=2   -0.05965838                             2.799834</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syn=1   -0.06000199                             3.135869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syn=2   -0.05922775                             3.218964</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       POST-SECONDARY OR HIGHER:sexFEMALE POST-SECONDARY OR HIGHER:age</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> syn=1                          0.2122077                  -0.05960619</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> syn=2                          0.1714760                  -0.05402365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syn=1                         0.04375053                  -0.05788913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> syn=2                        -0.13941733                  -0.05705260</span>
 <span class="r-in"><span><span class="fu"><a href="compare.html">compare</a></span><span class="op">(</span><span class="va">f1</span>, <span class="va">ods</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, p):</span> object 'ods' not found</span>
 </code></pre></div>

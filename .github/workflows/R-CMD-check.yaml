@@ -27,6 +27,7 @@ jobs:
             collection-fontsrecommended 
             etoolbox
             fancyvrb
+            float
             framed
             hyperref     
             preprint

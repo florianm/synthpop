@@ -8,12 +8,12 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-",
+  fig.path = "man/figures/",
   out.width = "100%"
 )
 ```
 
-# synthpop
+# synthpop <img src="man/figures/synthpop.png" align="right" alt="synthpop logo" width="120" />
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/synthpop)](https://CRAN.R-project.org/package=synthpop)

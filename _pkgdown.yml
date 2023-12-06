@@ -1,6 +1,9 @@
 url: https://florianm.github.io/synthpop/
 template:
   bootstrap: 5
+  bootswatch: lux
+  bslib:
+    pkgdown-nav-height: 100px
 home: 
   title: synthpop
   description: Generating Synthetic Versions of Sensitive Microdata for Statistical Disclosure Control

@@ -33,6 +33,7 @@ jobs:
             preprint
             scheme-basic 
             setspace
+            texlive-science
             thumbpdf
             xcolor
 

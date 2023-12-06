@@ -63,11 +63,11 @@
 <dd><p>a matrix (<code>k</code> x <code>p</code>) of synthesised covariates.</p></dd>
 
   <dt>proper</dt>
-<dd><p>a logical value specifying whether proper synthesis 
+<dd><p>a logical value specifying whether proper synthesis
     should be conducted. See details.</p></dd>
 
   <dt>smoothing</dt>
-<dd><p>smoothing method. See documentation for 
+<dd><p>smoothing method. See documentation for
     <code><a href="syn.smooth.html">syn.smooth</a></code>.</p></dd>
 
   <dt>...</dt>
@@ -77,18 +77,18 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Synthesis of <code>y</code> by predictive mean matching. The procedure
-  is as follows:</p><ol><li><p>Fit a linear regression 
+  is as follows:</p><ol><li><p>Fit a linear regression
   to the original data.</p></li>
 <li><p>Compute predicted values <code>y.hat</code>
-  and <code>ysyn.hat</code> for the original <code>x</code> and synthesised 
+  and <code>ysyn.hat</code> for the original <code>x</code> and synthesised
   <code>xp</code> covariates respectively.</p></li>
-<li><p>For each predicted value <code>ysyn.hat</code> find donor 
-  observations with the closest predicted values <code>y.hat</code> 
-  (ties are broken by random selection), randomly sample one of 
+<li><p>For each predicted value <code>ysyn.hat</code> find donor
+  observations with the closest predicted values <code>y.hat</code>
+  (ties are broken by random selection), randomly sample one of
   them and take its observed value <code>y</code> as the synthetic value.</p></li>
-</ol><p>The Bayesian version (for proper synthesis) includes additional 
-  step before computing predicted values:</p><ul><li><p>Draw coefficients 
-  from normal distribution with mean and variance estimated in step 1 and use 
+</ol><p>The Bayesian version (for proper synthesis) includes additional
+  step before computing predicted values:</p><ul><li><p>Draw coefficients
+  from normal distribution with mean and variance estimated in step 1 and use
   them to calculate predicted values for the synthesised covariates.</p></li>
 </ul></div>
     <div class="section level2">

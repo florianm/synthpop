@@ -45,8 +45,8 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sdc</span><span class="op">(</span><span class="va">object</span>, <span class="va">data</span>, label <span class="op">=</span> <span class="cn">NULL</span>, rm.replicated.uniques <span class="op">=</span> <span class="cn">FALSE</span>, </span>
-<span> uniques.exclude <span class="op">=</span> <span class="cn">NULL</span>, recode.vars <span class="op">=</span> <span class="cn">NULL</span>, bottom.top.coding <span class="op">=</span> <span class="cn">NULL</span>, </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sdc</span><span class="op">(</span><span class="va">object</span>, <span class="va">data</span>, label <span class="op">=</span> <span class="cn">NULL</span>, rm.replicated.uniques <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span> uniques.exclude <span class="op">=</span> <span class="cn">NULL</span>, recode.vars <span class="op">=</span> <span class="cn">NULL</span>, bottom.top.coding <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span> recode.exclude <span class="op">=</span> <span class="cn">NULL</span>, smooth.vars <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -55,45 +55,45 @@
     <dl><dt>object</dt>
 <dd><p>an object of class <code>synds</code>, which stands
     for 'synthesised data set'. It is typically created by
-    function <code><a href="syn.html">syn()</a></code> and it includes <code>object$m</code> 
+    function <code><a href="syn.html">syn()</a></code> and it includes <code>object$m</code>
     synthesised data set(s).</p></dd>
 
   <dt>data</dt>
 <dd><p>the original (observed) data set.</p></dd>
 
   <dt>label</dt>
-<dd><p>a single string with a label to be added to the synthetic data 
+<dd><p>a single string with a label to be added to the synthetic data
     sets as a new variable to make it clear that the data are synthetic/fake.</p></dd>
 
   <dt>rm.replicated.uniques</dt>
-<dd><p>a logical value indicating whether unique 
-    replicates of units that are unique also in the orginal data set should 
+<dd><p>a logical value indicating whether unique
+    replicates of units that are unique also in the orginal data set should
     be removed.</p></dd>
 
   <dt>uniques.exclude</dt>
-<dd><p>a single string or a vector of strings with name(s) 
+<dd><p>a single string or a vector of strings with name(s)
     of variable(s) to be excluded from the identification of uniques.</p></dd>
 
   <dt>recode.vars</dt>
-<dd><p>a single string or a vector of strings with name(s) 
+<dd><p>a single string or a vector of strings with name(s)
     of variable(s) to be bottom- or/and top-coded.</p></dd>
 
   <dt>bottom.top.coding</dt>
-<dd><p>a list of two-element vectors specifing 
-    bottom and top codes for each variable in <code>recode.vars</code>. 
+<dd><p>a list of two-element vectors specifing
+    bottom and top codes for each variable in <code>recode.vars</code>.
     If there is no need for bottom or top coding <code>NA</code> should be used.
-    If only one variable is to be recoded, codes can be given as 
+    If only one variable is to be recoded, codes can be given as
     a two-element vector.</p></dd>
 
   <dt>recode.exclude</dt>
-<dd><p>a list specifying for each variable in 
-    <code>recode.vars</code> values to be excluded from recoding, e.g. missing data 
-    codes. If all values should be considered for recoding <code>NA</code> should be 
-    used. If only one variable is to be recoded, code(s) can be given as 
+<dd><p>a list specifying for each variable in
+    <code>recode.vars</code> values to be excluded from recoding, e.g. missing data
+    codes. If all values should be considered for recoding <code>NA</code> should be
+    used. If only one variable is to be recoded, code(s) can be given as
     a single number or a vector.</p></dd>
 
   <dt>smooth.vars</dt>
-<dd><p>a single string or a vector of strings with name(s) 
+<dd><p>a single string or a vector of strings with name(s)
     of numeric variable(s) to be smoothed (<code><a href="https://rdrr.io/r/stats/smooth.spline.html" class="external-link">smooth.spline</a></code> function is used).</p></dd>
 
 </dl></div>
@@ -101,7 +101,7 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An <code>object</code> provided as an argument adjusted in accordance with the 
+<p>An <code>object</code> provided as an argument adjusted in accordance with the
   other parameters' values.</p>
     </div>
     <div class="section level2">
@@ -127,12 +127,12 @@
 <span class="r-in"><span>recode.exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NA</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>,<span class="op">-</span><span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> m = 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age: no. of bottom-coded values - 63, no. of top-coded values - 32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> income: no. of bottom-coded values - 0, no. of top-coded values - 127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age: no. of bottom-coded values - 58, no. of top-coded values - 28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> income: no. of bottom-coded values - 0, no. of top-coded values - 146</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> m = 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age: no. of bottom-coded values - 53, no. of top-coded values - 32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> income: no. of bottom-coded values - 0, no. of top-coded values - 145</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> no. of replicated uniques: 120, 112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age: no. of bottom-coded values - 57, no. of top-coded values - 29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> income: no. of bottom-coded values - 0, no. of top-coded values - 126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> no. of replicated uniques: 116, 137</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

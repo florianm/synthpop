@@ -63,21 +63,21 @@
   <dt>cont.na</dt>
 <dd><p>a vector of codes for missing values for continuous
      variables that should be excluded from smoothing.</p></dd>
-  
+
   <dt>proper</dt>
-<dd><p>if <code>proper = TRUE</code> values are sampled from  
+<dd><p>if <code>proper = TRUE</code> values are sampled from
     a bootstrapped sample of the original data.</p></dd>
-  
+
   <dt>...</dt>
 <dd><p>additional parameters passed to <code>sample</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>A simple random sample with replacement is taken from the 
- observed values in <code>y</code> and used as synthetic values. 
- A Guassian kernel smoothing can be applied to continuous variables 
- by setting smoothing parameter to <code>"density"</code>. It is recommended 
+    <p>A simple random sample with replacement is taken from the
+ observed values in <code>y</code> and used as synthetic values.
+ A Guassian kernel smoothing can be applied to continuous variables
+ by setting smoothing parameter to <code>"density"</code>. It is recommended
  as a tool to decrease the disclosure risk.</p>
     </div>
     <div class="section level2">

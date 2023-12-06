@@ -48,7 +48,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">syn.polyreg</span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, <span class="va">xp</span>, proper <span class="op">=</span> <span class="cn">FALSE</span>, maxit <span class="op">=</span> <span class="fl">1000</span>, trace <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">syn.polyreg</span><span class="op">(</span><span class="va">y</span>, <span class="va">x</span>, <span class="va">xp</span>, proper <span class="op">=</span> <span class="cn">FALSE</span>, maxit <span class="op">=</span> <span class="fl">1000</span>, trace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>            MaxNWts <span class="op">=</span> <span class="fl">10000</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -64,9 +64,9 @@
 <dd><p>a matrix (<code>k</code> x <code>p</code>) of synthesised covariates.</p></dd>
 
   <dt>proper</dt>
-<dd><p>for proper synthesis (<code>proper = TRUE</code>) 
+<dd><p>for proper synthesis (<code>proper = TRUE</code>)
     a multinomial model is fitted to a bootstrapped sample of the original data.</p></dd>
- 
+
   <dt>maxit</dt>
 <dd><p>the maximum number of iterations for <code><a href="https://rdrr.io/pkg/nnet/man/nnet.html" class="external-link">nnet</a></code>.</p></dd>
 
@@ -82,20 +82,20 @@
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Generates synthetic categorical variables by the polytomous 
+    <p>Generates synthetic categorical variables by the polytomous
   regression model. The method consists of the following steps:</p><ol><li><p>Fit categorical response as a multinomial model.</p></li>
 <li><p>Compute predicted categories.</p></li>
 <li><p>Add appropriate
   noise to predictions.</p></li>
-</ol><p>The algorithm of <code>syn.polyreg</code> uses the function 
-  <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></code> from the <span class="pkg">nnet</span> package. Any numerical 
-  variables are scaled to cover the range (0,1) before fitting. Warnings 
+</ol><p>The algorithm of <code>syn.polyreg</code> uses the function
+  <code><a href="https://rdrr.io/pkg/nnet/man/multinom.html" class="external-link">multinom</a></code> from the <span class="pkg">nnet</span> package. Any numerical
+  variables are scaled to cover the range (0,1) before fitting. Warnings
   are printed if the algorithm fails to converge in <code>maxit</code> iterations
-  and also if the synthesised data has only one category. The latter may occur 
-  if the variable being synthesised is sparse so that the algorithm fails to 
+  and also if the synthesised data has only one category. The latter may occur
+  if the variable being synthesised is sparse so that the algorithm fails to
   iterate.</p>
 <p>In order to avoid bias due to perfect prediction, the
-  data are augmented by the method of White, Daniel and Royston (2010).</p>  
+  data are augmented by the method of White, Daniel and Royston (2010).</p>
 <p>NOTE that when the function is called by setting elements of method in <code><a href="syn.html">syn()</a></code>
   to <code>"polyreg"</code>, the parameters <code>maxit</code>, <code>trace</code> and <code>MaxNWts</code>
   can be supplied to <code><a href="syn.html">syn()</a></code> as e.g. <code>polyreg.maxit</code>.</p>

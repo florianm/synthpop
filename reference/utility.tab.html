@@ -115,7 +115,7 @@ It can be also used with synthetic data NOT created by syn(),
     which the missing data codes need to be specified.</p></dd>
 
   <dt>max.table</dt>
-<dd><p>a maximum table size. You could try increasing the default 
+<dd><p>a maximum table size. You could try increasing the default
     value, but memory problems are likely.</p></dd>
 
   <dt>ngroups</dt>
@@ -132,17 +132,17 @@ It can be also used with synthetic data NOT created by syn(),
 
   <dt>print.tables</dt>
 <dd><p>a logical value that determines if tables of observed and
-    synthesised data are to be printed. By default tables are printed if they 
+    synthesised data are to be printed. By default tables are printed if they
     have up to three dimensions.</p></dd>
 
   <dt>print.stats</dt>
 <dd><p>a single string or a vector of strings that determines
-    which utility measures to print. Must be a selection from:  
-     <code>"VW"</code>, <code>"FT"</code>,<code>"JSD"</code>, <code>"SPECKS"</code>, <code>"WMabsDD"</code>, 
-     <code>"U"</code>, <code>"G"</code>, <code>"pMSE"</code>, <code>"PO50"</code>, <code>"MabsDD"</code>, 
-     <code>"dBhatt"</code>,  <code>"S_VW"</code>, <code>"S_FT"</code>, <code>"S_JSD"</code>, 
-     <code>"S_WMabsDD"</code>, <code>"S_G"</code>, <code>"S_pMSE"</code>, <code>"df"</code>, <code>dfG</code>. 
-    If <code>print.stats = "all"</code>, all of these will be printed. For more 
+    which utility measures to print. Must be a selection from:
+     <code>"VW"</code>, <code>"FT"</code>,<code>"JSD"</code>, <code>"SPECKS"</code>, <code>"WMabsDD"</code>,
+     <code>"U"</code>, <code>"G"</code>, <code>"pMSE"</code>, <code>"PO50"</code>, <code>"MabsDD"</code>,
+     <code>"dBhatt"</code>,  <code>"S_VW"</code>, <code>"S_FT"</code>, <code>"S_JSD"</code>,
+     <code>"S_WMabsDD"</code>, <code>"S_G"</code>, <code>"S_pMSE"</code>, <code>"df"</code>, <code>dfG</code>.
+    If <code>print.stats = "all"</code>, all of these will be printed. For more
     information see the details section below.</p></dd>
 
   <dt>print.zdiff</dt>
@@ -150,7 +150,7 @@ It can be also used with synthetic data NOT created by syn(),
    differences between observed and expected are to be printed.</p></dd>
 
   <dt>print.flag</dt>
-<dd><p>a logical value that determines if messages are to be printed 
+<dd><p>a logical value that determines if messages are to be printed
     during computation.</p></dd>
 
   <dt>digits</dt>
@@ -173,29 +173,29 @@ It can be also used with synthetic data NOT created by syn(),
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Forms tables of observed and synthesised values for the variables
 specified in <code>vars</code>. Several utility measures are calculated from the cells
-of the tables, as described below. Details of all of these measures can be found 
+of the tables, as described below. Details of all of these measures can be found
 in Raab et al. (2021). If the synthesising model is correct the measures
-<code>VW</code>, <code>FT</code>, <code>G</code> and <code>JSD</code> should have chi-square distributions 
-with <code>df</code> degrees of freedom for large samples. Standardised versions of each 
-measure are available (e.g. <code>S_VW</code> for <code>VW</code>, where <code>S_VW = VW/df</code>) 
-that will have an expected value of <code>1</code> if the synthesising model is correct. 
-Four other measures are calculated by considering the table as a prediction model. 
-The propensity score mean-squared error <code>pMSE</code>, and from a comparison of 
-propensity scores for the synthetic and original data the Kolmogorov-Smirnov 
-statistic <code>SPECKS</code> and the Wilcoxon rank-sum statistic <code>U</code> and also 
-the percentage of the observations correctly predicted in the combined tables over 
-50%(<code>PO50</code>) where the majority of observations in each grouping are in 
-agreement with category (real or synthetic) of the observation. The first of these 
-<code>pMSE</code> is identical except for a constant to <code>VW</code>. No expected values are 
-computed for the last three of these measures, but they can be obtained by replication 
-from <code><a href="utility.gen.html">utility.gen()</a></code>. 
-Three further measures are calulated from the tables. The mean absolute difference 
-in distributions: firstly <code>MabsDD</code>, the avarage absolute difference in the 
-proportions of original and synthetic data from all the cells in the table. 
-Secondly a weighted version of this measure <code>WMabsDD</code> where the weights are 
-proportional to the inverse of the variance of the absolute differences so that 
-this measure can be standardised by its expected value, <code>df</code>. Finally the 
-Bhattacharyya distances <code>BhattD</code> derived from the overlap of the histograms 
+<code>VW</code>, <code>FT</code>, <code>G</code> and <code>JSD</code> should have chi-square distributions
+with <code>df</code> degrees of freedom for large samples. Standardised versions of each
+measure are available (e.g. <code>S_VW</code> for <code>VW</code>, where <code>S_VW = VW/df</code>)
+that will have an expected value of <code>1</code> if the synthesising model is correct.
+Four other measures are calculated by considering the table as a prediction model.
+The propensity score mean-squared error <code>pMSE</code>, and from a comparison of
+propensity scores for the synthetic and original data the Kolmogorov-Smirnov
+statistic <code>SPECKS</code> and the Wilcoxon rank-sum statistic <code>U</code> and also
+the percentage of the observations correctly predicted in the combined tables over
+50%(<code>PO50</code>) where the majority of observations in each grouping are in
+agreement with category (real or synthetic) of the observation. The first of these
+<code>pMSE</code> is identical except for a constant to <code>VW</code>. No expected values are
+computed for the last three of these measures, but they can be obtained by replication
+from <code><a href="utility.gen.html">utility.gen()</a></code>.
+Three further measures are calulated from the tables. The mean absolute difference
+in distributions: firstly <code>MabsDD</code>, the avarage absolute difference in the
+proportions of original and synthetic data from all the cells in the table.
+Secondly a weighted version of this measure <code>WMabsDD</code> where the weights are
+proportional to the inverse of the variance of the absolute differences so that
+this measure can be standardised by its expected value, <code>df</code>. Finally the
+Bhattacharyya distances <code>BhattD</code> derived from the overlap of the histograms
 of the original and synthetic data sets.</p>
     </div>
     <div class="section level2">
@@ -214,43 +214,43 @@ of the original and synthetic data sets.</p>
     utility measure.</p></dd>
 
   <dt>JSD</dt>
-<dd><p>a vector with <code>object$m</code> values for the Jensen-Shannaon 
+<dd><p>a vector with <code>object$m</code> values for the Jensen-Shannaon
     divergence for comparing the tables.</p></dd>
 
   <dt>SPECKS</dt>
-<dd><p>a vector with <code>object$m</code> values for the Kolmogorov-Smirnov 
-    statistic for comparing the propensity scores for the original and synthetic 
+<dd><p>a vector with <code>object$m</code> values for the Kolmogorov-Smirnov
+    statistic for comparing the propensity scores for the original and synthetic
     data.</p></dd>
 
   <dt>WMabsDD</dt>
-<dd><p>a vector with <code>object$m</code> values of the weighted mean 
+<dd><p>a vector with <code>object$m</code> values of the weighted mean
     absolute difference in distributions for original and synthetic data.</p></dd>
 
   <dt>U</dt>
-<dd><p>a vector with <code>object$m</code> values of the Wilcoxon statistic 
+<dd><p>a vector with <code>object$m</code> values of the Wilcoxon statistic
     comparing the propensity scores for the original and synthetic data.</p></dd>
 
   <dt>G</dt>
-<dd><p>a vector with <code>object$m</code> values for the adjusted likelihood 
+<dd><p>a vector with <code>object$m</code> values for the adjusted likelihood
     ratio utility measure.</p></dd>
 
   <dt>pMSE</dt>
-<dd><p>a vector with <code>object$m</code> values of the propensity score 
+<dd><p>a vector with <code>object$m</code> values of the propensity score
     mean-squared error; linearly related to <code>VW</code>.</p></dd>
- 
+
   <dt>PO50</dt>
-<dd><p>a vector with <code>object$m</code> values of the percentage over 
-    50% of observations correctly predicted from the propensity scores 
+<dd><p>a vector with <code>object$m</code> values of the percentage over
+    50% of observations correctly predicted from the propensity scores
     linearly related to <code>SPECKS</code> and <code>MabsDD</code>.</p></dd>
- 
+
   <dt>MabsDD</dt>
-<dd><p>a vector with <code>object$m</code> values of the mean absolute 
-    difference in distributions for original and synthetic data linearly 
+<dd><p>a vector with <code>object$m</code> values of the mean absolute
+    difference in distributions for original and synthetic data linearly
     related to <code>SPECKS</code> and <code>PO50</code>.</p></dd>
 
   <dt>dBhatt</dt>
-<dd><p>a vector with <code>object$m</code> values of the Bhattacharyya 
-    distances between the synthetic and original data, linearly related to 
+<dd><p>a vector with <code>object$m</code> values of the Bhattacharyya
+    distances between the synthetic and original data, linearly related to
     the square root of <code>FT</code>.</p></dd>
 
   <dt>S_VW</dt>
@@ -279,7 +279,7 @@ of the original and synthetic data sets.</p>
 
   <dt>dfG</dt>
 <dd><p>degrees of freedom used in standardising <code>G</code>.</p></dd>
-  
+
   <dt>nempty</dt>
 <dd><p>a vector of length <code>object$m</code> with number of cells
     not contributing to the statistics.</p></dd>
@@ -325,8 +325,8 @@ of the original and synthetic data sets.</p>
   creation of synthetic data in R. <em>Journal of Statistical Software</em>,
   <b>74</b>(11), 1-26. <a href="https://doi.org/10.18637/jss.v074.i11" class="external-link">doi:10.18637/jss.v074.i11</a>
 .</p>
-<p>Raab, G.M., Nowok, B. and Dibben, C. (2021). Assessing, visualizing and 
-  improving the utility of synthetic data. Available from 
+<p>Raab, G.M., Nowok, B. and Dibben, C. (2021). Assessing, visualizing and
+  improving the utility of synthetic data. Available from
   <a href="https://arxiv.org/abs/2109.12717" class="external-link">https://arxiv.org/abs/2109.12717</a>.</p>
 <p>Read, T.R.C. and Cressie, N.A.C. (1988) <em>Goodness--of--Fit Statistics for
   Discrete Multivariate Data</em>, Springer--Verlag, New York.</p>

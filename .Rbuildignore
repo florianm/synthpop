@@ -1,2 +1,12 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.devcontainer
+^\.vscode
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^NAMESPACE\.old$
+^\.lintr$
+^\.pre-commit-config\.yaml$
+^README\.Rmd$

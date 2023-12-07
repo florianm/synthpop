@@ -2,8 +2,8 @@
 \alias{syn.rf}
 \title{Synthesis with random forest}
 \description{
-Generates univariate synthetic data using Breiman's random forest algorithm 
-classification and regression. It uses \code{\link{randomForest}} function 
+Generates univariate synthetic data using Breiman's random forest algorithm
+classification and regression. It uses \code{\link{randomForest}} function
 from the \pkg{randomForest} package.
 }
 \usage{
@@ -13,13 +13,13 @@ syn.rf(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...)
   \item{y}{an original data vector of length \code{n}.}
   \item{x}{a matrix (\code{n} x \code{p}) of original covariates.}
   \item{xp}{a matrix (\code{k} x \code{p}) of synthesised covariates.}
-  \item{smoothing}{smoothing method for numeric variable. See 
+  \item{smoothing}{smoothing method for numeric variable. See
     \code{\link{syn.smooth}}.}
-  \item{proper}{for proper synthesis (\code{proper = TRUE}) a model is fitted 
+  \item{proper}{for proper synthesis (\code{proper = TRUE}) a model is fitted
     to a bootstrapped sample of the original data.}
   \item{ntree}{number of trees to grow.}
-  \item{\dots}{additional parameters passed to 
-    \code{\link[randomForest]{randomForest}}.}  
+  \item{\dots}{additional parameters passed to
+    \code{\link[randomForest]{randomForest}}.}
 }
 \details{...}
 \value{
@@ -35,4 +35,3 @@ A list with two components:
   \code{\link{syn.smooth}}
 }
 \keyword{datagen}
-

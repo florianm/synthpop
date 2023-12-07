@@ -6,20 +6,20 @@
   analysis.
 }
 \usage{
-syn.norm(y, x, xp, proper = FALSE, ...) 
+syn.norm(y, x, xp, proper = FALSE, ...)
 }
 \arguments{
   \item{y}{an original data vector of length \code{n}.}
   \item{x}{a matrix (\code{n} x \code{p}) of original covariates.}
   \item{xp}{a matrix (\code{k} x \code{p}) of synthesised covariates.}
-  \item{proper}{a logical value specifying whether proper synthesis 
+  \item{proper}{a logical value specifying whether proper synthesis
     should be conducted. See details.}
   \item{\dots}{additional parameters.}
 }
 \details{
   Generates synthetic values using the spread around the
   fitted linear regression line of \code{y} given \code{x}.
-  For proper synthesis first the regression coefficients 
+  For proper synthesis first the regression coefficients
   are drawn from normal distribution with mean and variance
   from the fitted model.
 }

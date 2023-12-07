@@ -112,9 +112,11 @@ ods <- SD2011[, c("smoke", "sex", "age", "edu")]
 levels(ods$edu) <- c("NONE", "VOC", "SEC", "HIGH")
 s1 <- syn(ods, seed = 1234)
 summary(glm(smoke ~ sex + age + edu + sex * edu,
-  data = s1$syn, family = "binomial"))
+  data = s1$syn, family = "binomial"
+))
 summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-  data = s1, family = "binomial"))
+  data = s1, family = "binomial"
+))
 @
 \renewcommand{\baselinestretch}{1.5}
 Running this code shows that the results from \texttt{glm()} and \texttt{glm.synds()} are identical.  This is also the case if the synthesis is carried out using the parameter \texttt{proper = TRUE} of \texttt{syn()} or if some of the variables in the model have not been synthesised. One small advantage of using \texttt{glm.synds()} is that it checks and gives warnings if the model includes unsynthesised variables that are not at the start of the visit sequence, which can produce results which are wrong, as in the next example.
@@ -122,7 +124,8 @@ Running this code shows that the results from \texttt{glm()} and \texttt{glm.syn
 <<>>=
 s2 <- syn(ods, seed = 1234, visit.sequence = c("smoke", "edu", "age"))
 summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-data = s2, family = "binomial"))
+  data = s2, family = "binomial"
+))
 @
 \renewcommand{\baselinestretch}{1.5}
 
@@ -136,10 +139,12 @@ s3 <- syn(ods, seed = 1234, k = 500)
 
 ## analysing synthetic data with just glm()
 summary(glm(smoke ~ sex + age + edu + sex * edu,
-            data = s3$syn, family = "binomial"))
+  data = s3$syn, family = "binomial"
+))
 ## using glm.synds()
 summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-                  data = s3, family = "binomial"))
+  data = s3, family = "binomial"
+))
 @
 \renewcommand{\baselinestretch}{1.5}
 
@@ -152,7 +157,8 @@ This code gets inference to population parameters for our example with all varia
 \renewcommand{\baselinestretch}{1.0}
 <<>>=
 summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-  data = s1, family = "binomial"), population.inference = TRUE)
+  data = s1, family = "binomial"
+), population.inference = TRUE)
 @
 \renewcommand{\baselinestretch}{1.5}
 
@@ -163,7 +169,8 @@ The first term is larger when synthesis is done with \texttt{proper = TRUE} as w
 <<>>=
 s4 <- syn(ods, seed = 5678, proper = TRUE)
 summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-  data = s4, family = "binomial"), population.inference = TRUE)
+  data = s4, family = "binomial"
+), population.inference = TRUE)
 @
 \renewcommand{\baselinestretch}{1.5}
 
@@ -173,7 +180,8 @@ summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
 <<eval=FALSE>>=
 s5 <- syn(ods, seed = 5678, m = 10, proper = TRUE, print.flag = FALSE)
 summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-  data = s5, family = "binomial"), population.inference = TRUE)
+  data = s5, family = "binomial"
+), population.inference = TRUE)
 @
 \begin{verbatim}
 Fit to synthetic data set with 10 syntheses. Inference to population
@@ -207,11 +215,14 @@ In the next example only one of the variables in the formula has been synthesise
 
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
-s6 <- syn(ods, seed = 910011, m = 12,
-  method = c("", "", "", "cart"), print.flag = FALSE)
+s6 <- syn(ods,
+  seed = 910011, m = 12,
+  method = c("", "", "", "cart"), print.flag = FALSE
+)
 
 summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-  data = s6, family = "binomial"), population.inference = TRUE)
+  data = s6, family = "binomial"
+), population.inference = TRUE)
 @
 \begin{verbatim}
 Fit to synthetic data set with 12 syntheses. Inference to population
@@ -241,11 +252,14 @@ If a user attempts an incomplete fit with \texttt{population.inference = TRUE} f
 
 \renewcommand{\baselinestretch}{1.0}
 <<>>=
-s7 <- syn(ods, seed = 910011, m = 1,
-  method = c("", "", "", "cart"), print.flag = FALSE)
+s7 <- syn(ods,
+  seed = 910011, m = 1,
+  method = c("", "", "", "cart"), print.flag = FALSE
+)
 
 summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-  data = s7, family = "binomial"), population.inference = TRUE)
+  data = s7, family = "binomial"
+), population.inference = TRUE)
 @
 \renewcommand{\baselinestretch}{1.5}
 
@@ -254,9 +268,13 @@ In addition to these combined estimates from all the syntheses, the user can cho
 
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
-summary(glm.synds(smoke ~ sex + age + edu + sex * edu,
-  data = s6, family = "binomial"), population.inference = TRUE,
-  incomplete = TRUE, msel = 1:2)
+summary(
+  glm.synds(smoke ~ sex + age + edu + sex * edu,
+    data = s6, family = "binomial"
+  ),
+  population.inference = TRUE,
+  incomplete = TRUE, msel = 1:2
+)
 @
 \begin{verbatim}
 Fit to synthetic data set with 12 syntheses. Inference to population
@@ -338,11 +356,15 @@ We illustrate these results with three different syntheses and three different l
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
 ods <- ods[!is.na(ods$smoke), ] # remove 10 observations with missing "smoke"
-s8 <- syn.strata(ods, m = 5, method = "parametric", strata = "smoke",
+s8 <- syn.strata(ods,
+  m = 5, method = "parametric", strata = "smoke",
   seed = 5678, visit.sequence = c("smoke", "sex", "edu", "age"),
-  print.flag = FALSE, tab.strataobs = FALSE)
-f8 <- glm.synds(smoke ~ sex + edu + sex * edu, data = s8,
-  family = "binomial")
+  print.flag = FALSE, tab.strataobs = FALSE
+)
+f8 <- glm.synds(smoke ~ sex + edu + sex * edu,
+  data = s8,
+  family = "binomial"
+)
 compare(f8, ods, plot.intercept = TRUE, plot = "coef")
 @
 \begin{verbatim}
@@ -378,10 +400,14 @@ The second example is more typical of what a user of \textbf{synthpop} might use
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
 ods <- ods[!is.na(ods$smoke), ] # remove 10 observationswith missing "smoke"
-s9 <- syn(ods, m = 5, seed = 5678,
-  visit.sequence = c("sex", "edu", "age", "smoke"), print.flag = FALSE)
-f9 <- glm.synds(smoke ~ sex + age + edu + sex * age, data = s9,
-  family = "binomial")
+s9 <- syn(ods,
+  m = 5, seed = 5678,
+  visit.sequence = c("sex", "edu", "age", "smoke"), print.flag = FALSE
+)
+f9 <- glm.synds(smoke ~ sex + age + edu + sex * age,
+  data = s9,
+  family = "binomial"
+)
 compare(f9, ods)
 @
 \begin{verbatim}
@@ -420,10 +446,14 @@ The third synthesis uses the method \texttt{"sample"} for all variables, a boots
 
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
-s10 <- syn(ods, m = 5, seed = 5678, method = "sample",
-  visit.sequence = c("sex", "edu", "age", "smoke"), print.flag = FALSE)
-f10 <- glm.synds(smoke ~ sex + age + edu + sex * edu, data = s10,
-  family = "binomial")
+s10 <- syn(ods,
+  m = 5, seed = 5678, method = "sample",
+  visit.sequence = c("sex", "edu", "age", "smoke"), print.flag = FALSE
+)
+f10 <- glm.synds(smoke ~ sex + age + edu + sex * edu,
+  data = s10,
+  family = "binomial"
+)
 compare(f10, ods)
 @
 \begin{verbatim}
@@ -458,10 +488,14 @@ When some variables in the model are not synthesised  we need to set \texttt{inc
 \begin{small}
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
-s11 <- syn(ods, seed = 910011, m = 20, method = c("", "", "cart", "cart"),
-  print.flag = FALSE)
-f11 <- glm.synds(smoke ~ sex + age + edu + sex * edu, data = s11,
-  family = "binomial")
+s11 <- syn(ods,
+  seed = 910011, m = 20, method = c("", "", "cart", "cart"),
+  print.flag = FALSE
+)
+f11 <- glm.synds(smoke ~ sex + age + edu + sex * edu,
+  data = s11,
+  family = "binomial"
+)
 compare(f11, ods)
 @
 \begin{verbatim}
@@ -511,15 +545,21 @@ To illustrate these methods we select three different fitted models. In the firs
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
 ods <- ods[!is.na(ods$smoke), ]
-s12 <- syn.strata(ods, m = 5, visit.sequence = c(4, 1, 2),
-  method = "parametric", strata = "smoke", seed = 5678, print.flag = FALSE)
-s13 <- syn.strata(ods, m = 5, visit.sequence = c(4, 1, 2),
+s12 <- syn.strata(ods,
+  m = 5, visit.sequence = c(4, 1, 2),
+  method = "parametric", strata = "smoke", seed = 5678, print.flag = FALSE
+)
+s13 <- syn.strata(ods,
+  m = 5, visit.sequence = c(4, 1, 2),
   method = "parametric", strata = "smoke", seed = 1234, proper = TRUE,
-  print.flag = FALSE, tab.strataobs = FALSE)
+  print.flag = FALSE, tab.strataobs = FALSE
+)
 @
 <<eval=FALSE>>=
-f12 <- glm.synds(smoke ~ sex + edu + sex * edu, data = s12,
-  family = "binomial")
+f12 <- glm.synds(smoke ~ sex + edu + sex * edu,
+  data = s12,
+  family = "binomial"
+)
 compare(f12, ods, plot.intercept = TRUE, plot = "coef")
 @
 \begin{verbatim}
@@ -548,8 +588,10 @@ compatible with a chi-squared test with 8 degrees of freedom.
 \end{verbatim}
 
 <<eval=FALSE>>=
-f13 <- glm.synds(smoke ~ sex + edu + sex * edu, data = s13,
-  family = "binomial")
+f13 <- glm.synds(smoke ~ sex + edu + sex * edu,
+  data = s13,
+  family = "binomial"
+)
 compare(f13, ods, plot.intercept = TRUE)
 @
 \begin{verbatim}
@@ -585,14 +627,20 @@ The next example uses parametric models which capture some of the relationships 
 
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
-s14 <- syn(ods, m = 5, seed = 9101112, method = "parametric",
-  print.flag = FALSE)
-s15 <- syn(ods, m = 5, seed = 1415, method = "parametric",
-  proper = TRUE, print.flag = FALSE)
+s14 <- syn(ods,
+  m = 5, seed = 9101112, method = "parametric",
+  print.flag = FALSE
+)
+s15 <- syn(ods,
+  m = 5, seed = 1415, method = "parametric",
+  proper = TRUE, print.flag = FALSE
+)
 @
 <<eval=FALSE>>=
-f14 <- glm.synds(smoke ~ sex + edu + age + sex * edu, data = s14,
-  family = "binomial")
+f14 <- glm.synds(smoke ~ sex + edu + age + sex * edu,
+  data = s14,
+  family = "binomial"
+)
 compare(f14, ods, plot.intercept = TRUE, plot = "coef")
 @
 \begin{verbatim}
@@ -622,8 +670,10 @@ compatible with a chi-squared test with 9 degrees of freedom.
 \end{verbatim}
 
 <<eval=FALSE>>=
-f15 <- glm.synds(smoke ~ sex + edu + age + sex * edu, data = s15,
-  family = "binomial")
+f15 <- glm.synds(smoke ~ sex + edu + age + sex * edu,
+  data = s15,
+  family = "binomial"
+)
 compare(f15, ods, plot.intercept = TRUE)
 @
 \begin{verbatim}
@@ -670,8 +720,10 @@ When the intervals are calculated on the original scales (\texttt{plot = "coef"}
 \renewcommand{\baselinestretch}{1.0}
 <<eval=FALSE>>=
 s16 <- syn(ods, proper = TRUE, print.flag = FALSE)
-f16 <- glm.synds(smoke ~ sex + edu + sex * edu, data = s16,
-  family = "binomial")
+f16 <- glm.synds(smoke ~ sex + edu + sex * edu,
+  data = s16,
+  family = "binomial"
+)
 @
 <<eval=FALSE>>=
 compare(f16, ods, plot.intercept = TRUE, plot = "coef")
@@ -702,8 +754,10 @@ compatible with a chi-squared test with 8 degrees of freedom.
 \end{verbatim}
 
 <<eval=FALSE>>=
-compare(f16, ods, plot.intercept = TRUE, population.inference = TRUE,
-  plot = "coef")
+compare(f16, ods,
+  plot.intercept = TRUE, population.inference = TRUE,
+  plot = "coef"
+)
 @
 \begin{verbatim}
 Call used to fit models to the data:

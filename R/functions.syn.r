@@ -5,8 +5,7 @@
 
 ### -----.norm.fix.syn------------------------------------------------------
 
-.norm.fix.syn <- function(y, x, ridge = 0.00001, ...)
-{
+.norm.fix.syn <- function(y, x, ridge = 0.00001, ...) {
 # Calculates regression coefficients + error estimate
 
   xtx <- t(x) %*% x
@@ -24,8 +23,7 @@
 
 ### -----.norm.draw.syn-----------------------------------------------------
 
-.norm.draw.syn <- function(y, x, ridge = 0.00001, ...)
-{
+.norm.draw.syn <- function(y, x, ridge = 0.00001, ...) {
 # Draws values of beta and sigma for Bayesian linear regression synthesis
 # of y given x according to Rubin p.167
 
@@ -45,8 +43,7 @@
 
 ### -----syn.norm-----------------------------------------------------------
 
-syn.norm <- function(y, x, xp, proper = FALSE, ...)
-{
+syn.norm <- function(y, x, xp, proper = FALSE, ...) {
   x <- cbind(1, as.matrix(x))
   xp <- cbind(1, as.matrix(xp))
   if (proper == FALSE) {
@@ -63,12 +60,17 @@ syn.norm <- function(y, x, xp, proper = FALSE, ...)
 
 ### -----syn.lognorm--------------------------------------------------------
 
-syn.lognorm <- function(y, x, xp, proper = FALSE, ...)
-{
+syn.lognorm <- function(y, x, xp, proper = FALSE, ...) {
   addbit <- FALSE
   if (any(y < 0)) stop("Log transformation not appropriate for negative values.\n", call. = FALSE)
-  if (any(y == 0)) {y <- y + .5 * min(y[y != 0]); y <- log(y); addbit <- TRUE} ##  warning about this and above should be in check model
-  else y <- log(y)
+  if (any(y == 0)) {
+    y <- y + .5 * min(y[y != 0])
+    y <- log(y)
+    addbit <- TRUE
+  } ##  warning about this and above should be in check model
+  else {
+    y <- log(y)
+  }
   x <- cbind(1, as.matrix(x))
   xp <- cbind(1, as.matrix(xp))
   if (proper == FALSE) {
@@ -77,7 +79,10 @@ syn.lognorm <- function(y, x, xp, proper = FALSE, ...)
     parm <- .norm.draw.syn(y, x, ...)
   }
   res <- xp %*% parm$beta + rnorm(nrow(xp)) * parm$sigma
-  if (addbit) {res <- res - .5 * min(y[y != 0]); res[res <= 0] <- 0}
+  if (addbit) {
+    res <- res - .5 * min(y[y != 0])
+    res[res <= 0] <- 0
+  }
   res <- exp(res)
   res <- round(res, max(sapply(y, decimalplaces)))
 
@@ -87,11 +92,14 @@ syn.lognorm <- function(y, x, xp, proper = FALSE, ...)
 
 ### -----syn.sqrtnorm-------------------------------------------------------
 
-syn.sqrtnorm <- function(y, x, xp, proper = FALSE, ...)
-{
+syn.sqrtnorm <- function(y, x, xp, proper = FALSE, ...) {
   addbit <- FALSE
-  if (any(y < 0)) stop("Square root transformation not appropriate for negative values.\n", call. = FALSE) ##  needs check in checkmodel
-  else y <- sqrt(y)
+  if (any(y < 0)) {
+    stop("Square root transformation not appropriate for negative values.\n", call. = FALSE)
+  } ##  needs check in checkmodel
+  else {
+    y <- sqrt(y)
+  }
   x <- cbind(1, as.matrix(x))
   xp <- cbind(1, as.matrix(xp))
   if (proper == FALSE) {
@@ -109,8 +117,7 @@ syn.sqrtnorm <- function(y, x, xp, proper = FALSE, ...)
 
 ### -----syn.cubertnorm-----------------------------------------------------
 
-syn.cubertnorm <- function(y, x, xp, proper = FALSE, ...)
-{
+syn.cubertnorm <- function(y, x, xp, proper = FALSE, ...) {
   addbit <- FALSE
   y <- sign(y) * abs(y)^(1 / 3)
   x <- cbind(1, as.matrix(x))
@@ -130,8 +137,7 @@ syn.cubertnorm <- function(y, x, xp, proper = FALSE, ...)
 
 ### -----syn.normrank-------------------------------------------------------
 
-syn.normrank <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
-{
+syn.normrank <- function(y, x, xp, smoothing = "", proper = FALSE, ...) {
 # Regression synthesis of y given x, with a fixed regression
 # line, and with random draws of the residuals around the line.
 # Adapted from norm by carrying out regression on Z scores from ranks
@@ -189,8 +195,7 @@ syn.normrank <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
 
 ### -----.pmm.match---------------------------------------------------------
 
-.pmm.match <- function(z, yhat = yhat, y = y, donors = 3, ...)
-{
+.pmm.match <- function(z, yhat = yhat, y = y, donors = 3, ...) {
 # Auxilary function for syn.pmm.
 # z    = target predicted value (scalar)
 # yhat = array of fitted values, to be matched against z
@@ -208,8 +213,7 @@ syn.normrank <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
 
 ### -----syn.pmm------------------------------------------------------------
 
-syn.pmm <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
-{
+syn.pmm <- function(y, x, xp, smoothing = "", proper = FALSE, ...) {
 # Synthesis of y by predictive mean matching
 # Warning: can be slow for large data sets
 # for which syn.normrank may be a better choice
@@ -234,8 +238,7 @@ syn.pmm <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
 
 ### -----augment.syn--------------------------------------------------------
 
-augment.syn <- function(y, x, ...)
-{
+augment.syn <- function(y, x, ...) {
 # define augmented data for stabilizing logreg and polyreg
 # by the ad hoc procedure of White, Daniel & Royston, CSDA, 2010
 # This function will prevent augmented data beyond the min and
@@ -253,10 +256,14 @@ augment.syn <- function(y, x, ...)
   p <- ncol(x)
 
 # skip augmentation if there are no predictors
-  if (p == 0) return(list(y = y, x = x, w = rep(1, length(y))))
+  if (p == 0) {
+    return(list(y = y, x = x, w = rep(1, length(y))))
+  }
 
 # skip augmentation if there is only 1 missing value
-  if (length(y) == 1) return(list(y = y, x = x, w = rep(1, length(y))))
+  if (length(y) == 1) {
+    return(list(y = y, x = x, w = rep(1, length(y))))
+  }
 
 # calculate values to augment
   mean <- apply(x, 2, mean)
@@ -266,7 +273,8 @@ augment.syn <- function(y, x, ...)
   nr <- 2 * p * ki
   a <- matrix(mean, nrow = nr, ncol = p, byrow = TRUE)
   b <- matrix(rep(c(rep(c(0.5, -0.5), ki), rep(0, nr)), length = nr * p),
-                 nrow = nr, ncol = p, byrow = FALSE)
+    nrow = nr, ncol = p, byrow = FALSE
+  )
   c <- matrix(sd, nrow = nr, ncol = p, byrow = TRUE)
   d <- a + b * c
   d <- pmax(matrix(minx, nrow = nr, ncol = p, byrow = TRUE), d)
@@ -277,8 +285,13 @@ augment.syn <- function(y, x, ...)
 # beware, concatenation of factors
 # this change needed to avoid reordering of factors
 # if (is.factor(y)) ya <- as.factor(levels(y)[c(y,e)]) else ya  <- c(y, e)
-  if (is.factor(y)) ya <- addNA(factor(levels(y)[c(y, e)],
-    levels = levels(y)), ifany = TRUE) else ya <- c(y, e)
+  if (is.factor(y)) {
+    ya <- addNA(factor(levels(y)[c(y, e)],
+      levels = levels(y)
+    ), ifany = TRUE)
+  } else {
+    ya <- c(y, e)
+  }
   wa <- c(rep(1, length(y)), rep((p + 1) / nr, nr))
 
   return(list(y = ya, x = xa, w = wa))
@@ -288,8 +301,7 @@ augment.syn <- function(y, x, ...)
 ### -----syn.logreg---------------------------------------------------------
 
 syn.logreg <- function(y, x, xp, denom = NULL, denomp = NULL,
-                       proper = FALSE, ...)
-{
+                       proper = FALSE, ...) {
 # Synthesis for binary or binomial response variables by
 # logistic regression model. See Rubin (1987, p. 169-170) for
 # a description of the method.
@@ -355,8 +367,7 @@ syn.logreg <- function(y, x, xp, denom = NULL, denomp = NULL,
 ### -----syn.polyreg--------------------------------------------------------
 
 syn.polyreg <- function(y, x, xp, proper = FALSE, maxit = 1000,
-                        trace = FALSE, MaxNWts = 10000, ...)
-{
+                        trace = FALSE, MaxNWts = 10000, ...) {
 # synthesis for categorical response variables by the Bayesian
 # polytomous regression model. See J.P.L. Brand (1999), Chapter 4,
 # Appendix B.
@@ -393,8 +404,10 @@ syn.polyreg <- function(y, x, xp, proper = FALSE, maxit = 1000,
 ###
 
   xfy <- cbind.data.frame(yf, xf_sc)
-  fit <- multinom(formula(xfy), data = xfy, weights = w,
-    maxit = maxit, trace = trace, MaxNWts = MaxNWts, ...)
+  fit <- multinom(formula(xfy),
+    data = xfy, weights = w,
+    maxit = maxit, trace = trace, MaxNWts = MaxNWts, ...
+  )
   if (fit$convergence == 1) cat("\nReached max number of iterations for a multinomial model\nsuggest rerunning with polyreg.maxit increased (default 1000)\n")
   post <- predict(fit, xp, type = "probs")
   if (length(y) == 1) post <- matrix(post, nrow = 1, ncol = length(post))
@@ -420,8 +433,7 @@ syn.polyreg <- function(y, x, xp, proper = FALSE, maxit = 1000,
 ### -----syn.polr-----------------------------------------------------------
 
 syn.polr <- function(y, x, xp, proper = FALSE, maxit = 1000,
-                     trace = FALSE, MaxNWts = 10000, ...)
-{
+                     trace = FALSE, MaxNWts = 10000, ...) {
   x <- as.matrix(x)
   xp <- as.matrix(xp)
 
@@ -444,8 +456,10 @@ syn.polr <- function(y, x, xp, proper = FALSE, maxit = 1000,
   fit <- try(suppressWarnings(polr(formula(xfy), data = xfy, Hess = TRUE, weights = wf, ...)), silent = TRUE)
 
   if (inherits(fit, "try-error")) {
-    fit <- multinom(formula(xfy), data = xfy, weights = wf,
-                    maxit = maxit, trace = trace, Hess = TRUE, MaxNWts = MaxNWts, ...)
+    fit <- multinom(formula(xfy),
+      data = xfy, weights = wf,
+      maxit = maxit, trace = trace, Hess = TRUE, MaxNWts = MaxNWts, ...
+    )
     cat("\tMethod changed to multinomial")
     if (fit$convergence == 1) cat("\nReached max number of iterations for a multinomial model\nRerun with polyreg.maxit increased (default 100)\n")
   }
@@ -468,28 +482,30 @@ syn.polr <- function(y, x, xp, proper = FALSE, maxit = 1000,
 
 ### -----syn.sample---------------------------------------------------
 
-syn.sample <- function(y, xp, smoothing = "", cont.na = NA, proper = FALSE, ...)
-{
+syn.sample <- function(y, xp, smoothing = "", cont.na = NA, proper = FALSE, ...) {
 # Generates random sample from the observed y's
 # with bootstrap if proper == TRUE
   if (proper == TRUE) y <- sample(y, replace = TRUE)
   yp <- sample(y, size = xp, replace = TRUE)
 
-  if (smoothing != "") yp[!(yp %in% cont.na)] <-
-    syn.smooth(yp[!(yp %in% cont.na)], y[!(y %in% cont.na)],
-               smoothing = smoothing)
+  if (smoothing != "") {
+    yp[!(yp %in% cont.na)] <-
+      syn.smooth(yp[!(yp %in% cont.na)], y[!(y %in% cont.na)],
+        smoothing = smoothing
+      )
+  }
 
   return(list(res = yp, fit = "sample"))
 }
 
 
 ### -----syn.passive--------------------------------------------------------
-syn.passive <- function(data, func)
-{
+syn.passive <- function(data, func) {
 # Special elementary synthesis method for transformed data.
 # SuppressWarnings to avoid message 'NAs by coercion for NAtemp
   res <- suppressWarnings(model.frame(as.formula(func), data,
-                                      na.action = na.pass))
+    na.action = na.pass
+  ))
 
   return(list(res = res, fit = "passive"))
 }
@@ -498,8 +514,7 @@ syn.passive <- function(data, func)
 ### -----syn.cart-----------------------------------------------------------
 
 syn.cart <- function(y, x, xp, smoothing = "", proper = FALSE,
-                     minbucket = 5, cp = 1e-08, ...)
-{
+                     minbucket = 5, cp = 1e-08, ...) {
   ylogical <- is.logical(y)
 
   if (proper == TRUE) {
@@ -516,8 +531,10 @@ syn.cart <- function(y, x, xp, smoothing = "", proper = FALSE,
 # }
   minbucket <- max(1, minbucket) # safety
   if (!is.factor(y) & !is.logical(y)) {
-    fit <- rpart(y ~ ., data = as.data.frame(cbind(y, x)), method = "anova",
-                 minbucket = minbucket, cp = cp, ...)
+    fit <- rpart(y ~ .,
+      data = as.data.frame(cbind(y, x)), method = "anova",
+      minbucket = minbucket, cp = cp, ...
+    )
 # get leaf number for observed data
     leafnr <- floor(as.numeric(row.names(fit$frame[fit$where, ])))
 # replace yval with leaf number in order to predict later node number
@@ -547,8 +564,10 @@ syn.cart <- function(y, x, xp, smoothing = "", proper = FALSE,
     new <- vector("numeric", nrow(xp))
     for (j in uniquenodes) {
       donors <- y[leafnr == j] # values of y in a leaf
-      new[nodes == j] <- resample(donors, size = sum(nodes == j),
-                                  replace = TRUE)
+      new[nodes == j] <- resample(donors,
+        size = sum(nodes == j),
+        replace = TRUE
+      )
     }
 
     if (smoothing != "") new <- syn.smooth(new, y, smoothing = smoothing)
@@ -557,11 +576,16 @@ syn.cart <- function(y, x, xp, smoothing = "", proper = FALSE,
 # new   <- sapply(1:length(donor),function(s) resample(donor[[s]], 1))
   } else {
     y <- factor(y)
-    fit <- rpart(y ~ ., data = as.data.frame(cbind(y, x)), method = "class",
-                   minbucket = minbucket, cp = cp, ...)
+    fit <- rpart(y ~ .,
+      data = as.data.frame(cbind(y, x)), method = "class",
+      minbucket = minbucket, cp = cp, ...
+    )
     nodes <- predict(object = fit, newdata = xp)
-    new <- apply(nodes, MARGIN = 1, FUN = function(s) resample(colnames(nodes),
-                                                        size = 1, prob = s))
+    new <- apply(nodes, MARGIN = 1, FUN = function(s) {
+      resample(colnames(nodes),
+        size = 1, prob = s
+      )
+    })
     if (ylogical) {
       new <- as.logical(new)
     } else {
@@ -576,24 +600,29 @@ syn.cart <- function(y, x, xp, smoothing = "", proper = FALSE,
 ### -----syn.ctree----------------------------------------------------------
 
 syn.ctree <- function(y, x, xp, smoothing = "", proper = FALSE, minbucket = 5,
-                      mincriterion = 0.9, ...)
-{
+                      mincriterion = 0.9, ...) {
   if (proper == TRUE) {
     s <- sample(length(y), replace = truehist())
     y <- y[s]
     x <- x[s, , drop = FALSE]
   }
 
-  for (i in which(sapply(x, class) != sapply(xp, class))) xp[, i] <-
+  for (i in which(sapply(x, class) != sapply(xp, class))) {
+    xp[, i] <-
       eval(parse(text = paste0("as.", class(x[, i]), "(xp[,i])", sep = "")))
+  }
 
 # Fit a tree
 #  datact     <- partykit::ctree(y ~ ., data = as.data.frame(cbind(y, x)),
 #                  control = partykit::ctree_control(minbucket = minbucket,
 #                                                    mincriterion = mincriterion, ...))
-  datact <- ctree(y ~ ., data = as.data.frame(cbind(y, x)),
-    controls = ctree_control(minbucket = minbucket,
-                             mincriterion = mincriterion, ...))
+  datact <- ctree(y ~ .,
+    data = as.data.frame(cbind(y, x)),
+    controls = ctree_control(
+      minbucket = minbucket,
+      mincriterion = mincriterion, ...
+    )
+  )
 
 # fit.nodes  <- predict(datact, type = "node")
   fit.nodes <- where(datact)
@@ -607,13 +636,16 @@ syn.ctree <- function(y, x, xp, smoothing = "", proper = FALSE, minbucket = 5,
 
   for (i in nodes) {
     newrowno[pred.nodes == i] <- sample(rowno[fit.nodes == i],
-                                        length(newrowno[pred.nodes == i]),
-                                        replace = TRUE)
+      length(newrowno[pred.nodes == i]),
+      replace = TRUE
+    )
   }
   new <- y[newrowno]
 
-  if (!is.factor(y) & smoothing != "") new <-
-    syn.smooth(new, y, smoothing = smoothing)
+  if (!is.factor(y) & smoothing != "") {
+    new <-
+      syn.smooth(new, y, smoothing = smoothing)
+  }
 
   return(list(res = new, fit = datact))
 }
@@ -631,8 +663,10 @@ syn.survctree <- function(y, yevent, x, xp, proper = FALSE, minbucket = 5, ...)
     yevent <- yevent[s]
   }
 
-  for (i in which(sapply(x, class) != sapply(xp, class))) xp[, i] <-
+  for (i in which(sapply(x, class) != sapply(xp, class))) {
+    xp[, i] <-
       eval(parse(text = paste0("as.", class(x[, i]), "(xp[,i])", sep = "")))
+  }
 
   if (is.factor(yevent)) {
     yevent0 <- as.numeric(yevent) - 1
@@ -642,8 +676,9 @@ syn.survctree <- function(y, yevent, x, xp, proper = FALSE, minbucket = 5, ...)
 
 # Fit a tree
   datact <- ctree(Surv(y, yevent0) ~ .,
-                      data = as.data.frame(cbind(y, yevent0, x)),
-                      controls = ctree_control(minbucket = minbucket, ...))
+    data = as.data.frame(cbind(y, yevent0, x)),
+    controls = ctree_control(minbucket = minbucket, ...)
+  )
 # fit.nodes  <- predict(datact, type = "node")
   fit.nodes <- where(datact)
   nodes <- unique(fit.nodes)
@@ -656,8 +691,10 @@ syn.survctree <- function(y, yevent, x, xp, proper = FALSE, minbucket = 5, ...)
   newrowno <- rep(0, nrow(xp))
   for (i in nodes) {
     newrowno[pred.nodes == i] <- sample(rowno[fit.nodes == i],
-    length(newrowno[pred.nodes == i]), replace = TRUE)
-   }
+      length(newrowno[pred.nodes == i]),
+      replace = TRUE
+    )
+  }
 # Predicte node & sample time+event
   faketime <- y[newrowno]
   fakeevent <- yevent[newrowno]
@@ -668,17 +705,17 @@ syn.survctree <- function(y, yevent, x, xp, proper = FALSE, minbucket = 5, ...)
 
 ### -----syn.rf-------------------------------------------------------------
 # bagging when mtry = ncol(x) - using all predictors
-syn.rf <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...)
-{
-
+syn.rf <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...) {
 # nodesize <- max(1, nodesize)  # safety
 # if (proper == TRUE) {
 #  s <- sample(length(y), replace = T); y <- y[s]
 #  x <- x[s, , drop = FALSE]
 # }
 
-  for (i in which(sapply(x, class) != sapply(xp, class))) xp[, i] <-
-    do.call(paste0("as.", class(x[, i])[1]), unname(xp[, i]))
+  for (i in which(sapply(x, class) != sapply(xp, class))) {
+    xp[, i] <-
+      do.call(paste0("as.", class(x[, i])[1]), unname(xp[, i]))
+  }
 
   if (is.factor(y)) {
     obslevels <- levels(y)
@@ -704,8 +741,10 @@ syn.rf <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...)
   yhat <- sapply(ndonors, sample, size = 1)
 
   if (is.factor(y)) yhat <- factor(yhat, levels = obslevels)
-  if (!is.factor(y) & smoothing != "") yhat <-
-    syn.smooth(yhat, y, smoothing = smoothing)
+  if (!is.factor(y) & smoothing != "") {
+    yhat <-
+      syn.smooth(yhat, y, smoothing = smoothing)
+  }
 
   return(list(res = yhat, fit = rf.fit))
 }
@@ -715,8 +754,7 @@ syn.rf <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...)
 # bagging when mtry = ncol(x) - using all predictors
 # contributed by Caspar J. van Lissa
 
-syn.ranger <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
-{
+syn.ranger <- function(y, x, xp, smoothing = "", proper = FALSE, ...) {
   dots <- list(...)
   dots[c("formula", "data")] <- NULL
   if ("min.node.size" %in% names(dots)) {
@@ -729,8 +767,10 @@ syn.ranger <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
     x <- x[s, , drop = FALSE]
   }
 
-  for (i in which(sapply(x, class) != sapply(xp, class))) xp[, i] <-
-    do.call(paste0("as.", class(x[, i])[1]), unname(xp[, i]))
+  for (i in which(sapply(x, class) != sapply(xp, class))) {
+    xp[, i] <-
+      do.call(paste0("as.", class(x[, i])[1]), unname(xp[, i]))
+  }
 
   if (is.factor(y)) {
     obslevels <- levels(y)
@@ -756,8 +796,10 @@ syn.ranger <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
   yhat <- sapply(ndonors, sample, size = 1)
 
   if (is.factor(y)) yhat <- factor(yhat, levels = obslevels)
-  if (!is.factor(y) & smoothing != "") yhat <-
-    syn.smooth(yhat, y, smoothing = "smoothing")
+  if (!is.factor(y) & smoothing != "") {
+    yhat <-
+      syn.smooth(yhat, y, smoothing = "smoothing")
+  }
 
   return(list(res = yhat, fit = rf.fit))
 }
@@ -765,16 +807,17 @@ syn.ranger <- function(y, x, xp, smoothing = "", proper = FALSE, ...)
 
 ### -----syn.bag-------------------------------------------------------------
 # bagging when mtry = ncol(x) - using all predictors
-syn.bag <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...)
-{
+syn.bag <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...) {
 # nodesize <- max(1, nodesize)  # safety
 # if (proper == TRUE) {
 #  s <- sample(length(y), replace = T); y <- y[s]
 #  x <- x[s, , drop = FALSE]
 # }
 
-  for (i in which(sapply(x, class) != sapply(xp, class))) xp[, i] <-
-    do.call(paste0("as.", class(x[, i])[1]), unname(xp[, i]))
+  for (i in which(sapply(x, class) != sapply(xp, class))) {
+    xp[, i] <-
+      do.call(paste0("as.", class(x[, i])[1]), unname(xp[, i]))
+  }
 
   if (is.factor(y)) {
     obslevels <- levels(y)
@@ -783,8 +826,10 @@ syn.bag <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...)
 
 # fit a random forest
 # regression (mtry = p/3), classification (mtry = sqrt(p))
-  rf.fit <- randomForest(y ~ ., data = cbind.data.frame(y, x),
-                         ntree = ntree, mtry = ncol(x), ...)
+  rf.fit <- randomForest(y ~ .,
+    data = cbind.data.frame(y, x),
+    ntree = ntree, mtry = ncol(x), ...
+  )
   nodessyn <- attr(predict(rf.fit, newdata = xp, nodes = T), "nodes")
   nodesobs <- attr(predict(rf.fit, newdata = x, nodes = T), "nodes")
 
@@ -801,8 +846,10 @@ syn.bag <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...)
   yhat <- sapply(ndonors, sample, size = 1)
 
   if (is.factor(y)) yhat <- factor(yhat, levels = obslevels)
-  if (!is.factor(y) & smoothing != "") yhat <-
-    syn.smooth(yhat, y, smoothing = smoothing)
+  if (!is.factor(y) & smoothing != "") {
+    yhat <-
+      syn.smooth(yhat, y, smoothing = smoothing)
+  }
 
   return(list(res = yhat, fit = rf.fit))
 }
@@ -811,8 +858,7 @@ syn.bag <- function(y, x, xp, smoothing = "", proper = FALSE, ntree = 10, ...)
 ### -----syn.nested---------------------------------------------------------
 # function for allocating to subcategories (random sampling within groups)
 
-syn.nested <- function(y, x, xp, smoothing = "", cont.na = NA, ...)
-{
+syn.nested <- function(y, x, xp, smoothing = "", cont.na = NA, ...) {
   xr <- x[, 1]
   xpr <- xp[, 1]
   uxpr <- sort(unique(xpr))
@@ -824,9 +870,12 @@ syn.nested <- function(y, x, xp, smoothing = "", cont.na = NA, ...)
   }
   yp <- y[indexp]
 
-  if (smoothing != "") yp[!(yp %in% cont.na)] <-
-    syn.smooth(yp[!(yp %in% cont.na)], y[!(y %in% cont.na)],
-               smoothing = smoothing)
+  if (smoothing != "") {
+    yp[!(yp %in% cont.na)] <-
+      syn.smooth(yp[!(yp %in% cont.na)], y[!(y %in% cont.na)],
+        smoothing = smoothing
+      )
+  }
 
   return(list(res = yp, fit = "nested"))
 }
@@ -834,8 +883,7 @@ syn.nested <- function(y, x, xp, smoothing = "", cont.na = NA, ...)
 
 ### -----syn.satcat---------------------------------------------------------
 
-syn.satcat <- function(y, x, xp, proper = FALSE, ...)
-{
+syn.satcat <- function(y, x, xp, proper = FALSE, ...) {
 # Fits a saturated model to combinations of variables.
 # Method fails if the predictor variables generate
 # a combination of variables not found in the original data.
@@ -870,14 +918,14 @@ syn.satcat <- function(y, x, xp, proper = FALSE, ...)
 
 ### -----syn.constant-------------------------------------------------------
 
-syn.constant <- function(y, xp, ...)
-{
+syn.constant <- function(y, xp, ...) {
   yp <- y
   length(yp) <- xp
   if (xp > length(y)) {
     yp[(length(y) + 1):xp] <- names(which.max(table(y, exclude = NULL))) # in case y is 'almost' constant
-    if (is.numeric(y)) yp <- as.numeric(yp)
-    else if (is.logical(y)) yp <- as.logical(yp)
+    if (is.numeric(y)) {
+      yp <- as.numeric(yp)
+    } else if (is.logical(y)) yp <- as.logical(yp)
   }
   return(list(res = yp, fit = "constant"))
 }
@@ -885,8 +933,7 @@ syn.constant <- function(y, xp, ...)
 
 ### -----syn.collinear------------------------------------------------------
 
-syn.collinear <- function(y, x, xp, ...)
-{
+syn.collinear <- function(y, x, xp, ...) {
   x <- x[, 1] # !BN to check
   xp <- xp[, 1] # !BN to check
   indexp <- match(xp, x)
@@ -898,64 +945,75 @@ syn.collinear <- function(y, x, xp, ...)
 ### -----syn.catall---------------------------------------------------------
 
 syn.catall <- function(x, k, proper = FALSE, priorn = 1, structzero = NULL,
-                       maxtable = 1e8, epsilon = 0, rand = TRUE, ...)
-{
+                       maxtable = 1e8, epsilon = 0, rand = TRUE, ...) {
 # Fits a saturated model to combinations of variables
 # xp just holds number of synthetic records required
 
-   levs <- sapply(x, function(x) {length(levels(x)) + any(is.na(x))}) # all NAtemp here already
- table.size <- prod(levs) # exp(sum(log(levs)))
- if (table.size > maxtable) stop("Table has more than ", maxtable / 1e6,
-   " million cells (", round(table.size / 1e6, 2),
-   " millions),\nwhich may lead to memory problems.\nYou can rerun syn() with catall.maxtable increased (default: ", maxtable / 1e6,
-   " millions).\nAlternatively use a smaller group of variables for catall.",
-   sep = "", call. = FALSE)
+  levs <- sapply(x, function(x) {
+    length(levels(x)) + any(is.na(x))
+  }) # all NAtemp here already
+  table.size <- prod(levs) # exp(sum(log(levs)))
+  if (table.size > maxtable) {
+    stop("Table has more than ", maxtable / 1e6,
+      " million cells (", round(table.size / 1e6, 2),
+      " millions),\nwhich may lead to memory problems.\nYou can rerun syn() with catall.maxtable increased (default: ", maxtable / 1e6,
+      " millions).\nAlternatively use a smaller group of variables for catall.",
+      sep = "", call. = FALSE
+    )
+  }
 
- N <- dim(x)[1]
- if (proper == TRUE) x <- x[sample(1:N, replace = TRUE), ]
- tab <- table(x)
- n <- length(tab)
- addon <- priorn / n
+  N <- dim(x)[1]
+  if (proper == TRUE) x <- x[sample(1:N, replace = TRUE), ]
+  tab <- table(x)
+  n <- length(tab)
+  addon <- priorn / n
 # Set structural zero cells to zeros
- if (!is.null(structzero)) {
-   sz <- checksz(structzero, x) ## checks and converts var names to numbers
-   if (sum(tab[sz]) > 0) cat("
+  if (!is.null(structzero)) {
+    sz <- checksz(structzero, x) ## checks and converts var names to numbers
+    if (sum(tab[sz]) > 0) cat("
 \n************************************************************************
 WARNING: Total of ", sum(tab[sz]), " counts of original data in structural zero cells.
 ************************************************************************\n", sep = "")
- }
+  }
 # Add extra to prior
- tab <- (tab + addon)
- if (!is.null(structzero)) tab[sz] <- 0
- dt <- dim(tab)
- dn <- dimnames(tab)
+  tab <- (tab + addon)
+  if (!is.null(structzero)) tab[sz] <- 0
+  dt <- dim(tab)
+  dn <- dimnames(tab)
   if (epsilon > 0) {
     if (rand == TRUE) {
-      if (!is.null(structzero)) tab[!sz] <- addlapn(tab[!sz], epsilon)
-      else tab <- addlapn(tab, epsilon)
+      if (!is.null(structzero)) {
+        tab[!sz] <- addlapn(tab[!sz], epsilon)
+      } else {
+        tab <- addlapn(tab, epsilon)
+      }
       fit <- tab
       tab <- tab / sum(tab) # get it as proportions
       tab <- rmultinom(1, k, tab)
     } else {
-      if (!is.null(structzero)) tab[!sz] <- addlapn(tab[!sz], epsilon)
-      else tab <- addlapn(tab, epsilon) # GR2022
+      if (!is.null(structzero)) {
+        tab[!sz] <- addlapn(tab[!sz], epsilon)
+      } else {
+        tab <- addlapn(tab, epsilon)
+      } # GR2022
       fit <- tab
       tab <- roundspec(tab * k / sum(tab))
     }
- } else {
+  } else {
     if (rand == TRUE) {
       fit <- tab
       tab <- tab / sum(tab) # get it as proportions
       tab <- rmultinom(1, k, tab)
+    } else {
+      stop("If you set rand = FALSE when epsilon = 0 synthpop will return the data unchanged", call. = FALSE)
     }
-    else stop("If you set rand = FALSE when epsilon = 0 synthpop will return the data unchanged", call. = FALSE)
- }
- tab <- array(tab, dt)
- dimnames(tab) <- dn
- res <- array.to.frame(tab)
- for (i in 1:dim(res)[2]) res[, i] <- addNA(res[, i], ifany = TRUE)
- res <- res[sample(1:nrow(res)), ]
- return(list(res = res, fit = fit))
+  }
+  tab <- array(tab, dt)
+  dimnames(tab) <- dn
+  res <- array.to.frame(tab)
+  for (i in 1:dim(res)[2]) res[, i] <- addNA(res[, i], ifany = TRUE)
+  res <- res[sample(1:nrow(res)), ]
+  return(list(res = res, fit = fit))
 }
 
 
@@ -963,98 +1021,124 @@ WARNING: Total of ", sum(tab[sz]), " counts of original data in structural zero 
 
 syn.ipf <- function(x, k, proper = FALSE, priorn = 1, structzero = NULL,
                     gmargins = "twoway", othmargins = NULL, tol = 1e-3, max.its = 5000,
-                    maxtable = 1e8, print.its = FALSE, epsilon = 0, rand = TRUE, ...)
-{
+                    maxtable = 1e8, print.its = FALSE, epsilon = 0, rand = TRUE, ...) {
 # Fits log-linear model to combinations of variables
 # k just holds number of synthetic records required
 
- levs <- sapply(x, function(x) {length(levels(x)) + any(is.na(x))}) # all NAtemp here already
- table.size <- prod(levs) # exp(sum(log(levs)))
- if (table.size > maxtable) stop("Table has more than ", maxtable / 1e6,
-   " million cells (", round(table.size / 1e6, 2),
-   " millions),\nwhich may lead to memory problems.\nYou can rerun syn() with ipf.maxtable increased (default: ", maxtable / 1e6,
-   " millions).\nAlternatively use a smaller group of variables for ipf.",
-   sep = "", call. = FALSE)
+  levs <- sapply(x, function(x) {
+    length(levels(x)) + any(is.na(x))
+  }) # all NAtemp here already
+  table.size <- prod(levs) # exp(sum(log(levs)))
+  if (table.size > maxtable) {
+    stop("Table has more than ", maxtable / 1e6,
+      " million cells (", round(table.size / 1e6, 2),
+      " millions),\nwhich may lead to memory problems.\nYou can rerun syn() with ipf.maxtable increased (default: ", maxtable / 1e6,
+      " millions).\nAlternatively use a smaller group of variables for ipf.",
+      sep = "", call. = FALSE
+    )
+  }
 
- N <- dim(x)[1]
- nv <- dim(x)[2] # number of variables
- if (proper == TRUE) x <- x[sample(1:N, replace = TRUE), ]
- tab <- table(x, useNA = "ifany")
- n <- length(tab)
+  N <- dim(x)[1]
+  nv <- dim(x)[2] # number of variables
+  if (proper == TRUE) x <- x[sample(1:N, replace = TRUE), ]
+  tab <- table(x, useNA = "ifany")
+  n <- length(tab)
 # Add extra to prior
- addon <- priorn / n
+  addon <- priorn / n
 # Set structural zero cells to zeros
- if (!is.null(structzero)) {
-   sz <- checksz(structzero, x) # checks and converts var names to numbers
-   if (sum(tab[sz]) > 0) cat("
+  if (!is.null(structzero)) {
+    sz <- checksz(structzero, x) # checks and converts var names to numbers
+    if (sum(tab[sz]) > 0) cat("
 \n************************************************************************
 WARNING: Total of ", sum(tab[sz]), " counts of original data in structural zero cells.
 ************************************************************************\n", sep = "")
- }
- if (!is.null(gmargins)) {
-   if (gmargins == "twoway") {
-     n_margins <- nv * (nv - 1) / 2
-     mx_margins <- combn(1:nv, 2)
-     margins <- split(mx_margins, col(mx_margins))
-   } else if (gmargins == "oneway") {
-     margins <- as.list(1:nv)
-   } else stop("Only 'oneway' or 'twoway' are implemented for gmargins.\n",
-               call. = FALSE)
-   if (!is.null(othmargins)) for (i in 1:length(othmargins)) {
-     margins[[length(margins) + 1]] <- othmargins[[i]]
-   }
- } else {
-   if (!is.null(othmargins)) margins <- othmargins
-   else stop("Need to specify some margins.\n", call. = FALSE)
- }
+  }
+  if (!is.null(gmargins)) {
+    if (gmargins == "twoway") {
+      n_margins <- nv * (nv - 1) / 2
+      mx_margins <- combn(1:nv, 2)
+      margins <- split(mx_margins, col(mx_margins))
+    } else if (gmargins == "oneway") {
+      margins <- as.list(1:nv)
+    } else {
+      stop("Only 'oneway' or 'twoway' are implemented for gmargins.\n",
+        call. = FALSE
+      )
+    }
+    if (!is.null(othmargins)) {
+      for (i in 1:length(othmargins)) {
+        margins[[length(margins) + 1]] <- othmargins[[i]]
+      }
+    }
+  } else {
+    if (!is.null(othmargins)) {
+      margins <- othmargins
+    } else {
+      stop("Need to specify some margins.\n", call. = FALSE)
+    }
+  }
 
- umar <- unique(unlist(margins))
- missed <- (1:nv)[!(1:nv %in% umar)]
+  umar <- unique(unlist(margins))
+  missed <- (1:nv)[!(1:nv %in% umar)]
 
- if (length(missed) > 0) cat("\n
+  if (length(missed) > 0) cat("\n
 **************************************************
 SEVERE WARNING: Margins ", missed, " not fitted.
 This means they will be fitted as having
 the same proportion in each level.
 **************************************************\n", sep = "")
- if (epsilon > 0) {eps <- epsilon / length(margins)
-   cat("Overall epsilon for DP is ", epsilon, " divided equally between ",
-       length(margins), " margins to give ", eps, " each,\n")
- }
+  if (epsilon > 0) {
+    eps <- epsilon / length(margins)
+    cat(
+      "Overall epsilon for DP is ", epsilon, " divided equally between ",
+      length(margins), " margins to give ", eps, " each,\n"
+    )
+  }
 
 # Get data for margins
- margins.data <- vector("list", length(margins))
- for (i in 1:length(margins)) {
-   margins.data[[i]] <- table(x[, margins[[i]]], useNA = "ifany")
+  margins.data <- vector("list", length(margins))
+  for (i in 1:length(margins)) {
+    margins.data[[i]] <- table(x[, margins[[i]]], useNA = "ifany")
     margins.data[[i]] <- margins.data[[i]] + priorn / length(margins.data[[i]])
     if (epsilon > 0) {
       margins.data[[i]] <- addlapn(margins.data[[i]], eps)
     }
- }
- start <- array(1, dim(tab))
+  }
+  start <- array(1, dim(tab))
 
- results.1 <- suppressWarnings(Ipfp(start, margins, margins.data,
-                iter = max.its, print = print.its, tol = tol, ...)) # note larger than default to speed things up needs checking
+  results.1 <- suppressWarnings(Ipfp(start, margins, margins.data,
+    iter = max.its, print = print.its, tol = tol, ...
+  )) # note larger than default to speed things up needs checking
 
- if (results.1$conv == TRUE) cat("\n['ipf' converged in ",
-   length(results.1$evol.stp.crit), " iterations]\n", sep = "")
- else cat("\n['ipf' failed to converge in ", length(results.1$evol.stp.crit),
-   " iterations]\n\nYou can try to change parameters of Ipfp() function,\ne.g. syn(..., ipf.iter = 2000).", sep = "")
+  if (results.1$conv == TRUE) {
+    cat("\n['ipf' converged in ",
+      length(results.1$evol.stp.crit), " iterations]\n",
+      sep = ""
+    )
+  } else {
+    cat("\n['ipf' failed to converge in ", length(results.1$evol.stp.crit),
+      " iterations]\n\nYou can try to change parameters of Ipfp() function,\ne.g. syn(..., ipf.iter = 2000).",
+      sep = ""
+    )
+  }
 
- exp1 <- array(N * results.1$p.hat, dim(tab))
- if (!is.null(structzero)) exp1[sz] <- 0
+  exp1 <- array(N * results.1$p.hat, dim(tab))
+  if (!is.null(structzero)) exp1[sz] <- 0
 
- exp1 <- exp1 / sum(exp1) # get it as proportions
- if (epsilon == 0 & rand == FALSE) cat("WARNING: No DP noise or random noise added,\nData returned will be close to NULL expectation for model defined by margins.\n")
- if (rand == TRUE) z <- rmultinom(1, k, exp1)
- else z <- roundspec(exp1 * k / sum(exp1))
- res <- array(z, dim(exp1))
- dimnames(res) <- dimnames(tab)
- res <- array.to.frame(res)
- for (i in 1:dim(res)[2]) res[, i] <- addNA(res[, i], ifany = TRUE)
- res <- res[sample(1:nrow(res)), ]
- fit <- list(margins = margins, margins.data = margins.data)
- return(list(res = res, fit = fit))
+  exp1 <- exp1 / sum(exp1) # get it as proportions
+  if (epsilon == 0 & rand == FALSE) cat("WARNING: No DP noise or random noise added,\nData returned will be close to NULL expectation for model defined by margins.\n")
+  if (rand == TRUE) {
+    z <- rmultinom(1, k, exp1)
+  } else {
+    z <- roundspec(exp1 * k / sum(exp1))
+  }
+  res <- array(z, dim(exp1))
+  dimnames(res) <- dimnames(tab)
+  res <- array.to.frame(res)
+  for (i in 1:dim(res)[2]) res[, i] <- addNA(res[, i], ifany = TRUE)
+  res <- res[sample(1:nrow(res)), ]
+  fit <- list(margins = margins, margins.data = margins.data)
+  return(list(res = res, fit = fit))
 }
 
 
@@ -1062,7 +1146,9 @@ the same proportion in each level.
 #||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 ### -----is.passive---------------------------------------------------------
-is.passive <- function(string) return("~" == substring(string, 1, 1))
+is.passive <- function(string) {
+  return("~" == substring(string, 1, 1))
+}
 
 
 ### -----resample-----------------------------------------------------------
@@ -1075,8 +1161,7 @@ resample <- function(x, ...) x[sample.int(length(x), ...)]
 # counts number of decimal places - used for rounding smoothed values
 # approximate in some cases (as.character -> 15 significant digits;
 # scientific notation)
-decimalplaces <- function(x)
-{
+decimalplaces <- function(x) {
   x <- x - floor(x) # -> more digit numbers
   if (!is.na(x) & (x %% 1) != 0 & (round(x, 15) %% 1 != 0)) {
     nchar(strsplit(sub("0+$", "", as.character(x)), ".", fixed = TRUE)[[1]][[2]])
@@ -1087,8 +1172,7 @@ decimalplaces <- function(x)
 
 
 ### -----get.names----------------------------------------------------------
-get.names <- function(formula, names)
-{
+get.names <- function(formula, names) {
   res <- match(all.vars(formula)[-1], names)
   return(res)
 }
@@ -1096,14 +1180,17 @@ get.names <- function(formula, names)
 
 ### -----addXfac------------------------------------------------------------
 # function to add factors
-addXfac <- function(x, ...)
-{
+addXfac <- function(x, ...) {
   df <- cbind.data.frame(x, ...)
-  if (any(sapply(df, is.factor) + sapply(df, is.numeric) != 1))
+  if (any(sapply(df, is.factor) + sapply(df, is.numeric) != 1)) {
     stop("All arguments must be factors or numeric", call. = FALSE)
+  }
   fn <- function(f) {
-    if (is.factor(f)) f <- as.numeric(levels(f))[f]
-    else f <- f
+    if (is.factor(f)) {
+      f <- as.numeric(levels(f))[f]
+    } else {
+      f <- f
+    }
   }
   df <- as.data.frame(sapply(df, fn))
   add <- factor(rowSums(df))
@@ -1113,13 +1200,13 @@ addXfac <- function(x, ...)
 
 ### -----syn.smooth---------------------------------------------------------
 
-syn.smooth <- function(ysyn, yobs = NULL, smoothing = "spline", window = 5, ...)
-{
-  if (!(smoothing %in% c("", "spline", "density", "rmean")))
+syn.smooth <- function(ysyn, yobs = NULL, smoothing = "spline", window = 5, ...) {
+  if (!(smoothing %in% c("", "spline", "density", "rmean"))) {
     cat('Smoothing must be one of "spline", "density" or "rmean". No smoothing done.\n')
-  if (any(is.na(ysyn))) stop("ysyn cannot contain missing values", call. = FALSE)
-
-  else if (smoothing == "density") {
+  }
+  if (any(is.na(ysyn))) {
+    stop("ysyn cannot contain missing values", call. = FALSE)
+  } else if (smoothing == "density") {
     ys <- 1:length(ysyn)
 # exclude from smoothing if freq for a single value higher than 70%
     maxfreq <- which.max(table(ysyn))
@@ -1127,9 +1214,9 @@ syn.smooth <- function(ysyn, yobs = NULL, smoothing = "spline", window = 5, ...)
     if (table(ysyn)[maxfreq] / sum(table(ysyn)) > .7) ys <- which(ysyn != maxcat)
 # exclude from smoothing if data are top-coded - approximate check
     if (10 * table(ysyn)[length(table(ysyn)) - 1] <
-        tail(table(ysyn), n = 1) - table(ysyn)[length(table(ysyn)) - 1]) {
-          ys <- ys[-which(ysyn == max(yobs))]
-          maxy <- max(yobs)
+      tail(table(ysyn), n = 1) - table(ysyn)[length(table(ysyn)) - 1]) {
+      ys <- ys[-which(ysyn == max(yobs))]
+      maxy <- max(yobs)
     }
 
     densbw <- density(ysyn[ys], width = "SJ")$bw
@@ -1137,13 +1224,11 @@ syn.smooth <- function(ysyn, yobs = NULL, smoothing = "spline", window = 5, ...)
     if (!exists("maxy")) maxy <- max(yobs) + densbw
     ysyn[ys] <- pmax(pmin(ysyn[ys], maxy), min(yobs))
     ysyn[ys] <- round(ysyn[ys], max(sapply(yobs, decimalplaces)))
-  }
-  else if (smoothing == "rmean") {
+  } else if (smoothing == "rmean") {
     ord <- order(ysyn)
     ysyn <- runningmean(1:length(ysyn), ysyn[ord], window = window)
     ysyn[ord] <- round(ysyn, max(sapply(yobs, decimalplaces)))
-  }
-  else if (smoothing == "spline") {
+  } else if (smoothing == "spline") {
     ord <- order(ysyn)
     ysyn <- smooth.spline(sort(ysyn), all.knots = FALSE)$y
     ysyn[ord] <- round(ysyn, max(sapply(yobs, decimalplaces)))
@@ -1155,8 +1240,7 @@ syn.smooth <- function(ysyn, yobs = NULL, smoothing = "spline", window = 5, ...)
 
 ### -----checksz------------------------------------------------------------
 
-checksz <- function(sz, x)
-{
+checksz <- function(sz, x) {
   if (!is.list(sz)) stop("structzero needs to be a list.\n", call. = FALSE)
   if (!is.character(names(sz)) || !all(grepl("_", names(sz)))) stop("\nstructzero list elements must be named using variable names\nseperated by an underscore, e.g. sex_edu", call. = FALSE)
 
@@ -1169,7 +1253,6 @@ checksz <- function(sz, x)
   res <- rep(FALSE, nrow(dd))
 
   for (i in 1:length(sz)) {
-
     tempz <- rep(TRUE, nrow(dd))
     if (names(sz)[i] != paste0(names(sz[[i]]), collapse = "_")) stop("\nNames of structzero list elements must correspond to names of their sublists.", call. = FALSE)
     vars <- names(sz[[i]])
@@ -1179,15 +1262,21 @@ checksz <- function(sz, x)
 
     for (j in 1:nvars) {
       if (!is.numeric(sz[[i]][[j]])) {
-        if (!all(sz[[i]][[j]] %in% levels(x[, vars[j]])))
+        if (!all(sz[[i]][[j]] %in% levels(x[, vars[j]]))) {
           stop("Structural zeros (element ", i, ", variable ", j,
-               "): level(s) of variable not in data.\n", call. = FALSE)
+            "): level(s) of variable not in data.\n",
+            call. = FALSE
+          )
+        }
         sz[[i]][[j]] <- match(sz[[i]][[j]], levels(x[, vars[j]]))
       }
-      if (!all(sz[[i]][[j]] %in% 1:nlevels(x[, vars[j]])))
+      if (!all(sz[[i]][[j]] %in% 1:nlevels(x[, vars[j]]))) {
         stop("Structural zeros (element ", i, ", variable ", j,
-             "): numeric level(s) of variable not in data.\n", sep = "",
-             call. = FALSE)
+          "): numeric level(s) of variable not in data.\n",
+          sep = "",
+          call. = FALSE
+        )
+      }
       tempz <- tempz & (as.numeric(dd[, vars[j]]) %in% sz[[i]][[j]])
     }
     res[tempz] <- TRUE
@@ -1198,8 +1287,7 @@ checksz <- function(sz, x)
 
 ### -----array.to.frame-----------------------------------------------------
 
-array.to.frame <- function(x)
-{
+array.to.frame <- function(x) {
   df1 <- as.data.frame.table(x)
 # df1 <- df1[df1$Freq != 0,]
   res <- df1[rep(1:nrow(df1), df1$Freq), -ncol(df1)]
@@ -1211,8 +1299,9 @@ array.to.frame <- function(x)
 ### -----roundspec----------------------------------------------------------
 
 roundspec <- function(tab) { ## special rounding to preserve total
-  if (abs(round(sum(tab)) - sum(tab)) > 1e-6)
+  if (abs(round(sum(tab)) - sum(tab)) > 1e-6) {
     stop("This function assumes sum of tab is a whole number\n", .call = FALSE)
+  }
   diff <- round(sum(tab) - sum(round(tab)))
 
   if (diff == 0 & all(tab >= 0)) {
@@ -1228,7 +1317,6 @@ roundspec <- function(tab) { ## special rounding to preserve total
       inds <- (1:length(tab))
       newtab <- round(tab)
       newtab[1:(diff)] <- newtab[1:(diff)] + 1
-
     }
     result <- newtab
   } else {

@@ -163,6 +163,7 @@ cmu
 cnf
 cnth
 cntv
+codebase
 codebook
 codespaces
 coef
@@ -286,6 +287,7 @@ envbody
 eps
 epstopdf
 eqnshift
+errorlens
 et
 etal
 etexcmds
@@ -387,6 +389,7 @@ indicateing
 Inferentially
 infwarerr
 intcalc
+intellisense
 io
 ipf
 Ipfp
@@ -401,6 +404,7 @@ james
 jamesgoldie
 Jarmin
 jasa
+javascript
 jb
 JB
 jbig
@@ -423,6 +427,7 @@ keyval
 kinney
 kinneyetal
 knitr
+kohler
 Kohnen
 Kowarik
 KV
@@ -431,6 +436,7 @@ kvoptions
 kvsetkeys
 labelled
 langpatches
+languageserver
 laplace
 lasy
 latexconfig
@@ -446,6 +452,7 @@ LazyData
 ldots
 leftroot
 letltxmacro
+levelOfObjectDetail
 libmagick
 libudunits
 libxt
@@ -453,6 +460,8 @@ libxtst
 lineht
 linkcounter
 linkdim
+linter
+linters
 Lissa
 listcount
 Liu
@@ -703,6 +712,7 @@ setNames
 setspace
 Shannaon
 Sheather
+showObjectSize
 SILC
 simpop
 simPop
@@ -790,6 +800,7 @@ tmpcounter
 tmplength
 toks
 tol
+tomoki
 topmargin
 topskip
 Torra
@@ -806,7 +817,9 @@ uniquecounter
 uniques
 unsynthesised
 Urlmuskip
+useHttpgd
 useNA
+usernamehw
 USERPROFILE
 usethis
 usr
@@ -834,6 +847,7 @@ wkabint
 WMabsDD
 WooProp
 workspaces
+workspaceViewer
 www
 XeTeXLinkMargin
 xp

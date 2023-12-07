@@ -7,5 +7,6 @@
 ^pkgdown$
 ^\.github$
 ^NAMESPACE\.old$
-^README\.Rmd$
+^\.lintr$
 ^\.pre-commit-config\.yaml$
+^README\.Rmd$

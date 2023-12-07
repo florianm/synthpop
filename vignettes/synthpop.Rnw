@@ -298,8 +298,10 @@ The default algorithm of synthesising variables in columns from left to right ca
 data. In order to remove their original values from the resulting synthetic data sets an argument \code{drop.not.used} has to be set to \code{TRUE}. To synthesize variables \code{sex}, \code{age}, \code{ls}, \code{marital} and \code{edu} in this order we run the \code{syn()} function with the following specification
 
 <<eval=FALSE>>=
-sds.selection <- syn(ods, visit.sequence = c(1, 2, 6, 4, 3),
-  seed = my.seed, drop.not.used = TRUE)
+sds.selection <- syn(ods,
+  visit.sequence = c(1, 2, 6, 4, 3),
+  seed = my.seed, drop.not.used = TRUE
+)
 @
 
 An appropriate prediction matrix is created automatically. To avoid having to alter other parameters when the visit sequence is changed and to ensure the synthetic data have the same structure as the original ones, the variables in \code{sds.selection$predictor.matrix} are arranged in the same order as in the original data. The same applies to \code{sds.selection$method} and synthesised data set \code{sds.selection$syn}. As noted above, if the parameter \code{drop.not.used} is set to \code{TRUE} and there are variables that are not used in synthesis, they are not included in the output. In this case the column indices in visit sequence, which align to the synthetic data columns, may not be the same as in the original data.
@@ -361,8 +363,10 @@ In order to build an adequate predictor selection matrix, instead of doing it fr
 <<results=hide>>=
 visit.sequence.ini <- c(1, 2, 5, 6, 4, 3)
 method.ini <- c("sample", "ctree", "ctree", "polyreg", "", "ctree", "")
-sds.ini <- syn(data = ods, visit.sequence = visit.sequence.ini,
-  method = method.ini, m = 0, drop.not.used = FALSE)
+sds.ini <- syn(
+  data = ods, visit.sequence = visit.sequence.ini,
+  method = method.ini, m = 0, drop.not.used = FALSE
+)
 @
 <<>>=
 sds.ini$predictor.matrix
@@ -371,31 +375,43 @@ predictor.matrix.corrected["marital", "ls"] <- 0
 predictor.matrix.corrected
 @
 <<eval=FALSE>>=
-sds.corrected <- syn(data = ods, visit.sequence = visit.sequence.ini,
+sds.corrected <- syn(
+  data = ods, visit.sequence = visit.sequence.ini,
   method = method.ini, predictor.matrix = predictor.matrix.corrected,
-  seed = my.seed)
+  seed = my.seed
+)
 @
 
 \subsubsection{Handling missing values in continuous variables}
 Data can be missing for a number of reasons (e.g. refusal, inapplicability, lack of knowledge) and multiple missing data codes are used to represent this variety. By default, numeric missing data codes for a continuous variable are treated as non-missing values. This may lead to erroneous synthetic values, especially when standard parametric models are used or when synthetic values are smoothed to decrease disclosure risk. The problem refers not only to the variable in question, but also to variables predicted from it. The parameter \code{cont.na} of the \code{syn()} function allows to define missing-data codes for continuous variables in order to model them separately (see Section~\ref{sec:basicfun}). In our simple example a continuous variable \code{income} has two types of missing values (\code{NA} and \code{-8}) and they should be provided in a list element named \code{"income"}. The following code shows the recommended settings for synthesis of income variable, which includes smoothing and separate synthesis of missing values
 
 <<eval=FALSE>>=
-sds.income <- syn(ods, cont.na = list(income = c(NA, -8)),
-  smoothing = list(income = "density"), seed = NA)
+sds.income <- syn(ods,
+  cont.na = list(income = c(NA, -8)),
+  smoothing = list(income = "density"), seed = NA
+)
 @
 
 \subsubsection{Rules for restricted values}
 To illustrate application of rules for restricted values consider marital status. According to Polish law males have to be at least 18 to get married. Thus, in our synthesised data set all male individuals younger than 18 should have marital status \code{SINGLE} which is the case in the observed data set. Running without rules gives incorrect results with some of the males under 18 classified as \code{MARRIED} (see summary output table below).
 
 <<eval=FALSE>>=
-M18.ods <- table(subset(ods,
-  age < 18 & sex == "MALE", marital))
-M18.default <- table(subset(sds.default$syn,
-  age < 18 & sex == "MALE", marital))
-M18.parametric <- table(subset(sds.parametric$syn,
-  age < 18 & sex == "MALE", marital))
-cbind("Observed data" = M18.ods, CART = M18.default,
-  Parametric = M18.parametric)
+M18.ods <- table(subset(
+  ods,
+  age < 18 & sex == "MALE", marital
+))
+M18.default <- table(subset(
+  sds.default$syn,
+  age < 18 & sex == "MALE", marital
+))
+M18.parametric <- table(subset(
+  sds.parametric$syn,
+  age < 18 & sex == "MALE", marital
+))
+cbind(
+  "Observed data" = M18.ods, CART = M18.default,
+  Parametric = M18.parametric
+)
 @
 \begin{verbatim}
                    Observed data CART Parametric
@@ -411,19 +427,29 @@ Application of a rule, as specified below using named lists, leads to the correc
 <<results=hide, eval=FALSE>>=
 rules.marital <- list(marital = "age < 18 & sex == 'MALE'")
 rvalues.marital <- list(marital = "SINGLE")
-sds.rmarital <- syn(ods, rules = rules.marital,
-  rvalues = rvalues.marital, seed = my.seed)
-sds.rmarital.param <- syn(ods, rules = rules.marital,
-  rvalues = rvalues.marital, method = "parametric", seed = my.seed)
+sds.rmarital <- syn(ods,
+  rules = rules.marital,
+  rvalues = rvalues.marital, seed = my.seed
+)
+sds.rmarital.param <- syn(ods,
+  rules = rules.marital,
+  rvalues = rvalues.marital, method = "parametric", seed = my.seed
+)
 @
 A summary table can be produced using the following code
 <<eval=FALSE>>=
-rM18.default <- table(subset(sds.rmarital$syn,
-  age < 18 & sex == "MALE", marital))
-rM18.parametric <- table(subset(sds.rmarital.param$syn,
-  age < 18 & sex == "MALE", marital))
-cbind("Observed data" = M18.ods, CART = rM18.default,
-  Parametric = rM18.parametric)
+rM18.default <- table(subset(
+  sds.rmarital$syn,
+  age < 18 & sex == "MALE", marital
+))
+rM18.parametric <- table(subset(
+  sds.rmarital.param$syn,
+  age < 18 & sex == "MALE", marital
+))
+cbind(
+  "Observed data" = M18.ods, CART = rM18.default,
+  Parametric = rM18.parametric
+)
 @
 \begin{verbatim}
                    Observed data CART Parametric
@@ -544,12 +570,14 @@ Returning to the logistic regression model for \code{wkabint}, we estimate the o
 
 <<>>=
 model.ods <- glm(wkabint ~ sex + age + edu + log(income),
-  family = "binomial", data = ods)
+  family = "binomial", data = ods
+)
 model.ods
 @
 <<eval=FALSE>>=
 model.sds <- glm.synds(wkabint ~ sex + age + edu + log(income),
-  family = "binomial", data = sds)
+  family = "binomial", data = sds
+)
 model.sds
 @
 \begin{verbatim}

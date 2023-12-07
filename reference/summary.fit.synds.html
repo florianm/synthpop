@@ -232,19 +232,19 @@ simple or proper synthesis (for details see Raab et al. (2017)).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     data = s1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Combined estimates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                             xpct(Beta) xpct(se.Beta) xpct(z) Pr(&gt;|xpct(z)|)   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                  0.4872873     0.5588913  0.8719       0.383273   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sexFEMALE                    0.3414399     0.1540060  2.2171       0.026619 * </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age                          0.0118578     0.0045111  2.6286       0.008574 **</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduVOCATIONAL/GRAMMAR       -0.2825756     0.2412224 -1.1714       0.241425   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduSECONDARY                 0.3537039     0.2565920  1.3785       0.168059   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduPOST-SECONDARY OR HIGHER  0.4551010     0.2928892  1.5538       0.120224   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsPLEASED                   -0.0022504     0.4733349 -0.0048       0.996207   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY SATISFIED          -0.1884940     0.4760562 -0.3959       0.692143   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMIXED                     -0.2228213     0.4958593 -0.4494       0.653169   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY DISSATISFIED       -0.8973645     0.5419061 -1.6559       0.097734 . </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsUNHAPPY                   -0.4722073     1.0477496 -0.4507       0.652215   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsTERRIBLE                  -1.3186833     1.0313220 -1.2786       0.201026   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              xpct(Beta) xpct(se.Beta) xpct(z) Pr(&gt;|xpct(z)|)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                   1.0576149     0.5987047  1.7665        0.07731 .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sexFEMALE                     0.2483542     0.1560689  1.5913        0.11154  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age                           0.0101285     0.0045425  2.2297        0.02577 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduVOCATIONAL/GRAMMAR        -0.2018552     0.2369669 -0.8518        0.39431  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduSECONDARY                  0.4805722     0.2536052  1.8950        0.05810 .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduPOST-SECONDARY OR HIGHER   0.5380069     0.2934553  1.8334        0.06675 .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsPLEASED                    -0.5532934     0.5227991 -1.0583        0.28991  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY SATISFIED           -0.6650514     0.5259344 -1.2645        0.20605  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMIXED                      -0.6194228     0.5463481 -1.1338        0.25690  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY DISSATISFIED        -1.3999122     0.5891359 -2.3762        0.01749 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsUNHAPPY                     1.6131194   242.2154785  0.0067        0.99469  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsTERRIBLE                   -4.4127075   196.8215439 -0.0224        0.98211  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">f1</span>, population.inference <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
@@ -256,19 +256,19 @@ simple or proper synthesis (for details see Raab et al. (2017)).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     data = s1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Combined estimates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                               Beta.syn se.Beta.syn   z.syn Pr(&gt;|z.syn|)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                  0.4872873   0.6122347  0.7959      0.42608  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sexFEMALE                    0.3414399   0.1687051  2.0239      0.04298 *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age                          0.0118578   0.0049416  2.3996      0.01641 *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduVOCATIONAL/GRAMMAR       -0.2825756   0.2642459 -1.0694      0.28490  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduSECONDARY                 0.3537039   0.2810824  1.2584      0.20826  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduPOST-SECONDARY OR HIGHER  0.4551010   0.3208440  1.4184      0.15606  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsPLEASED                   -0.0022504   0.5185124 -0.0043      0.99654  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY SATISFIED          -0.1884940   0.5214934 -0.3615      0.71776  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMIXED                     -0.2228213   0.5431866 -0.4102      0.68165  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY DISSATISFIED       -0.8973645   0.5936284 -1.5117      0.13062  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsUNHAPPY                   -0.4722073   1.1477522 -0.4114      0.68077  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsTERRIBLE                  -1.3186833   1.1297567 -1.1672      0.24312  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                Beta.syn se.Beta.syn   z.syn Pr(&gt;|z.syn|)  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                   1.0576149   0.6558482  1.6126      0.10683  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sexFEMALE                     0.2483542   0.1709649  1.4527      0.14632  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age                           0.0101285   0.0049761  2.0354      0.04181 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduVOCATIONAL/GRAMMAR        -0.2018552   0.2595842 -0.7776      0.43680  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduSECONDARY                  0.4805722   0.2778106  1.7299      0.08366 .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduPOST-SECONDARY OR HIGHER   0.5380069   0.3214642  1.6736      0.09421 .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsPLEASED                    -0.5532934   0.5726977 -0.9661      0.33399  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY SATISFIED           -0.6650514   0.5761322 -1.1543      0.24836  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMIXED                      -0.6194228   0.5984944 -1.0350      0.30068  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY DISSATISFIED        -1.3999122   0.6453660 -2.1692      0.03007 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsUNHAPPY                     1.6131194 265.3337627  0.0061      0.99515  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsTERRIBLE                   -4.4127075 215.6071988 -0.0205      0.98367  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-in"><span></span></span>
@@ -285,9 +285,7 @@ simple or proper synthesis (for details see Raab et al. (2017)).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Synthesis number 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  sex age edu ls</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NaNs produced</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  smoke</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  sex age edu ls smoke</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Synthesis number 4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------</span>
@@ -297,9 +295,7 @@ simple or proper synthesis (for details see Raab et al. (2017)).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Synthesis number 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  sex age edu ls</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NaNs produced</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  smoke</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  sex age edu ls smoke</span>
 <span class="r-in"><span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="fu"><a href="glm.synds.html">glm.synds</a></span><span class="op">(</span><span class="va">smoke</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">edu</span> <span class="op">+</span> <span class="va">ls</span>, data <span class="op">=</span> <span class="va">s2</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">f2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fit to synthetic data set with 5 syntheses. Inference to coefficients</span>
@@ -310,19 +306,19 @@ simple or proper synthesis (for details see Raab et al. (2017)).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     data = s2)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Combined estimates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                              xpct(Beta) xpct(se.Beta) xpct(z) Pr(&gt;|xpct(z)|)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                   0.3445642     0.5569621  0.6186        0.53615  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sexFEMALE                     0.3551110     0.1534387  2.3144        0.02065 *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age                           0.0114055     0.0045167  2.5252        0.01156 *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduVOCATIONAL/GRAMMAR        -0.3477475     0.2335140 -1.4892        0.13644  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduSECONDARY                  0.3443955     0.2496364  1.3796        0.16771  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduPOST-SECONDARY OR HIGHER   0.6345008     0.2975442  2.1325        0.03297 *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsPLEASED                     0.2373394     0.4728511  0.5019        0.61571  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY SATISFIED           -0.1712358     0.4719610 -0.3628        0.71674  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMIXED                      -0.3538403     0.4896148 -0.7227        0.46987  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY DISSATISFIED        -0.7482222     0.5221115 -1.4331        0.15184  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsUNHAPPY                     8.0834679   438.5775682  0.0184        0.98529  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsTERRIBLE                  -10.1829154   553.3654305 -0.0184        0.98532  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              xpct(Beta) xpct(se.Beta) xpct(z) Pr(&gt;|xpct(z)|)   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                   4.0247714   180.8090534  0.0223       0.982241   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sexFEMALE                     0.3772038     0.1618108  2.3311       0.019746 * </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age                           0.0133479     0.0047414  2.8152       0.004875 **</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduVOCATIONAL/GRAMMAR        -0.2580407     0.2499416 -1.0324       0.301883   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduSECONDARY                  0.5116834     0.2720637  1.8807       0.060006 . </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduPOST-SECONDARY OR HIGHER   0.3528590     0.2996747  1.1775       0.239006   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsPLEASED                    -3.4429469   180.8087728 -0.0190       0.984808   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY SATISFIED           -3.7626884   180.8087802 -0.0208       0.983397   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMIXED                      -4.1819517   180.8088312 -0.0231       0.981547   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY DISSATISFIED        -4.0879885   180.8090302 -0.0226       0.981962   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsUNHAPPY                     7.2638173   678.5999376  0.0107       0.991460   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsTERRIBLE                   -7.3409068   326.4755793 -0.0225       0.982061   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">f2</span>, population.inference <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
@@ -335,18 +331,18 @@ simple or proper synthesis (for details see Raab et al. (2017)).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Combined estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                Beta.syn se.Beta.syn   z.syn Pr(&gt;|z.syn|)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                   0.3445642   0.6590065  0.5229      0.60108  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sexFEMALE                     0.3551110   0.1815511  1.9560      0.05047 .</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age                           0.0114055   0.0053442  2.1342      0.03283 *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduVOCATIONAL/GRAMMAR        -0.3477475   0.2762975 -1.2586      0.20818  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduSECONDARY                  0.3443955   0.2953738  1.1660      0.24363  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> eduPOST-SECONDARY OR HIGHER   0.6345008   0.3520590  1.8023      0.07150 .</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsPLEASED                     0.2373394   0.5594849  0.4242      0.67141  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY SATISFIED           -0.1712358   0.5584318 -0.3066      0.75912  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMIXED                      -0.3538403   0.5793201 -0.6108      0.54134  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY DISSATISFIED        -0.7482222   0.6177706 -1.2112      0.22583  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsUNHAPPY                     8.0834679 518.9319769  0.0156      0.98757  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lsTERRIBLE                  -10.1829154 654.7508072 -0.0156      0.98759  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)                   4.0247714 213.9361570  0.0188      0.98499  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sexFEMALE                     0.3772038   0.1914571  1.9702      0.04882 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age                           0.0133479   0.0056101  2.3793      0.01735 *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduVOCATIONAL/GRAMMAR        -0.2580407   0.2957349 -0.8725      0.38291  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduSECONDARY                  0.5116834   0.3219101  1.5895      0.11194  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> eduPOST-SECONDARY OR HIGHER   0.3528590   0.3545799  0.9951      0.31966  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsPLEASED                    -3.4429469 213.9358251 -0.0161      0.98716  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY SATISFIED           -3.7626884 213.9358339 -0.0176      0.98597  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMIXED                      -4.1819517 213.9358942 -0.0195      0.98440  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsMOSTLY DISSATISFIED        -4.0879885 213.9361296 -0.0191      0.98475  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsUNHAPPY                     7.2638173 802.9302744  0.0090      0.99278  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lsTERRIBLE                   -7.3409068 386.2911149 -0.0190      0.98484  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 </code></pre></div>

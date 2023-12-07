@@ -41,14 +41,361 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.8-2" id="synthpop-18-2">synthpop 1.8-2<a class="anchor" aria-label="anchor" href="#synthpop-18-2"></a></h2>
 <div class="section level3">
-<h3 id="maintenance-1-8-2">Maintenance<a class="anchor" aria-label="anchor" href="#maintenance-1-8-2"></a></h3>
-<p>This version brings a maintenance uplift to incorporate tidyverse standards. (#31)</p>
-<ul><li><p>Add a devcontainer config to allow contributing through GitHub Codespaces. Source: <a href="https://jamesgoldie.dev/writing/dev-containers-in-r/" class="external-link">jamesgoldie.dev</a></p></li>
-<li><p>Add a <code>NEWS.md</code> file to track changes to the package.</p></li>
-<li><p>Add a <code>README.Rmd</code> file. (#30)</p></li>
-<li><p>Add a pkgdown site deployed to GitHub via <code><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">usethis::use_pkgdown_github_pages()</a></code>. (#23)</p></li>
-<li><p>Add Roxygen for documentation.</p></li>
-<li><p>Migrate hand-written NAMESPACE and .Rd docs to Roxygen docstrings.</p></li>
+<h3 id="new-features-1-8-2">New features<a class="anchor" aria-label="anchor" href="#new-features-1-8-2"></a></h3>
+<p>This version brings a maintenance uplift to incorporate tidyverse standards. (#31) The added functionality lowers the barrier of entry to contributors and also aims to lower the workload for package maintainers as reviewers of contributions.</p>
+<ul><li>Add a devcontainer config to allow contributing through GitHub Codespaces. The devcontainer provides VS Code with a sensible selection of extensions.</li>
+<li>Upgrade <code>NEWS</code> to <code>NEWS.md</code>.</li>
+<li>Add a <code>README.Rmd</code> file. (#30)</li>
+<li>Migrate hand-written NAMESPACE and .Rd docs to Roxygen docstrings.</li>
+<li>Add Roxygen for documentation.</li>
+<li>Add a test suite.</li>
+<li>Add pre-commit hooks which help to uphold coding standards.</li>
+<li>Add continuous testing through GitHub Actions.</li>
+<li>Add continuous documentation through GitHub Actions and pkgdown. The resulting pkgdown website is deployed to GitHub pages. (#23)</li>
+</ul><p>Applying tidyverse code formatting and migrating reference documentation brings many line changes to the codebase, but does not alter the package API or functionality.</p>
+</div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.8-0" id="synthpop-18-0">synthpop 1.8-0<a class="anchor" aria-label="anchor" href="#synthpop-18-0"></a></h2><p class="text-muted">CRAN release: 2022-08-31</p>
+<div class="section level3">
+<h3 id="new-features-1-8-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-8-0"></a></h3>
+<ul><li>An option in compare.synds() to add values of a selected utility measure to names of a plot facets (<code>utility.to.plot</code> argument).</li>
+<li>Synthesis with “catall” and “ipf” has ## New features that permit the creation of differentialy private (DP) synthetic data. Parameters are <code>epsilon</code> and <code>rand</code>.</li>
+<li>New smoothing methods (<code>smoothing</code> argument): “spline” and “rmean”. Now you can also provide a single string specifying a smoothing method, which will be then used to smooth all numeric variables in the data. You can still provide a named list to smooth selected variables only.</li>
+<li>New parameters <code>low</code>, <code>high</code>, <code>n.breaks</code>, and <code>breaks</code> for utility.tables() that allow to create a two color binned gradient and set colours for low and high ends of the gradient.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-8-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-8-0"></a></h3>
+<ul><li>Optional parameters can be set for syn.norm(), syn.lognorm(), syn.sqrtnorm(), syn.cubertnorm(), syn.normrank(), syn.pmm().</li>
+<li>syn.cubertnorm() now allows negative values.</li>
+<li>In multi.compare() if <code>msel = NULL</code>, pooled synthetic data copies are compared with the original data.</li>
+<li>Parameter <code>incomplete</code> added to summary.fit.synds() function.</li>
+<li>In syn.ipf() default value of <code>tol</code> parameter changed to 1e-3 in order to speed up convergence.</li>
+<li>Sublist elements of structural zero list must be named.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-8-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-8-0"></a></h3>
+<ul><li>In multi.compare() default colour and fill scales restored for ggplot() to allow for more than 9 levels/synthetic data sets to be plotted.</li>
+<li>Automatic detection of incomplete synthesis.</li>
+<li>Formatting of labels for ploting numeric variables in compare.synds() that could create duplicated values.</li>
+<li>Subsetting of columns in data frames that are also tibbles.</li>
+<li>Handling of special characters in variable names.</li>
+<li>Labeling of multi.compare() plots.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.7-0" id="synthpop-17-0">synthpop 1.7-0<a class="anchor" aria-label="anchor" href="#synthpop-17-0"></a></h2><p class="text-muted">CRAN release: 2021-11-17</p>
+<div class="section level3">
+<h3 id="new-features-1-7-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-7-0"></a></h3>
+<ul><li>New function utility.tables() summarises oneway, two- or three-way tables of utility by utility.tab(). Plots and tables of utility measures can be produced.</li>
+<li>Functions utility.gen(), utility.tab(), and compare.synds() can be used to assess the utility of synthetic data sets that were created NOT using synthpop. They have to be provided as a data.frame or a list.</li>
+<li>utility.gen() and utility.tab() have a parameter <code>k.syn</code> to indicate that the sample size itself has been synthesised. The default value is <code>FALSE</code> that will apply to synthetic data created by synthpop.</li>
+<li>The following additional statstics for each synthesis are calculated in utility.tab(): “G” - the adjusted likelihood ratio chi-squared statistic for comparing tables with original and synthesised values, “JSD” - the Jensen-Shannon distance between the tables with original and</li>
+<li>These additional statistics are computed by utility.tab() and utility.gen(): “PO50” - the percentage over 50% of each synthetic data set where the model used to predict real or synthetic is correct; “SPECKS” the Kolmogorov-Smirnov distance comparing the prpensity scores for the synthetic and original data.</li>
+<li>Parameter <code>print.flag</code> is added to utility.gen() and utility.tab() to suppress, if desired, output for simulations.</li>
+<li>compare.synds() produces a table, tab.res, that gives the oneway utility statistics computed by utility.tab with parameter tables = “oneway”</li>
+<li>New parameters <code>plot</code> and <code>table</code> in compare.synds() function to indicate, respectively, whether plots should be produced and tables printed. By default plots are printed and tables are suppressed.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-7-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-7-0"></a></h3>
+<ul><li>Default <code>minnumlevels</code> changed from -1 to 1. This permits numeric variables with a single distinct value as well as missing values to be synthesised correctly.</li>
+<li>In utility.gen() failure to converge is changed from a warning to a failure and message changed.</li>
+<li>Improved error messages in syn() to signal small samples or factor variables with too many levels.</li>
+<li>Matrix of predictors x in logreg.syn() is centred and xp made to match to improve comptutation (thanks to Heloise Gauvin for noting this problem).</li>
+<li>Improved error messages and help file for syn.survctree().</li>
+<li>In syn() variables changed to factors from character are changed back to character in synthetic data.</li>
+<li>In syn() variables changed to factor from numeric because of only a few levels, are changed back to numeric in synthetic data.</li>
+<li>In utility.tab() default for <code>digits</code> changed from 2 to 3.</li>
+<li>Several ## Changes to a utility.gen(), including calculating p-values for resampling methods empirically and the calculation of the percentage correctly predicted by the model. Also ## Changes in the saved object and in the print method.</li>
+<li>Print method for utility.gen() changed to allow user to change settings when called after the objects are created.</li>
+<li>In compare.synds() and multi.compare() numeric variables with fewer than 6 distinct values are changed to factors in order to make plots more readable.</li>
+<li>In multi.compare() if barplot.position = “dodge”, source of data (original/sythetic) is mapped to an aesthetic <code>fill</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-7-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-7-0"></a></h3>
+<ul><li>Problems with checks when a variable has a class attribute that is of length &gt; 1 corrected.</li>
+<li>Bug in survctree.syn() corrected.</li>
+<li>Bug in utility.tab() when classInt() returns duplicate values for breaks when <code>style = "quantile"</code>, now the default, corrected.</li>
+<li>A synthetic version of a logical variable synthesised using function syn.cart() is also logical.</li>
+<li>Passive functionality has been improved to allow checking if the passive method would give the right answer in the original data and produce a failure if it fails.</li>
+<li>Synthesis of variables with assigned labels (note that synthetic values will not have labels).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.6-0" id="synthpop-16-0">synthpop 1.6-0<a class="anchor" aria-label="anchor" href="#synthpop-16-0"></a></h2><p class="text-muted">CRAN release: 2020-09-04</p>
+<div class="section level3">
+<h3 id="new-features-1-6-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-6-0"></a></h3>
+<ul><li>Incomplete synthesis is detected automatically from the details of the methods used to synthesise a data set. Functions glm.synds(), lm.synds(), polr.synds() and multinomial.synds() return another component <code>incomplete</code> of their result. The function summary.fit.synds() no longer has the parameter <code>incomplete</code>. In the previous version when a user fitted a model where some of the variables were not synthesised and <code>m = 1</code>, summary.fit.synds() would stop with an error. In the current version calculations are carried out as if all variables had been synthesised (<code>incomplete</code> is set to <code>FALSE</code>) but a warning is printed.</li>
+<li>New function polr.synds() to fit ordered logistic models to synthetic data using the polr() function from the package MASS. The compare.fit.synds() function can be used to compare the results of polr.synds() with those based on the original data.</li>
+<li>New synthesising function syn.ranger() which uses a fast implementation of random forests (contributed by Caspar van Lissa).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-6-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-6-0"></a></h3>
+<ul><li>The vignette on inference has been updated.</li>
+<li>synthpop website address added in a DESCRIPTION file.</li>
+<li>“cart” default method is explicitly defined in the syn() function.</li>
+<li>Correction of a Value part in the help files for syn.methods.</li>
+<li>Warning when numeric variables with five or fewer levels not changed to factors.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-6-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-0"></a></h3>
+<ul><li>Method “polr” (ordered logistic regression) is not replaced by “polyreg” (unordered logistic regression) if not necessary. A bug due to passing of an unnecessary parameter <code>smoothing</code> removed.</li>
+<li>In cart.syn() when a numeric variable is synthesised and the synthetic values of the explanatory variables cannot be classified to a final node of a tree they are randomly assigned to one of the final children nodes.</li>
+<li>In glm.synds() when used with <code>family = gaussian</code> the variances are rescaled with the residual variance estimate.</li>
+<li>Numeric varaiables with missing values which are not synthesised but used as predictors for other variables are kept unchanged.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5-1" id="synthpop-15-1">synthpop 1.5-1<a class="anchor" aria-label="anchor" href="#synthpop-15-1"></a></h2><p class="text-muted">CRAN release: 2019-03-20</p>
+<div class="section level3">
+<h3 id="bug-fixes-1-5-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-1"></a></h3>
+<ul><li>Not running an example that mostly fails due to too many small categories in the synthesised data set.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5-0" id="synthpop-15-0">synthpop 1.5-0<a class="anchor" aria-label="anchor" href="#synthpop-15-0"></a></h2><p class="text-muted">CRAN release: 2018-08-16</p>
+<div class="section level3">
+<h3 id="new-features-1-5-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-5-0"></a></h3>
+<ul><li>New methods “catall” and “ipf” that synthesise a group of variables together at the start of the synthesis.</li>
+<li>New parameters <code>numtocat</code> and <code>catgroups</code> for syn(). Variables in <code>numtocat</code> are converted into categorical variables with breaks determined by their distribution and <code>catgroups</code> gives the target number of groups for each variable. The data with the categorical versions are then synthesised and finally the synthesised variables in <code>numtocat</code> are created from bootstrap samples within the categories. This feature was developed for the second stage of “ipf” and “catall” but can be used with any method. Variables in <code>numtocat</code> must have a method suitable for categorical data.</li>
+<li>New function numtocat.syn() can be used to group numeric variables into categories. It can be used before synthesis to create a new data frame that can then be synthesised. It should be used instead of the <code>numtocat</code> parameter of syn() if you want to keep the categorical variables in the synthetic data.</li>
+<li>The function nested.syn() can now be used with continuous variables nested within categories. It also allows smoothing of the non-missing data.</li>
+<li>New function codebook.syn() that can be used to check features of data before synthesis.</li>
+<li>New parameter to compare.synds() <code>stat</code> with possible values “percents” or “counts” allows tables and plots to display counts instead of percentages in groups.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-5-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-5-0"></a></h3>
+<ul><li>Some improvements to utility.tab():
+<ul><li>default for <code>print.tables</code> is to print if up to a 3-way table;</li>
+<li>a new parameter <code>useNA</code> to include or exclude NA values from tables;</li>
+<li>a new parameter <code>print.stats</code> to allow a choice of what statistics to be printed and the default is to print only the Voas-Williamson statistic with a simpler format.</li>
+</ul></li>
+<li>Format of printed output from utility.gen() has been changed to emphasise the ratio to the expected as the most important measure.</li>
+<li>
+<code>mincriterion</code> for syn.ctree() changed to <code>0.9</code>.</li>
+<li>If the syn() parameter <code>models = TRUE</code>, models are stored for the variables in the visit sequence and for missing values in the continous variables.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-5-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-0"></a></h3>
+<ul><li>utility.tab() and utility.gen() for synthetic data generated from syn.strata().</li>
+<li>Smoothing for “sample” method.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4-4" id="synthpop-14-4">synthpop 1.4-4<a class="anchor" aria-label="anchor" href="#synthpop-14-4"></a></h2><p class="text-muted">CRAN release: 2018-06-27</p>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-4"></a></h3>
+<ul><li>Compatibility with the new version of ggplot2 (2.3.0).</li>
+<li>Check in multi.compare() for missing argument <code>var</code>.</li>
+<li>Check in sdc() for data type of variables to be smoothed.</li>
+<li>Size of $syn when k &lt; n and all synthesising methods without predictors.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4-3" id="synthpop-14-3">synthpop 1.4-3<a class="anchor" aria-label="anchor" href="#synthpop-14-3"></a></h2><p class="text-muted">CRAN release: 2018-03-19</p>
+<div class="section level3">
+<h3 id="changes-1-4-3">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-3"></a></h3>
+<ul><li>In padModel.syn() the default for newly defined synthesising methods is NOT to create dummy variables from factors before fitting models.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-3"></a></h3>
+<ul><li>Extraction of variable name from a tranformed dependant variable in glm.synds(), lm.synds() and multinom.synds().</li>
+<li>In syn.polyreg() numerical variables used as predictors for the multinom() function are scaled so as to have a range (0,1) to improve convergence. An extra warning is included if all the preicted values are in one category, which can result when the model fails to iterate due to sparse data.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4-1" id="synthpop-14-1">synthpop 1.4-1<a class="anchor" aria-label="anchor" href="#synthpop-14-1"></a></h2><p class="text-muted">CRAN release: 2018-01-05</p>
+<div class="section level3">
+<h3 id="new-features-1-4-1">New features<a class="anchor" aria-label="anchor" href="#new-features-1-4-1"></a></h3>
+<ul><li>New version of utility.gen() and print.utility.gen(). These now implement the methods described in Snoke et. al. and include the following:
+<ul><li>appropriate method of getting the null distribution is selected based on synthesis details;</li>
+<li>warning messages if CART models fail to split;</li>
+<li>allow a seed value to be set and stored for resampling methods;</li>
+<li>printing Z scores from logit models using the average fit over different syntheses.</li>
+</ul></li>
+<li>New function multinom.synds() to fit multinomial models to synthetic data using the multinom() function from the package nnet.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-4-1">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-1"></a></h3>
+<ul><li>Default <code>cp</code> parameter in syn.cart() changed to 1e-8.</li>
+<li>Default <code>print.tables</code> parameter in utility.tab() changed to <code>TRUE</code>.</li>
+<li>All syn() result components that are lists, e.g. <code>cont.na</code>, have their elements named.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-1"></a></h3>
+<ul><li>Call to classIntervals() in utility.tab() uses style = “fisher” as default to avoid problems for variables with a small number of unique values.</li>
+<li>utility.tab() computes breaks for grouping from the combined data rather than just from the observed. This avoids problems when synthetic values are outside the range of the observed ones.</li>
+<li>In compare.fit.synds() the quantity real.varcov needs to be multiplied by sigma^2 when fitting.function is “lm”.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4-0" id="synthpop-14-0">synthpop 1.4-0<a class="anchor" aria-label="anchor" href="#synthpop-14-0"></a></h2><p class="text-muted">CRAN release: 2017-11-20</p>
+<div class="section level3">
+<h3 id="new-features-1-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-4-0"></a></h3>
+<ul><li>Vignette on inference from fitted models (we are grateful to Joerg Drechsler for his comments).</li>
+<li>New function syn.satcat allows saturated categorical models to be fitted from all possible interactions of the predictor variables.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-4-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-4-0"></a></h3>
+<ul><li>utility.tab() returns p-values for utility measures rather than standardised versions of the measures.</li>
+<li>
+<code>smooth.vars</code> parameter added to sdc() function which allows smoothing of numeric variables in the synthesised dataset.</li>
+<li>If <code>models = TRUE</code> in syn(), for <code>logreg</code> and <code>ployreg</code> coefficients of the fitted model are returned.</li>
+<li>Output from print.summary.fit.synds() is labelled differently according to whether <code>population.inference</code> is TRUE or FALSE (see vignette on inference). Also it now includes p-values and stars as are shown for lm() and glm().</li>
+<li>Warning messages are given in summary.fit.synds() when inference is attempted from an invalid model where synthsis has not conditioned on any variables that have been left unsynthesised.</li>
+<li>The <code>msel</code> parameter of print.summary.fit.synds() prints a table of estimates rather than a lsiting of each fit in detail.</li>
+<li>Several ## Changes in compare.fit.synds() are described in detail in the new vignette on inference (‘Inference from fitted models in synthpop’). These include extensions of the lack-of-fit tests and confidence interval overlap measures for different options.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-4-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-4-0"></a></h3>
+<ul><li>replicated.uniques() for a single variable.</li>
+<li>syn.cart() for logical variables without missings (thanks to bug report by Ruben Arslan).</li>
+<li>syn() can be used without loading the package (thanks to reported issue by Ruben Arslan)</li>
+<li>Missing data factor level <na> as a stratum in syn.strata()</na></li>
+<li>
+<code>seed</code> for syn.strata().</li>
+<li>print.fit.synds() for syn.strata() object.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3-2" id="synthpop-13-2">synthpop 1.3-2<a class="anchor" aria-label="anchor" href="#synthpop-13-2"></a></h2><p class="text-muted">CRAN release: 2017-07-10</p>
+<div class="section level3">
+<h3 id="changes-1-3-2">Changes<a class="anchor" aria-label="anchor" href="#changes-1-3-2"></a></h3>
+<ul><li>For consistency reasons tab.utility() changed to utility.tab() and utility.synds() to utility.gen().</li>
+<li>utility.gen() under major revision and temporarily unavailable.</li>
+<li>Revision of utility.tab() function: a measure of fit proposed by Voas and Williams and one proposed by Freeman and Tukey are calculated; continous variables are categorised using classIntervals() function.</li>
+<li>Revision of compare.fit.synds() function: new lack-of-fit measures and mean values for existing analysis-specific utility measures (confidence interval overlap and absolute standardized difference between coefficient); <code>return.result</code> parameter replaced by <code>print.coef</code> with slightly different functionality - analysis-specific utility measures are always printed but you can choose whether to print or not model estimates.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-3-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-2"></a></h3>
+<ul><li>compare.synds() for integer variables without missing values (thanks to bug report by Joerg Drechsler).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3-1" id="synthpop-13-1">synthpop 1.3-1<a class="anchor" aria-label="anchor" href="#synthpop-13-1"></a></h2><p class="text-muted">CRAN release: 2016-11-23</p>
+<div class="section level3">
+<h3 id="changes-1-3-1">Changes<a class="anchor" aria-label="anchor" href="#changes-1-3-1"></a></h3>
+<ul><li>Update of the vignette.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-3-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-1"></a></h3>
+<ul><li>compare.synds() for variables with NA values in observed but not in synthetic data returns correct value (0) for NA category in synthetic data.</li>
+<li>Invalid <code>times</code> argument corrected (lists of numbers coerced to numbers).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3-0" id="synthpop-13-0">synthpop 1.3-0<a class="anchor" aria-label="anchor" href="#synthpop-13-0"></a></h2><p class="text-muted">CRAN release: 2016-10-24</p>
+<div class="section level3">
+<h3 id="new-features-1-3-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-3-0"></a></h3>
+<ul><li>Storing results of CART models when <code>models</code> set to TRUE.</li>
+<li>Function syn.strata() for stratified synthesis.</li>
+<li>Function multi.compare() for multivariate comparison of synthesised and observed data.</li>
+<li>Synthesising method “nested” for a variable nested within another variable.</li>
+<li>Tabular utility function tab.utility() for comparing contingency tables from observed and synthesized data.</li>
+<li>Parameter <code>uniques.exclude</code> for the sdc() function, which can be used to remove some variables from the identification of uniques.</li>
+<li>Function replicated.uniques() returns a number of unique individuals in the original data set ($no.uniques).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-3-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-3-0"></a></h3>
+<ul><li>Synthetic values of collinear variables are derived based on the one that is synthesised first and their method is set to “collinear”. They do not have to be removed prior to synthesis.</li>
+<li>Synthesising method for constant variables is set to “constant” and the variables are not removed from the synthesised data set when <code>drop.not.used = TRUE</code>.</li>
+<li>Default synthesising <code>method</code> changed to “cart”.</li>
+<li>Default <code>minnumlevels</code> changed to -1 (during synthesis numeric variables are not changed to factors regardless of the number of distinct values).</li>
+<li>Coefficient estimates and their confidence intervals are ploted in the same order as they are presented in a tabular form.</li>
+<li>No message on the seed value used (it is stored in the result object).</li>
+<li>Formula of the model to be fitted using glm.synds() or lm.synds() can be specified outside the function.</li>
+<li>Massage for sdc() on number of replicated uniques also when it is equal to zero.</li>
+<li>Maximum number of iterations for a multinomial model used in <code>polyreg</code> and <code>polr</code> method increased to 1000 (<code>maxit</code> parameter). Message if the limit is reached.</li>
+<li>write.syn() saves complete synds object into a file synobject_filename.RData.</li>
+<li>Error on exceeding <code>maxfaclevels</code> in not generated if <code>method</code> for the factor is set to “sample” or “nested”.</li>
+<li>For constant variables method is changed to “constant”.</li>
+<li>Year format for variables <code>ymarr</code> and <code>ysepdiv</code> in SD2011 dataset changed from <code>yy</code> to <code>yyyy</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-3-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-0"></a></h3>
+<ul><li>Types and placement of special signs that are allowed in <code>rules</code> have been extended and include e.g. initial and closing round bracket.</li>
+<li>compare.synds() provides output for logical variables.</li>
+<li>Synthesis of logical variables with missing values.</li>
+<li>Message about a change of method for a variable without predictors.</li>
+<li>Check for <code>filetype</code> in write.syn()</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2-1" id="synthpop-12-1">synthpop 1.2-1<a class="anchor" aria-label="anchor" href="#synthpop-12-1"></a></h2><p class="text-muted">CRAN release: 2016-03-15</p>
+<div class="section level3">
+<h3 id="bug-fixes-1-2-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-2-1"></a></h3>
+<ul><li>No calling var(x) on a factor x (in checks).</li>
+<li>No <code>contrasts</code> attribute for factors synthesised using parametric method.</li>
+<li>Misspelled vector name (nlevels) replaced with a correct one (nlevel).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2-0" id="synthpop-12-0">synthpop 1.2-0<a class="anchor" aria-label="anchor" href="#synthpop-12-0"></a></h2><p class="text-muted">CRAN release: 2016-02-03</p>
+<div class="section level3">
+<h3 id="new-features-1-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-2-0"></a></h3>
+<ul><li>A new function utility.synds() for distributional comparison of synthesised data with the original (observed) data using propensity scores.</li>
+<li>New measures for comparing model estimates based on synthesised and observed data implemented in compare.fit.synds() function: standardized differences in coefficient values(<code>coef.diff</code>) and confidence interval overlap (<code>ci.overlap</code>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-2-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-2-0"></a></h3>
+<ul><li>No dependency on <code>coefplot</code> package.</li>
+<li>Default for <code>drop.not.used</code> changed to FALSE.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1-1" id="synthpop-11-1">synthpop 1.1-1<a class="anchor" aria-label="anchor" href="#synthpop-11-1"></a></h2><p class="text-muted">CRAN release: 2015-07-08</p>
+<div class="section level3">
+<h3 id="changes-1-1-1">Changes<a class="anchor" aria-label="anchor" href="#changes-1-1-1"></a></h3>
+<ul><li>Both variable names and their column indices can be used in <code>visit.sequence</code>.</li>
+<li>Arguments <code>rules</code>, <code>rvalues</code>, <code>cont.na</code>, <code>semicont</code>, <code>smoothing</code>, <code>event</code>, <code>denom</code> are specified as named lists, e.g. rules = list(marital = “age &lt; 18”) and do not have to be specified for all variables.</li>
+<li>Optional arguments can be passed to synthesising functions by specifying <code>funname.argname</code> arguments, e.g. ctree.minbucket = 5; they are function-specific; <code>minbucket</code> removed from arguments.</li>
+<li>Smoothing is possible for numeric variables when synthesised with the method “sample”.</li>
+<li>compare() is a generic function with two methods (for class <code>synds</code> and <code>fit.synds</code>); it replaced two separate functions.</li>
+<li>New argument <code>return.plot</code> for compare() method for class <code>fit.synds</code>.</li>
+<li>New argument <code>msel</code> for compare() method for class <code>synds</code>, which allows comparison for pooled or selected data set(s). Results for multiple synthetic data sets can be plotted on the same graph.</li>
+<li>New argument <code>nrow</code> for compare() method for class <code>synds</code>; <code>nrow</code> and <code>ncol</code> determine number of plots per screen.</li>
+<li>Argument <code>plot.na</code> for compare() method for class <code>synds</code> is no longer required and missing data categories for numeric variables are ploted on the same plot as non-missing values.</li>
+<li>Argument <code>object</code> of lm.synds() and glm.synds() functions changed to <code>data</code>.</li>
+<li>print() method for class <code>fit.synds</code> gives by default combined coefficient estimates only.</li>
+<li>summary() method for class <code>fit.synds</code> gives combined coefficient estimates and their standard errors.</li>
+<li>summary() method for class <code>synds</code> with multiple synthetic data sets provides by default summaries that are calculated by averaging summary values for all synthetic data copies.</li>
+<li>Argument <code>obs.data</code> of compare.fit.synds() function changed to <code>data</code>.</li>
+<li>Method <code>surv.ctree</code> and <code>cart.bboot</code> changed to <code>survctree</code> and <code>cartbboot</code>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-1-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-1"></a></h3>
+<ul><li>
+<code>denom</code> and <code>event</code> for variables with missing data.</li>
+<li>
+<code>maxfaclevels</code> can be increased.</li>
+<li>Continuous variables with missing data when zero is a non-missing value.</li>
+<li>Synthesis of a single variable (with or without auxiliary predictors) now works.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1-0" id="synthpop-11-0">synthpop 1.1-0<a class="anchor" aria-label="anchor" href="#synthpop-11-0"></a></h2><p class="text-muted">CRAN release: 2015-02-21</p>
+<div class="section level3">
+<h3 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
+<ul><li>Function sdc() for statistical disclosure control of the synthesised data set(s); function replicated.uniques() to determine which unique units in the synthesised data set(s) replicates unique units in the original data set.</li>
+<li>Function read.obs() to import original data sets form external files.</li>
+<li>Function write.syn() to export synthetic data sets to external files and create a text file with information about the synthesis.</li>
+<li>syn() has new <code>semicont</code> parameter that allows to define spike(s) for semi-continuous variables in order to synthesise them separately.</li>
+<li>
+<code>lognorm</code>, <code>sqrtnorm</code> and <code>cubertnorm</code> methods for synthesis by linear regression after natural logarithm, square root or cube root transformation of a dependent variable.</li>
+<li>
+<code>seed</code> argument for syn() function.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-1-1-0">Changes<a class="anchor" aria-label="anchor" href="#changes-1-1-0"></a></h3>
+<ul><li>Revised output of summary.fit.synds() and compare.fit.synds(); standard errors of Z scores corrected (se(Z.syn)) (thanks to Joerg Drechsler).</li>
+<li>Figures for compare.fit.synds() and compare.synds() functions plotted using ggplot2 functions.</li>
+<li>period.separated or alllowercase naming convention has been adopted and parameter names <code>populationInference</code>, <code>visitSequence</code>, <code>predictorMatrix</code>, <code>contNA</code>, <code>defaultMethod</code>, <code>printFlag</code> and <code>nlevelmax</code> have been changed to <code>population.inference</code>, <code>visit.sequence</code>, <code>predictor.matrix</code>, <code>cont.na</code>, <code>default.method</code>, <code>print.flag</code> and <code>minnumlevels</code> respectively.</li>
+<li>Default for drop.pred.only changed to FALSE.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-1-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-0"></a></h3>
+<ul><li>Rounding procedure (thanks to bug report by Joerg Drechsler).</li>
+<li>Warning about extra disregarded argument <code>family</code> in compare.fit.synds().</li>
 </ul></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

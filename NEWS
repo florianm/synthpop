@@ -1,3 +1,28 @@
+synpop 1.8-3
+-------------
+NEW FEATURES
+* Add test coverage using `testthat`.
+* Add GitHub Action running `R CMD check`.
+* Add a devcontainer setup to provide a cloud-native development experience
+  in addition to local development. 
+* Prepare for built-in linting and formatting via pre-commit but do not 
+  yet enable pre-commit, leaving the decision and attribution of the formatting 
+  changes to package authors.
+* No changes to code, manual, or vignettes.
+* Add expected exceptions to `.Rbuildignore` for devcontainers, GitHub Actions, 
+  VS Code settings, pkgdown infrastructure, and pre-commit infrastructure.
+
+```
+# Before adding changes
+devtools::install()
+tools::compactPDF(gs_quality = "ebook", paths="vignettes/")
+devtools::check()
+
+# Add test framework
+
+
+```
+
 synthpop 1.8-0
 ---------------
 

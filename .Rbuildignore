@@ -1,2 +1,13 @@
 ^.*\.Rproj$
+^\.\.Rcheck$
 ^\.Rproj\.user$
+^\.devcontainer
+^\.github
+^\.vscode
+^docs$
+^pkgdown$
+^_pkgdown\.yml$
+^\.gitignore$
+^\.lintr$
+^\.pre-commit-config\.yaml$
+^README\.Rmd$

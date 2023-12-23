@@ -2,16 +2,18 @@
 # Basic usage
 #
 test_that("codebook.syn returns correct output for a simple data frame", {
-  # Create a simple data frame for testing, factor levels are <= maxlevs
-  # (default: 3)
+  # Inputs
+  # Factor levels are <= maxlevs (default: 3)
   test_data <- data.frame(
     A = c(1, 2, 3),
     B = c("a", "b", "a"),
     C = c(NA, 5, 6)
   )
 
-  # Test if codebook.syn() returns a list with two components
+  # Function call
   result <- codebook.syn(test_data)
+
+  # Test if codebook.syn() returns a list with two components
   expect_type(result, "list")
   expect_named(result, c("tab", "labs"))
 
@@ -27,7 +29,8 @@ test_that("codebook.syn returns correct output for a simple data frame", {
 })
 
 test_that("codebook.syn works with factor levels above maxlevs", {
-  # Create a more complex data frame for testing
+  # Inputs
+  # Factor levels are > maxlevs (default: 3)
   test_data <- data.frame(
     A = c(1, 2, 3, NA, 5),
     B = c("a", "b", "a", "c", "b"),

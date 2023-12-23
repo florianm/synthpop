@@ -1,5 +1,3 @@
-library(testthat)
-
 #-----------------------------------------------------------------------------#
 # Basic usage
 #
@@ -74,11 +72,11 @@ test_that("compare.synds(utility.stats = 'all') prints all utility stats", {
 })
 
 #-----------------------------------------------------------------------------#
-# Test edge cases
+# Edge cases
 # TODO
 
 #-----------------------------------------------------------------------------#
-# Test expected errors from invalid input
+# Expected errors from invalid input
 # TODO
 
 #-----------------------------------------------------------------------------#

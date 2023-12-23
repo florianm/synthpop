@@ -12,7 +12,7 @@ NEW FEATURES
 * Add expected exceptions to `.Rbuildignore` for devcontainers, GitHub Actions, 
   VS Code settings, pkgdown infrastructure, and pre-commit infrastructure.
 
-```
+```{r eval=FALSE}
 # Warning suggests to compress PDF vignettes
 tools::compactPDF(gs_quality = "ebook", paths="vignettes/")
 

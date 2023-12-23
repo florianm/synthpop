@@ -2,6 +2,10 @@ synpop 1.8-3
 -------------
 NEW FEATURES
 * Add test coverage using `testthat`.
+  * Test framework set up via `usethis::use_testthat()`.
+  * Individual test files added via `usethis::use_test("codebook_syn")`.
+    Dots in file names were here replaced with underscores, so the 
+    tests for `R/codebook.syn.r` live in `tests/test-codebook_syn.R`.
 * Add GitHub Action running `R CMD check`.
 * Add a devcontainer setup to provide a cloud-native development experience
   in addition to local development. 
@@ -11,21 +15,8 @@ NEW FEATURES
 * No changes to code, manual, or vignettes.
 * Add expected exceptions to `.Rbuildignore` for devcontainers, GitHub Actions, 
   VS Code settings, pkgdown infrastructure, and pre-commit infrastructure.
-
-```{r eval=FALSE}
-# Warning suggests to compress PDF vignettes
-tools::compactPDF(gs_quality = "ebook", paths="vignettes/")
-
-devtools::check()
-
-# Add test framework
-usethis::use_testthat()
-
-# For each function
-# Create if not exists and open file named after each function.
-# Replace dots with underscores, e.g. codebook.syn tests live at
-usethis::use_test("codebook_syn")
-```
+* R CMD check suggests to compress PDF vignettes:
+  `tools::compactPDF(gs_quality = "ebook", paths="vignettes/")`.
 
 synthpop 1.8-0
 ---------------

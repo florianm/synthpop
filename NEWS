@@ -5,22 +5,26 @@ NEW FEATURES
 * Add GitHub Action running `R CMD check`.
 * Add a devcontainer setup to provide a cloud-native development experience
   in addition to local development. 
-* Prepare for built-in linting and formatting via pre-commit but do not 
-  yet enable pre-commit, leaving the decision and attribution of the formatting 
-  changes to package authors.
+* Prepare for built-in linting and formatting via pre-commit. 
+  Enable non-invasive pre-commit checks and include but comment out checks 
+  which generate lots of changes.
 * No changes to code, manual, or vignettes.
 * Add expected exceptions to `.Rbuildignore` for devcontainers, GitHub Actions, 
   VS Code settings, pkgdown infrastructure, and pre-commit infrastructure.
 
 ```
-# Before adding changes
-devtools::install()
+# Warning suggests to compress PDF vignettes
 tools::compactPDF(gs_quality = "ebook", paths="vignettes/")
+
 devtools::check()
 
 # Add test framework
+usethis::use_testthat()
 
-
+# For each function
+# Create if not exists and open file named after each function.
+# Replace dots with underscores, e.g. codebook.syn tests live at
+usethis::use_test("codebook_syn")
 ```
 
 synthpop 1.8-0

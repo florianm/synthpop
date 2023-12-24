@@ -17,6 +17,7 @@ Imports: lattice, MASS, methods, nnet, ggplot2, graphics, stats, utils, rpart, p
 Suggests: 
     testthat (>= 3.0.0),
     usethis,
-    precommit
+    precommit,
+    covr
 LazyData: yes
 Config/testthat/edition: 3

@@ -11,3 +11,5 @@
 ^\.lintr$
 ^\.pre-commit-config\.yaml$
 ^README\.Rmd$
+^codecov\.yml$
+^\.github$

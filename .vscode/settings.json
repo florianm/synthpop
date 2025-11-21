@@ -1,0 +1,10 @@
+{
+    "r.session.levelOfObjectDetail": "Detailed",
+    "r.workspaceViewer.showObjectSize": true,
+    "r.plot.useHttpgd": true,
+    "latex-workshop.latex.outDir": "./out",
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.synctex.afterBuild.enabled": true,
+    "typescript.suggest.paths": false,
+    "javascript.suggest.paths": false
+}
